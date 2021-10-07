@@ -1,0 +1,31 @@
+# Initial server setup
+
+---
+
+
+
+- name: Initial Config Of Server
+  hosts: azure
+  become: true
+  tasks:
+    # Update and install the base software
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 60
+    - name: Upgrade installed apt packages 
+      apt:
+        upgrade: dist
+      register: upgrad
+    - name: Ensure that these software packages are installed
+      apt:
+        pkg:
+          - fail2ban
+          - pwgen
+          - needrestart
+          - sudo
+        state: latest
+    - name: Check if a reboot is needed for Debian-based systems
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_require
