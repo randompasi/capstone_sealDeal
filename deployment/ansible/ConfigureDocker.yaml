@@ -1,0 +1,9 @@
+---
+
+- name: Configure Azure Virtual Machine
+  hosts: azure
+  tasks:
+
+      - name: Install Docker
+        apt:
+          update_cache: yes
