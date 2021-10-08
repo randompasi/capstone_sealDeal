@@ -1,5 +1,5 @@
 #Creates React app on docker
-FROM node:alpine
+FROM node:13.12.0-alpine
 
 # set working directory
 WORKDIR /app
@@ -17,10 +17,6 @@ RUN npm install react-scripts@3.4.1 -g
 COPY . ./
 
 RUN chown -R node /app/node_modules/.cache
-
-# open port to listen
-EXPOSE 3000
-
 
 # start app
 CMD ["npm", "start"]
