@@ -24,6 +24,6 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker-compose -f ./docker-compose-prod.yml up
-            docker tag 
+            docker-compose -f ./docker-compose-prod.yml -t  up
+            docker tag capstone_sealdeal_prod-image ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstoneapp:${{ github.sha }}
             docker-compose push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstoneapp:${{ github.sha }}
