@@ -26,4 +26,4 @@ jobs:
         - run: |
             docker-compose -f ./docker-compose-prod.yml build
             docker tag capstone_sealdeal_prod-image ${{ github.sha }}
-            docker-compose push capstone_sealdeal_prod-image:${{ github.sha }}
+            docker-compose -f ./docker-compose-prod.yml push capstone_sealdeal_prod-image:${{ github.sha }}
