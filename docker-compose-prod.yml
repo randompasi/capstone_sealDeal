@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  prod-image:
+  prod_image:
     container_name: prod-capstone-container
     build:
       context: .

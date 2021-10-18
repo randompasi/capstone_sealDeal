@@ -25,5 +25,5 @@ jobs:
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
             docker-compose -f ./docker-compose-prod.yml build
-            docker tag capstone_sealdeal_prod-image capstone_sealdeal_prod-image:${{ github.sha }}
-            docker-compose -f ./docker-compose-prod.yml push capstone_sealdeal_prod-image:${{ github.sha }}
+            docker tag capstone_sealdeal_prod_image:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
