@@ -1,0 +1,26 @@
+name: Create and publish a Docker image
+
+on:
+  push:
+    branches: [ release ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+
+  build-and-push-image:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      package: write
+
+
+    steps:
+    - name: Checkout repository
+    - uses: actions/checkout@v2
+    
+    - name: Build the Docker image
+      run: docker build . --file ./Dockerfile.prod --tag capstone:$(date +%s)
