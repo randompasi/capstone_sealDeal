@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file ./my-app/Dockerfile.prod --tag capstone:$(date +%s)
+      run: docker build . --file ./Dockerfile.prod --tag capstone:$(date +%s)
