@@ -2,8 +2,8 @@ version: '3.7'
 
 services:
 
-  sample-prod:
-    container_name: prod-capstone
+  prod-capstone-image:
+    container_name: prod-capstone-container
     build:
       context: .
       dockerfile: Dockerfile.prod
