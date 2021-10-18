@@ -7,46 +7,57 @@ terraform {
     }
   }
 }
+
+locals {
+    # get json 
+    credentials = jsondecode(file("${path.module}/credentials.json"))
+
+   }
+
+
 provider "azurerm" {
-  subscription_id = "4ee8fea0-e01b-4bfc-8ffe-fa7d3ddff0c9"
   features {}
+  subscription_id   =  local.credentials.subscrition
+  tenant_id         = local.credentials.tenant
+  client_id         = local.credentials.appId
+  client_secret     = local.credentials.password
 }
 
 # Create a resource group if it doesn't exist
-resource "azurerm_resource_group" "myterraformgroup" {
-  name     = "myResourceGroup"
+resource "azurerm_resource_group" "capstoneterraformgroup" {
+  name     = "capstoneResourceGroup"
   location = var.azure_region
 
   tags = {
-    environment = "Terraform Demo"
+    environment = "Capstone Demo"
   }
 }
 
 # Create virtual network
-resource "azurerm_virtual_network" "myterraformnetwork" {
-  name                = "myVnet"
+resource "azurerm_virtual_network" "capstoneterraformnetwork" {
+  name                = "capstoneVnet"
   address_space       = ["10.0.0.0/16"]
   location            = var.azure_region
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = azurerm_resource_group.capstoneterraformgroup.name
 
   tags = {
-    environment = "Terraform Demo"
+    environment = "Capstone Demo"
   }
 }
 
 # Create subnet
-resource "azurerm_subnet" "myterraformsubnet" {
-  name                 = "mySubnet"
-  resource_group_name  = azurerm_resource_group.myterraformgroup.name
-  virtual_network_name = azurerm_virtual_network.myterraformnetwork.name
+resource "azurerm_subnet" "capstoneterraformsubnet" {
+  name                 = "capstoneSubnet"
+  resource_group_name  = azurerm_resource_group.capstoneterraformgroup.name
+  virtual_network_name = azurerm_virtual_network.capstoneterraformnetwork.name
   address_prefixes       = ["10.0.2.0/24"]
 }
 
 # Create public IPs
-resource "azurerm_public_ip" "myterraformpublicip" {
-  name                         = "myPublicIP"
+resource "azurerm_public_ip" "capstonePublicIP" {
+  name                         = "capstonePublicIP"
   location                     = var.azure_region
-  resource_group_name          = azurerm_resource_group.myterraformgroup.name
+  resource_group_name          = azurerm_resource_group.capstoneterraformgroup.name
   allocation_method            = "Dynamic"
   idle_timeout_in_minutes = 30
 
@@ -57,17 +68,17 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 
 
 # Create network interface
-resource "azurerm_network_interface" "myterraformnic" {
+resource "azurerm_network_interface" "capstoneTerraformnic" {
   name                      = "network_interface"
   location                  = var.azure_region
-  resource_group_name       = azurerm_resource_group.myterraformgroup.name
+  resource_group_name       = azurerm_resource_group.capstoneterraformgroup.name
 
   ip_configuration {
-    name                          = "myNicConfiguration"
-    subnet_id                     = azurerm_subnet.myterraformsubnet.id
+    name                          = "capstoneNicConfiguration"
+    subnet_id                     = azurerm_subnet.capstoneterraformsubnet.id
     private_ip_address_allocation = "Static"
     private_ip_address = "10.0.2.5"
-    public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
+    public_ip_address_id          = azurerm_public_ip.capstonePublicIP.id
   }
 
   tags = {
@@ -76,10 +87,10 @@ resource "azurerm_network_interface" "myterraformnic" {
 }
 
 # Create Network Security Group 
-resource "azurerm_network_security_group" "myterraformnsg" {
-  name                = "myNetworkSecurityGroup"
+resource "azurerm_network_security_group" "securityGroup" {
+  name                = "capstoneNetworkSecurityGroup"
   location            = var.azure_region
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = azurerm_resource_group.capstoneterraformgroup.name
 
 }
 
@@ -96,24 +107,24 @@ resource "azurerm_network_security_rule" "security_rules"{
     destination_port_range     = each.value.destination_port_range
     source_address_prefix      = each.value.source_address_prefix
     destination_address_prefix = each.value.destination_address_prefix
-    resource_group_name = azurerm_resource_group.myterraformgroup.name
-    network_security_group_name = azurerm_network_security_group.myterraformnsg.name
+    resource_group_name = azurerm_resource_group.capstoneterraformgroup.name
+    network_security_group_name = azurerm_network_security_group.securityGroup.name
 }
 
 
 
 
 # Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "example" {
-  network_interface_id      = azurerm_network_interface.myterraformnic.id
-  network_security_group_id = azurerm_network_security_group.myterraformnsg.id
+resource "azurerm_network_interface_security_group_association" "securityGroupAsssociation" {
+  network_interface_id      = azurerm_network_interface.capstoneTerraformnic.id
+  network_security_group_id = azurerm_network_security_group.securityGroup.id
 }
 
 # Generate random text for a unique storage account name
 resource "random_id" "randomId" {
   keepers = {
     # Generate a new ID only when a new resource group is defined
-    resource_group = azurerm_resource_group.myterraformgroup.name
+    resource_group = azurerm_resource_group.capstoneterraformgroup.name
   }
 
   byte_length = 8
@@ -121,12 +132,12 @@ resource "random_id" "randomId" {
 
 
 # Create virtual machine
-resource "azurerm_linux_virtual_machine" "myterraformvm" {
+resource "azurerm_linux_virtual_machine" "capstonevm" {
   name                  = "myVM"
   location              = var.azure_region
    admin_username      = "adminuser"
-  resource_group_name   = azurerm_resource_group.myterraformgroup.name
-  network_interface_ids = [azurerm_network_interface.myterraformnic.id]
+  resource_group_name   = azurerm_resource_group.capstoneterraformgroup.name
+  network_interface_ids = [azurerm_network_interface.capstoneTerraformnic.id]
   size                  = "Standard_DS1_v2"
 
   os_disk {
@@ -154,15 +165,18 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   }
 }
 
-data "azurerm_public_ip" "myterraformpublicip"{
-   name                = azurerm_public_ip.myterraformpublicip.name
-  resource_group_name = azurerm_linux_virtual_machine.myterraformvm.resource_group_name
+data "azurerm_public_ip" "capstonePublicIP"{
+   name                = azurerm_public_ip.capstonePublicIP.name
+  resource_group_name = azurerm_linux_virtual_machine.capstonevm.resource_group_name
 
 }
 
-output "public_ip_address" {
-value = data.azurerm_public_ip.myterraformpublicip.ip_address
 
-
+resource "azurerm_container_registry" "capstoneRegistery" {
+  name                = "capstoneRegistery"
+  resource_group_name = azurerm_resource_group.capstoneterraformgroup.name
+  location            = azurerm_resource_group.capstoneterraformgroup.location
+  sku                 = "Basic"
+  admin_enabled       = false
 }
 

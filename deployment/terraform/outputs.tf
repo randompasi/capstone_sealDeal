@@ -1,3 +1,3 @@
-# output "server_public_ip" {
-#   value =  "${data.azurerm_network_interface.myterraformnic.*.public_ip_address}"
-# }
+output "public_ip_address" {
+value = data.azurerm_public_ip.capstonePublicIP.ip_address
+}

@@ -5,7 +5,7 @@ services:
   sample-prod:
     container_name: sample-prod
     build:
-      context: .
+      context: ./my-app/
       dockerfile: Dockerfile.prod
     ports:
       - '1337:80'
