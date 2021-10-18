@@ -1,4 +1,6 @@
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+
 .terraform/
 .terraform.lock.hcl
 terraform.tfstate
