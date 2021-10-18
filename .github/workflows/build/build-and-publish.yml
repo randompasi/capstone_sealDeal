@@ -4,23 +4,25 @@ on:
   push:
     branches: [ release ]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
-
-  build-and-push-image:
-
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      package: write
-
-
-    steps:
-    - name: Checkout repository
-    - uses: actions/checkout@v2
-    
-    - name: Build the Docker image
-      run: docker build . --file ./Dockerfile.prod --tag capstone:$(date +%s)
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+          
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+        - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker-compose -f ./docker-compose-prod.yml -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstoneapp:${{ github.sha }} up
+            docker-compose push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstoneapp:${{ github.sha }}
