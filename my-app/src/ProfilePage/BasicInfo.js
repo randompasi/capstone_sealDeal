@@ -6,7 +6,7 @@ export default function BasicInfo({user}) {
 	return (
 		<div id="content">
 			<div style={{backgroundImage: user.avatarUrl}}></div>
-			<div style={{color: "white"}}>{user.name}!</div>
+			<div style={{color: "black"}}>{user.name}!!</div>
 		</div>
 	);
 }
