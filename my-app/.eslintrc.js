@@ -19,7 +19,9 @@ module.exports = {
 		sourceType: "module",
 	},
 	plugins: ["react", "jest"],
-	rules: {},
+	rules: {
+		"react/prop-types": "off",
+	},
 	settings: {
 		react: {
 			version: "detect",
