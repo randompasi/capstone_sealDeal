@@ -9,15 +9,15 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const publicPath = "/dist/";
 const mode = isDevelopment ? "development" : "production";
 const tailwindConfigFile = "./tailwind.config.js";
-const tailwindConfig = require(tailwindConfigFile)
+const tailwindConfig = require(tailwindConfigFile);
 
-console.log(`Building for ${mode}`)
+console.log(`Building for ${mode}`);
 
 module.exports = {
 	mode,
 	entry: "./src/index.js",
 	target: "web",
-	devtool: isDevelopment ? 'eval-source-map' : 'source-map',
+	devtool: isDevelopment ? "eval-source-map" : "source-map",
 	output: {
 		path: relative("dist"),
 		filename: "[name].js",
@@ -60,10 +60,8 @@ module.exports = {
 											purge: {
 												...tailwindConfig.purge,
 												enabled: !isDevelopment,
-												content: [
-													'src/**/*.js',
-												]
-											}
+												content: ["src/**/*.js"],
+											},
 										},
 									},
 									autoprefixer: {},

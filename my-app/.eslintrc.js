@@ -21,6 +21,7 @@ module.exports = {
 	plugins: ["react", "jest"],
 	rules: {
 		"react/prop-types": "off",
+		"eol-last": "warn",
 	},
 	settings: {
 		react: {
