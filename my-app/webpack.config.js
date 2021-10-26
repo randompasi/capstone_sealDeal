@@ -8,12 +8,16 @@ const relative = (/** @type {string} */ dir) => path.resolve(__dirname, dir);
 const isDevelopment = process.env.NODE_ENV !== "production";
 const publicPath = "/dist/";
 const mode = isDevelopment ? "development" : "production";
-const tailwindConfig = "./tailwind.config.js";
+const tailwindConfigFile = "./tailwind.config.js";
+const tailwindConfig = require(tailwindConfigFile)
+
+console.log(`Building for ${mode}`)
 
 module.exports = {
 	mode,
 	entry: "./src/index.js",
 	target: "web",
+	devtool: isDevelopment ? 'eval-source-map' : 'source-map',
 	output: {
 		path: relative("dist"),
 		filename: "[name].js",
@@ -51,7 +55,16 @@ module.exports = {
 							postcssOptions: {
 								plugins: {
 									tailwindcss: {
-										config: tailwindConfig,
+										config: {
+											...tailwindConfig,
+											purge: {
+												...tailwindConfig.purge,
+												enabled: !isDevelopment,
+												content: [
+													'src/**/*.js',
+												]
+											}
+										},
 									},
 									autoprefixer: {},
 								},
@@ -90,7 +103,7 @@ module.exports = {
 		name: `capstone-sealdeal_${mode}`,
 		version: "1",
 		buildDependencies: {
-			config: [__filename, ".babelrc.js", tailwindConfig, "package-lock.json"].map((_) =>
+			config: [__filename, ".babelrc.js", tailwindConfigFile, "package-lock.json"].map((_) =>
 				relative(_)
 			),
 		},

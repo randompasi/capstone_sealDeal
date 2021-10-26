@@ -4,12 +4,14 @@ import ProfilePage from "./ProfilePage/ProfilePage";
 
 function App() {
 	return (
-		<div className="App">
-			<header className="App-header"></header>
+		<>
+			<nav className="bg-gray-700 w-full h-20">
+				<span className="text-red-400">test</span>
+			</nav>
 			<main>
 				<ProfilePage />
 			</main>
-		</div>
+		</>
 	);
 }
 
