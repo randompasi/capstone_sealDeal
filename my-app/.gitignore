@@ -2,7 +2,7 @@
 
 # build output
 .webpack-cache
-dist
+build
 
 # dependencies
 /node_modules

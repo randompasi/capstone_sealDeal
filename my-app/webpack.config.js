@@ -6,7 +6,7 @@ const babelrc = require("./.babelrc");
 const relative = (/** @type {string} */ dir) => path.resolve(__dirname, dir);
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const publicPath = "/dist/";
+const publicPath = "/build/";
 const mode = isDevelopment ? "development" : "production";
 const tailwindConfigFile = "./tailwind.config.js";
 const tailwindConfig = require(tailwindConfigFile);
@@ -19,7 +19,7 @@ module.exports = {
 	target: "web",
 	devtool: isDevelopment ? "eval-source-map" : "source-map",
 	output: {
-		path: relative("dist"),
+		path: relative("build"),
 		filename: "[name].js",
 		publicPath,
 	},
@@ -81,13 +81,13 @@ module.exports = {
 		open: true,
 		hot: isDevelopment,
 		static: {
-			directory: relative("dist"),
+			directory: relative("build"),
 			serveIndex: true,
 			staticOptions: {},
 			publicPath,
 		},
 		historyApiFallback: {
-			index: "/dist/index.html",
+			index: "/build/index.html",
 		},
 		devMiddleware: {
 			publicPath,
