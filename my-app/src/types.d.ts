@@ -1,3 +1,4 @@
+import React from "react";
 
 export interface UserInfo {
 	name: string
@@ -10,4 +11,9 @@ export interface ProfilePageProps {
 
 export interface AvatarProps {
 	url: string
+}
+
+export interface BoxProps {
+	children: React.ReactNode | React.ReactNode[]
+	className?: string
 }

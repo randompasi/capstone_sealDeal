@@ -10,6 +10,6 @@
 	"exclude": ["node_modules/"],
 	"include": ["src/**/*"],
 	"typeAcquisition": {
-		"include": ["react", "./src/typeDeclarations.d.ts"]
+		"include": ["react", "./src/types/*.d.ts"]
 	}
 }

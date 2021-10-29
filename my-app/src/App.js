@@ -1,4 +1,5 @@
 import "./App.css";
+import Box from "./Box";
 import ProfilePage from "./ProfilePage/ProfilePage";
 
 function NavItem(props) {
@@ -11,18 +12,18 @@ function NavItem(props) {
 
 function App() {
 	return (
-		<>
-			<nav className="bg-gray-700 flex items-center justify-between flex-wrap p-6">
+		<div className="text-white">
+			<Box>
 				<div className="flex items-center flex-shrink-0 text-white mr-6">Logo</div>
 				<div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
 					<NavItem label="Menu 1" />
 					<NavItem label="Menu 2" />
 				</div>
-			</nav>
+			</Box>
 			<main>
 				<ProfilePage />
 			</main>
-		</>
+		</div>
 	);
 }
 
