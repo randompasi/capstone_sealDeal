@@ -1,3 +1,4 @@
+import facepng from "../assets/face.png";
 import {useState} from "react";
 import BasicInfo from "./BasicInfo";
 
@@ -5,7 +6,7 @@ export default function ProfilePage() {
 	const [user] = useState(() => {
 		/** @type {import('./types').UserInfo} */
 		const user = {
-			avatarUrl: "test",
+			avatarUrl: facepng,
 			name: "Foo Bar",
 		};
 		return user;

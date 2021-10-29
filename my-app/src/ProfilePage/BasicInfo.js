@@ -1,11 +1,12 @@
+import Avatar from "./Avatar";
+
 /**
  * @param {import('./types').ProfilePageProps} props
  */
 export default function BasicInfo({user}) {
-	console.log("woop", user.name);
 	return (
 		<div id="content">
-			<div style={{backgroundImage: user.avatarUrl}}></div>
+			<Avatar url={user.avatarUrl} />
 			<div style={{color: "black"}}>{user.name}!!</div>
 		</div>
 	);

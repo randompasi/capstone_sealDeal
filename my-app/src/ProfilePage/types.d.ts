@@ -7,3 +7,7 @@ export interface UserInfo {
 export interface ProfilePageProps {
 	user: UserInfo
 }
+
+export interface AvatarProps {
+	url: string
+}
