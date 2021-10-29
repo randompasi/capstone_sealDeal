@@ -133,7 +133,7 @@ resource "random_id" "randomId" {
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "capstonevm" {
-  name                  = "myVM"
+  name                  = "capstoneVM"
   location              = var.azure_region
    admin_username      = "adminuser"
   resource_group_name   = azurerm_resource_group.capstoneterraformgroup.name
@@ -166,7 +166,7 @@ resource "azurerm_linux_virtual_machine" "capstonevm" {
 }
 
 data "azurerm_public_ip" "capstonePublicIP"{
-   name                = azurerm_public_ip.capstonePublicIP.name
+  name                = azurerm_public_ip.capstonePublicIP.name
   resource_group_name = azurerm_linux_virtual_machine.capstonevm.resource_group_name
 
 }
@@ -177,6 +177,5 @@ resource "azurerm_container_registry" "capstoneRegistery" {
   resource_group_name = azurerm_resource_group.capstoneterraformgroup.name
   location            = azurerm_resource_group.capstoneterraformgroup.location
   sku                 = "Basic"
-  admin_enabled       = false
+  admin_enabled       = true
 }
-

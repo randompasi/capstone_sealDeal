@@ -1,0 +1,20 @@
+# deploy to production
+
+---
+
+
+
+- name: Initial Config Of Server
+  hosts: azure
+  become: true
+  tasks:
+    - name: Log into private registry and force re-authorization
+      docker_login:
+        registry: "{{ registery }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+    
+    - name: Pull IMG From Azure Registery
+      docker_image:
+        name: "{{dockerPath}}"
+        source: pull

@@ -27,3 +27,20 @@ jobs:
             docker-compose -f ./docker-compose-prod.yml build
             docker tag capstone_sealdeal_prod_image:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+        - name: Run playbook
+          uses: dawidd6/action-ansible-playbook@v2
+          with:
+            # Required, playbook filepath
+            playbook: deploy.yaml
+            # Optional, directory where playbooks live
+            directory: ./
+            # Optional, SSH private key
+            key: ${{secrets.SSH_PRIVATE_KEY}}
+            # Optional, additional flags to pass to ansible-playbook
+            options: |
+              --extra-vars dockerPath=${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+              --extra-vars registery=${{secrets.REGISTRY_LOGIN_SERVER}}
+              --extra-vars username=${{ secrets.REGISTRY_USERNAME }}
+              --extra-vars password=${{ secrets.REGISTRY_PASSWORD }}
+
+              
