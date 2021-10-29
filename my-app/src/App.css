@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: normal;
+  src: url('./assets/Montserrat/Montserrat-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: bold;
+  src: url('./assets/Montserrat/Montserrat-Bold.woff2') format('woff2');
+}
+
 html, body {
 	background-color: white;
 }

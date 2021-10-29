@@ -1,12 +1,26 @@
+import Box from "../Box";
+import Avatar from "./Avatar";
+
 /**
- * @param {import('./types').ProfilePageProps} props
+ * @param {import('../types').ProfilePageProps} props
  */
 export default function BasicInfo({user}) {
-	console.log("woop", user.name);
 	return (
-		<div id="content">
-			<div style={{backgroundImage: user.avatarUrl}}></div>
-			<div style={{color: "black"}}>{user.name}!!</div>
-		</div>
+		<Box className="my-5">
+			<div className="grid grid-cols-3 w-full">
+				<div>
+					<Avatar url={user.avatarUrl} />
+				</div>
+				<ul className="list-none">
+					<li>{user.name}</li>
+					<li>22.10.1987</li>
+					<li>Helsinki</li>
+				</ul>
+				<ul className="list-none">
+					<li>Sealdeal PRO Seller</li>
+					<li>162 Profile Likes</li>
+				</ul>
+			</div>
+		</Box>
 	);
 }
