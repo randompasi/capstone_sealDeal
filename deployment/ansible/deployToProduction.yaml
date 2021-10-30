@@ -11,7 +11,7 @@
 
     - name: Log into private registry and force re-authorization
       docker_login:
-        registry: {{registery}}
+        registry: "{{registery}}"
         username: {{username}}
         password: {{password}}
     
