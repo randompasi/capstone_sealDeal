@@ -42,5 +42,7 @@ jobs:
               --extra-vars registery=${{secrets.REGISTRY_LOGIN_SERVER}}
               --extra-vars username=${{ secrets.REGISTRY_USERNAME }}
               --extra-vars password=${{ secrets.REGISTRY_PASSWORD }}
+              --extra-vars previousCommit=${{github.event.before}}
+              --extra-vars commit=${{github.sha}}
 
               
