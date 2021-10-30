@@ -12,8 +12,8 @@
     - name: Log into private registry and force re-authorization
       docker_login:
         registry: "{{registery}}"
-        username: {{username}}
-        password: {{password}}
+        username: "{{username}}"
+        password: "{{password}}"
     
     - name: Stop old Container
       docker_container:
@@ -25,14 +25,14 @@
       docker_image:
         state: absent
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-        tag: {{previousCommit}}
+        tag: "{{previousCommit}}"
 
     - name: Pull IMG From Azure Registery
       docker_image:
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-        tag: {{commit}}
+        tag: "{{commit}}"
         source: pull
     - name: Create a container
       docker_container:
         name: koe
-        image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}
+        image: "capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}"
