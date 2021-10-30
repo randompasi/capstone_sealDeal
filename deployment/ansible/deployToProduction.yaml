@@ -8,13 +8,31 @@
   hosts: azure
   become: true
   tasks:
+
     - name: Log into private registry and force re-authorization
       docker_login:
-        registry: "{{ registery }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
+        registry: {{registery}}
+        username: {{username}}
+        password: {{password}}
     
+    - name: Stop old Container
+      docker_container:
+        name: koe
+        state: absent
+        force_kill : true
+
+    - name: Remove image
+      docker_image:
+        state: absent
+        name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
+        tag: {{previousCommit}}
+
     - name: Pull IMG From Azure Registery
       docker_image:
-        name: "{{dockerPath}}"
+        name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
+        tag: {{commit}}
         source: pull
+    - name: Create a container
+      docker_container:
+        name: koe
+        image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}
