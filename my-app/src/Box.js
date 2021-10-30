@@ -1,5 +1,5 @@
 /**
- * @param {import('./types').BoxProps} props
+ * @param {ProfilePage.BoxProps} props
  */
 export default function Box({children, className}) {
 	return (

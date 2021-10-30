@@ -2,7 +2,7 @@ import Box from "../Box";
 import Avatar from "./Avatar";
 
 /**
- * @param {import('../types').ProfilePageProps} props
+ * @param {ProfilePage.ProfilePageProps} props
  */
 export default function BasicInfo({user}) {
 	return (

@@ -1,5 +1,5 @@
 /**
- * @param {import('../types').AvatarProps} props
+ * @param {ProfilePage.AvatarProps} props
  */
 export default function Avatar({url}) {
 	const size = 100;

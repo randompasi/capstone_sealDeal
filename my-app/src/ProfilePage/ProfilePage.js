@@ -4,7 +4,7 @@ import BasicInfo from "./BasicInfo";
 
 export default function ProfilePage() {
 	const [user] = useState(() => {
-		/** @type {import('../types').UserInfo} */
+		/** @type {ProfilePage.UserInfo} */
 		const user = {
 			avatarUrl: facepng,
 			name: "Foo Bar",
