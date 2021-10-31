@@ -16,12 +16,14 @@ export default function ProfilePage() {
 		return user;
 	});
 	return (
-		<div>
-			<BasicInfo user={user} />
-			<Achievements user={user} />
-			<Reviews user={user} />
-			<SellingHistory user={user} />
-			<EnvironmentalSavings user={user} />
+		<div className="flex flex-col items-center">
+			<div className="w-9/12">
+				<BasicInfo user={user} />
+				<Achievements user={user} />
+				<Reviews user={user} />
+				<SellingHistory user={user} />
+				<EnvironmentalSavings user={user} />
+			</div>
 		</div>
 	);
 }
