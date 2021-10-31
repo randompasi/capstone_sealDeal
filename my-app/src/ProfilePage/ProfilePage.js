@@ -17,12 +17,22 @@ export default function ProfilePage() {
 	});
 	return (
 		<div className="flex flex-col items-center">
-			<div className="w-9/12">
-				<BasicInfo user={user} />
-				<Achievements user={user} />
+			<div className="w-8/12  p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"  style={{backgroundColor: "white"}}>
+				<div className="col-span-2">
+					<BasicInfo user={user} />
+				</div>
+
+				<div className="col-span-2">
+					<Achievements user={user} />
+				</div>
+				
 				<Reviews user={user} />
+
 				<SellingHistory user={user} />
-				<EnvironmentalSavings user={user} />
+				
+				<div className="col-span-2">
+					<EnvironmentalSavings user={user} />
+				</div>
 			</div>
 		</div>
 	);
