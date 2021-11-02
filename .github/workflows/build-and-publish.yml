@@ -2,6 +2,7 @@ name: Create and publish a Docker image
 
 on:
   push:
+  pull_request:
     branches: [ release ]
 
 jobs:
@@ -27,6 +28,15 @@ jobs:
             docker-compose -f ./docker-compose-prod.yml build
             docker tag capstone_sealdeal_prod_image:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+        - name: copy file via ssh password
+          uses: appleboy/scp-action@master
+          with:
+            host: 40.127.101.134
+            username: adminuser
+            port: 22
+            key: ${{secrets.SSH_PRIVATE_KEY}}
+            source: "tests/a.txt,tests/b.txt"
+            target: "test"    
         - name: Run playbook
           uses: dawidd6/action-ansible-playbook@v2
           with:

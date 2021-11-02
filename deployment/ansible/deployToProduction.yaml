@@ -32,7 +32,12 @@
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
         tag: "{{commit}}"
         source: pull
-    - name: Create a container
-      docker_container:
-        name: koe
-        image: "capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}"
+    
+    - name: Create and start services
+      docker_compose:
+      project_src: ./
+      files: [docker-compose-prod.yml]
+      register: output
+
+    - ansible.builtin.debug:
+        var: output
