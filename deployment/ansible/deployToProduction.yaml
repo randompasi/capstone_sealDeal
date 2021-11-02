@@ -17,7 +17,7 @@
     
     - name: Stop old Container
       docker_container:
-        name: koe
+        name: prod_production_1
         state: absent
         force_kill : true
 
@@ -49,5 +49,5 @@
 
     - ansible.builtin.assert:
         that:
-          - "{{commit}}_production_1.state.running"
+          - "prod_production_1.state.running"
 
