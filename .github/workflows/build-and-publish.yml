@@ -12,6 +12,11 @@ jobs:
         # checkout the repo
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
+        # Short name for current branch. For PRs, use target branch (base ref)
+        - name: Set environment variables
+          run: |
+            GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+            echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
           
         - name: 'Login via Azure CLI'
           uses: azure/login@v1
@@ -46,5 +51,7 @@ jobs:
               --extra-vars password=${{ secrets.REGISTRY_PASSWORD }}
               --extra-vars previousCommit=${{github.event.before}}
               --extra-vars commit=${{github.sha}}
+              --extra-vars branch=${{GIT_BRANCH}}
+              
 
               
