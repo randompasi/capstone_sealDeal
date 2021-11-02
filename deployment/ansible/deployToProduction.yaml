@@ -52,8 +52,3 @@
       register: output
     - ansible.builtin.debug:
         var: output
-
-    - ansible.builtin.assert:
-        that:
-          - "prod__production_1.state.running"
-
