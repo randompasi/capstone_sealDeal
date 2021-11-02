@@ -37,5 +37,17 @@ locals {
             source_address_prefix      = "*"
             destination_address_prefix = "*"
         }
+        
+        outbound = {
+            name                       = "OUTBOUND_RULE"
+            priority                   = 103
+            direction                  = "Outbound"
+            access                     = "Allow"
+            protocol                   = "Tcp"
+            source_port_range          = "*"
+            destination_port_range     = "*"
+            source_address_prefix      = "*"
+            destination_address_prefix = "*"
+        }
     }
 }

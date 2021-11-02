@@ -77,7 +77,7 @@ resource "azurerm_network_interface" "capstoneTerraformnic" {
     name                          = "capstoneNicConfiguration"
     subnet_id                     = azurerm_subnet.capstoneterraformsubnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address = "10.0.2.5"
+    private_ip_address            = "10.0.2.5"
     public_ip_address_id          = azurerm_public_ip.capstonePublicIP.id
   }
 
@@ -112,8 +112,6 @@ resource "azurerm_network_security_rule" "security_rules"{
 }
 
 
-
-
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "securityGroupAsssociation" {
   network_interface_id      = azurerm_network_interface.capstoneTerraformnic.id
@@ -129,6 +127,7 @@ resource "random_id" "randomId" {
 
   byte_length = 8
 }
+
 
 
 # Create virtual machine

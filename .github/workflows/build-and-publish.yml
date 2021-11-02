@@ -37,6 +37,7 @@ jobs:
             # Optional, SSH private key
             key: ${{secrets.SSH_PRIVATE_KEY}}
             # Optional, additional flags to pass to ansible-playbook
+            #koe
             options: |
               --extra-vars dockerPath=${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
               --extra-vars registery=${{secrets.REGISTRY_LOGIN_SERVER}}
