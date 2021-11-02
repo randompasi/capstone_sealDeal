@@ -17,11 +17,14 @@
     
     - name: Stop old Container
       docker_compose:
+        project_name: prod_production_1
         stopped: yes
-        services: ["prod_production_1"]
+        definition:
+          version: '2'
+          services: ["prod_production_1"]
 
     - name: Remove image
-      docker_image:
+      docker_B:
         state: absent
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
         tag: "{{previousCommit}}"
