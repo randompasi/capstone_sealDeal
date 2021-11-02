@@ -40,7 +40,7 @@
           version: '2'
           services:
             production:
-              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:"{{commit}}"
+              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}
               ports:
                   - "80:80"
       register: output
