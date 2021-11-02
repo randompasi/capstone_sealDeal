@@ -35,8 +35,8 @@
     
     - name: Create and start services
       docker_compose:
-      project_src: ./
-      files: [docker-compose-prod.yml]
+        project_src: ./
+        files: [docker-compose-prod.yml]
       register: output
 
     - ansible.builtin.debug:
