@@ -28,11 +28,7 @@ jobs:
         - run: |
             docker-compose -f ./docker-compose-prod.yml build
             docker tag capstone_sealdeal_prod_image:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
-        - name: Include task list in play
-          include_tasks: stuff.yml
-        
-        
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}        
         - name: Run playbook
           uses: dawidd6/action-ansible-playbook@v2
           with:
