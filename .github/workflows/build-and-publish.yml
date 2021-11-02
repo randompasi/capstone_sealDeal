@@ -35,7 +35,7 @@ jobs:
             username: adminuser
             port: 22
             key: ${{secrets.SSH_PRIVATE_KEY}}
-            source: "./docker-compose-prod.yml, ./Dockerfile.prod"
+            source: "./docker-compose-prod.yml"
             target: "."    
         - name: Run playbook
           uses: dawidd6/action-ansible-playbook@v2
