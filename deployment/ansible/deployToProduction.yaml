@@ -24,7 +24,7 @@
           services: ["prod_production_1"]
 
     - name: Remove image
-      docker_B:
+      docker_image:
         state: absent
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
         tag: "{{previousCommit}}"
