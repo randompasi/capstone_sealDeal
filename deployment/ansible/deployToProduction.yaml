@@ -30,7 +30,6 @@
     - name: Remove image
       docker_image:
         state: absent
-        force_absent: yes
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
         tag: "{{previousCommit}}"
 
