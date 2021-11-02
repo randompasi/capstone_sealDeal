@@ -16,10 +16,9 @@
         password: "{{password}}"
     
     - name: Stop old Container
-      docker_container:
-        name: prod_production_1
-        state: absent
-        force_kill : true
+      docker_compose:
+        stopped: yes
+        services: ["prod_production_1"]
 
     - name: Remove image
       docker_image:
