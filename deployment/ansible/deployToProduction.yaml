@@ -37,13 +37,13 @@
       docker_compose:
         project_name: flask
         definition:
-        version: '2'
-        services:
-          production:
-            image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-            ports:
-                - "80:80"
-        register: output
+          version: '2'
+          services:
+            production:
+              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
+              ports:
+                  - "80:80"
+      register: output
     - ansible.builtin.debug:
         var: output
 
