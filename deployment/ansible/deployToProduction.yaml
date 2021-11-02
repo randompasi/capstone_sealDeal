@@ -33,13 +33,21 @@
         tag: "{{commit}}"
         source: pull
     
-    - name: Create and start services
+    - name: Run project with docker-compose
       docker_compose:
-        project_src: ./
-        files: [docker-compose-prod.yml]
-        build: yes
-        state: present
-      register: output
-
+        project_name: flask
+        definition:
+        version: '2'
+        services:
+          production:
+            image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
+            ports:
+                - "80:80"
+        register: output
     - ansible.builtin.debug:
         var: output
+
+    - ansible.builtin.assert:
+        that:
+          - "production.flask_production_1.state.running"
+

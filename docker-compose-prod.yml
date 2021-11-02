@@ -6,6 +6,6 @@ services:
     container_name: prod-capstone-container
     build:
       context: .
-      dockerfile: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image # when testing local: Dockerfile.prod
+      dockerfile: Dockerfile.prod
     ports:
-      - '80:80'
+      - '1337:80'
