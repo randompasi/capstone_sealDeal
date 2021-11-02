@@ -68,4 +68,4 @@
       - name: Install docker-py an docker composser for ansible
         remote_user: adminuser
         pip:
-          name: ["docker-py", "docker-compose"]
+          name: ["docker-compose"]
