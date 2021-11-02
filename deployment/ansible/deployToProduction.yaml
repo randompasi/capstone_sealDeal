@@ -35,7 +35,7 @@
     
     - name: Run project with docker-compose
       docker_compose:
-        project_name: "{{branch}}"
+        project_name: "prod_{{branch}}"
         definition:
           version: '2'
           services:
