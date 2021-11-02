@@ -18,7 +18,8 @@
     - name: Stop old Container
       docker_compose:
         project_name: koe
-        stopped: yes
+        state: absent
+        remove_images: local
         definition:
           version: '2'
           services: 
