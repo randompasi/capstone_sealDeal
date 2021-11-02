@@ -55,5 +55,5 @@
 
     - ansible.builtin.assert:
         that:
-          - "prod_production_1.state.running"
+          - "prod__production_1.state.running"
 
