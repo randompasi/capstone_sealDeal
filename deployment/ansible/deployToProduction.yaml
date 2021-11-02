@@ -35,12 +35,12 @@
     
     - name: Run project with docker-compose
       docker_compose:
-        project_name: "prod_{{branch}}"
+        project_name: prod_{{branch}}
         definition:
           version: '2'
           services:
             production:
-              image: "capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}"
+              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}
               ports:
                   - "80:80"
       register: output
