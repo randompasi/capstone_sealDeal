@@ -15,7 +15,7 @@ jobs:
         # Short name for current branch. For PRs, use target branch (base ref)
         - name: Set environment variables
           run: |
-            run: echo ::set-output name=short_ref::${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+            echo ::set-output name=short_ref::${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
           
         - name: 'Login via Azure CLI'
           uses: azure/login@v1
