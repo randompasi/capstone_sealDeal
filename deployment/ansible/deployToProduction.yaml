@@ -17,13 +17,13 @@
     
     - name: Stop old Container
       docker_compose:
-        project_name: prod_{{branch}}
+        project_name: "{{branch}}"
         stopped: yes
         definition:
           version: '2'
           services: 
             production:
-              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}
+              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{previousCommit}}
               ports:
                   - "80:80"
 
