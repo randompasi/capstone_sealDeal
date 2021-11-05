@@ -6,7 +6,7 @@ const babelrc = require("./.babelrc");
 const relative = (/** @type {string} */ dir) => path.resolve(__dirname, dir);
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const publicPath = "/build/";
+const publicPath = "/";
 const mode = isDevelopment ? "development" : "production";
 const tailwindConfigFile = "./tailwind.config.js";
 const tailwindConfig = require(tailwindConfigFile);
