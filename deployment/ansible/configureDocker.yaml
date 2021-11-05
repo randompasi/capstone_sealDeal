@@ -30,7 +30,7 @@
       - name: Set up the stable repository
         remote_user: adminuser
         apt_repository:
-          repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+          repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
           state: present
           update_cache: yes
         tags:
@@ -64,3 +64,8 @@
           url : https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-x86_64
           dest: /usr/local/bin/docker-compose
           mode: 'u+x,g+x'
+          
+      - name: Install docker-py an docker composser for ansible
+        remote_user: adminuser
+        pip:
+          name: ["docker-compose"]

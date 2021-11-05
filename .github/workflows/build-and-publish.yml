@@ -1,0 +1,50 @@
+name: Create and publish a Docker image
+
+on:
+  push:
+  pull_request:
+    branches: [release, master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the repo
+      - name: Checkout GitHub Action
+        uses: actions/checkout@main
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build and push image
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker-compose -f ./docker-compose-prod.yml build
+          docker tag capstone_sealdeal_prod_image:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          # Required, playbook filepath
+          playbook: deployToProduction.yaml
+          # Optional, directory where playbooks live
+          directory: ./deployment/ansible/
+          # Optional, SSH private key
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          # Optional, additional flags to pass to ansible-playbook
+          #koe
+          options: |
+            --extra-vars dockerPath=${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+            --extra-vars registery=${{secrets.REGISTRY_LOGIN_SERVER}}
+            --extra-vars username=${{ secrets.REGISTRY_USERNAME }}
+            --extra-vars password=${{ secrets.REGISTRY_PASSWORD }}
+            --extra-vars previousCommit=${{github.event.before}}
+            --extra-vars commit=${{github.sha}}
+            --extra-vars branch=arvo
