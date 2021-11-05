@@ -6,6 +6,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    image: "${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}"
     ports:
       - "1337:80"
