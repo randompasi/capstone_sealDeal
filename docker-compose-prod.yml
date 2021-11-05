@@ -1,11 +1,11 @@
-version: '3.7'
+version: "3.7"
 
 services:
-
   prod_image:
     container_name: prod-capstone-container
     build:
       context: .
       dockerfile: Dockerfile.prod
+    image: "${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}"
     ports:
-      - '1337:80'
+      - "1337:80"
