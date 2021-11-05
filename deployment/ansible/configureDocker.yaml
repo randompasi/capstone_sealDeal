@@ -65,7 +65,7 @@
           dest: /usr/local/bin/docker-compose
           mode: 'u+x,g+x'
           
-      - name: Install docker-py
+      - name: Install docker-py an docker composser for ansible
         remote_user: adminuser
         pip:
-          name: "docker-py"
+          name: ["docker-compose"]

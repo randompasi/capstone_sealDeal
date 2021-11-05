@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  prod_image:
+    container_name: {{branch}}-container
+    image: {{dockerPath}}
+    ports:
+      - '80:80'

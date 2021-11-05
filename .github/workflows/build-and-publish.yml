@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [ release, master ]
 
+
 jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
@@ -12,7 +13,7 @@ jobs:
         # checkout the repo
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
-          
+      
         - name: 'Login via Azure CLI'
           uses: azure/login@v1
           with:
@@ -28,6 +29,7 @@ jobs:
             docker-compose -f ./docker-compose-prod.yml build
             docker tag capstone_sealdeal_prod_image:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
             docker-compose push ${{ secrets.REGISTRY_LOGIN_SERVER }}/capstone_sealdeal_prod_image:${{ github.sha }}
+
         - name: Run playbook
           uses: dawidd6/action-ansible-playbook@v2
           with:
@@ -46,5 +48,7 @@ jobs:
               --extra-vars password=${{ secrets.REGISTRY_PASSWORD }}
               --extra-vars previousCommit=${{github.event.before}}
               --extra-vars commit=${{github.sha}}
+              --extra-vars branch=arvo
+              
 
               

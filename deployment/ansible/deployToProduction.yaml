@@ -16,10 +16,17 @@
         password: "{{password}}"
     
     - name: Stop old Container
-      docker_container:
-        name: koe
+      docker_compose:
+        project_name: koe
         state: absent
-        force_kill : true
+        remove_images: local
+        definition:
+          version: '2'
+          services: 
+            production:
+              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{previousCommit}}
+              ports:
+                  - "80:80"
 
     - name: Remove image
       docker_image:
@@ -32,7 +39,17 @@
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
         tag: "{{commit}}"
         source: pull
-    - name: Create a container
-      docker_container:
-        name: koe
-        image: "capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}"
+    
+    - name: Run project with docker-compose
+      docker_compose:
+        project_name: koe
+        definition:
+          version: '2'
+          services:
+            production:
+              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}
+              ports:
+                  - "80:80"
+      register: output
+    - ansible.builtin.debug:
+        var: output
