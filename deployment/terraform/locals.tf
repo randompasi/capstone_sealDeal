@@ -50,4 +50,14 @@ locals {
             destination_address_prefix = "*"
         }
     }
+
+    
+    prefix   = "capstone"
+  backend_address_pool_name      = "${azurerm_virtual_network.capstoneterraformnetwork.name}-beap"
+  frontend_port_name             = "${azurerm_virtual_network.capstoneterraformnetwork.name}-feport"
+  frontend_ip_configuration_name = "${azurerm_virtual_network.capstoneterraformnetwork.name}-feip"
+  http_setting_name              = "${azurerm_virtual_network.capstoneterraformnetwork.name}-be-htst"
+  listener_name                  = "${azurerm_virtual_network.capstoneterraformnetwork.name}-httplstn"
+  request_routing_rule_name      = "${azurerm_virtual_network.capstoneterraformnetwork.name}-rqrt"
+  redirect_configuration_name    = "${azurerm_virtual_network.capstoneterraformnetwork.name}-rdrcfg"
 }
