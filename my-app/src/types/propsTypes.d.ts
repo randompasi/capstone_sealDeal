@@ -5,7 +5,10 @@ declare global {
 declare namespace ProfilePage {
 	declare interface UserInfo {
 		name: string
+		bday: string
+		city: string
 		avatarUrl: string
+		achievements: ProfilePage.AcievementProp[]
 	}
 
 	declare interface ProfilePageProps {
@@ -19,6 +22,11 @@ declare namespace ProfilePage {
 	declare interface BoxProps {
 		children: React.ReactNode | React.ReactNode[]
 		className?: string
+	}
+
+	declare interface AcievementProp {
+		text: string 
+		iconType: string
 	}
 }
 
