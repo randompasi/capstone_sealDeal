@@ -25,3 +25,5 @@ Building Infrastructure for the project in Azure.
 
 # Ansible #
 
+Updates and configuring linux virtual machine.
+Updates and deployes production docker containers with github CI/CD pipeline.

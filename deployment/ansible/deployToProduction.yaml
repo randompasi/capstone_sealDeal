@@ -1,4 +1,4 @@
-# deploy to production
+# Building DOcker image, pushing it to azure registery and building new container on server instance
 
 ---
 

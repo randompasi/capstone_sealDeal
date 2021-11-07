@@ -18,7 +18,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Build and push image
+      - name: Build and push image to azure registery
         uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
@@ -47,4 +47,3 @@ jobs:
             --extra-vars password=${{ secrets.REGISTRY_PASSWORD }}
             --extra-vars previousCommit=${{github.event.before}}
             --extra-vars commit=${{github.sha}}
-            --extra-vars branch=arvo
