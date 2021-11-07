@@ -1,3 +1,4 @@
+#Setting up docker on the server for debugging and ansible
 ---
 
 - name: Configure Azure Virtual Machine
@@ -65,7 +66,7 @@
           dest: /usr/local/bin/docker-compose
           mode: 'u+x,g+x'
           
-      - name: Install docker-py an docker composser for ansible
+      - name: Install docker for ansible
         remote_user: adminuser
         pip:
-          name: ["docker-compose"]
+          name: ["docker"]
