@@ -8,7 +8,13 @@ declare namespace ProfilePage {
 		bday: string
 		city: string
 		avatarUrl: string
-		achievements: ProfilePage.AcievementProp[]
+		achievements: AcievementProp[]
+		reviews: Review[]
+	}
+
+	declare interface Review {
+		title: string
+		rating: number
 	}
 
 	declare interface ProfilePageProps {
