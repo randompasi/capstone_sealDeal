@@ -11,12 +11,12 @@ jobs:
     steps:
       - name: Checkout GitHub Action
         uses: actions/checkout@main
-      - name: Npm install
+      - name: Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: '16'
           cache: 'npm'
-        run: npm ci
+      - run: npm ci
       - name: Run ESLint
         run: npm run lint
 
