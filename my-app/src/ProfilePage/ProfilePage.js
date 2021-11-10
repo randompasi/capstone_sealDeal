@@ -5,7 +5,6 @@ import Achievements from "./Achievements";
 import Reviews from "./Reviews";
 import SellingHistory from "./SellingHistory";
 import EnvironmentalSavings from "./EnvironmentalSavings";
-import Achievement from "./Achievement";
 
 export default function ProfilePage() {
 	const [user] = useState(() => {
