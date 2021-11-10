@@ -9,9 +9,8 @@ import "./Reviews.css";
 function Review({item}) {
 	const ratingIndex = item.rating - 1;
 	const stars = times(5, (i) => (
-		<div className="flex-auto">
+		<div className="flex-auto" key={i}>
 			<img
-				key={i}
 				src={starSrc}
 				alt="Star"
 				className={ratingIndex < i ? "opacity-0" : "reviews-star-colorize"}

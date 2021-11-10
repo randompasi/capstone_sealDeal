@@ -26,7 +26,10 @@ function App() {
 				</Box>
 			</header>
 
-			<main className="flex-auto h-full" style={{backgroundImage: 'url("' + background + '")'}}>
+			<main
+				className="flex-auto min-h-screen bg-cover pb-6"
+				style={{backgroundImage: 'url("' + background + '")'}}
+			>
 				<ProfilePage />
 			</main>
 
