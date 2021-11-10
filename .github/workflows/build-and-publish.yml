@@ -6,8 +6,27 @@ on:
     branches: [release, master]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: my-app
+    steps:
+      - name: Checkout GitHub Action
+        uses: actions/checkout@main
+      - name: Npm install
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+        run: npm ci
+      - name: Run ESLint
+        run: npm run lint
+
   build-and-deploy:
     runs-on: ubuntu-latest
+    needs:
+      - lint
     steps:
       # checkout the repo
       - name: Checkout GitHub Action
