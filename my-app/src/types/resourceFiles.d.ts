@@ -9,6 +9,11 @@ declare module "*.jpg" {
 	export default val
 }
 
+declare module "*.webp" {
+	declare const val: string
+	export default val
+}
+
 declare module "*.svg" {
 	declare const content: string;
 	export default content;

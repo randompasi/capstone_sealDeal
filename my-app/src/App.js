@@ -1,7 +1,9 @@
 import "./App.css";
 import Box from "./Box";
 import ProfilePage from "./ProfilePage/ProfilePage";
-import background from "./assets/profile_bg.jpg";
+
+import webpBackground from "./assets/profile-bg-optimized.webp";
+import jpgBackground from "./assets/profile-bg-optimized.jpg";
 
 function NavItem(props) {
 	return (
@@ -10,6 +12,8 @@ function NavItem(props) {
 		</a>
 	);
 }
+
+const makeCssUrl = (url) => `url('${url}')`;
 
 function App() {
 	return (
@@ -28,7 +32,9 @@ function App() {
 
 			<main
 				className="flex-auto min-h-screen bg-cover pb-6"
-				style={{backgroundImage: 'url("' + background + '")'}}
+				style={{
+					backgroundImage: [webpBackground, jpgBackground].map(makeCssUrl).join(","),
+				}}
 			>
 				<ProfilePage />
 			</main>
