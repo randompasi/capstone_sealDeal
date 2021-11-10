@@ -15,11 +15,13 @@ function App() {
 	return (
 		<div className="text-white h-screen w-screen">
 			<header>
-				<Box>
-					<div className="flex items-center flex-shrink-0 text-white mr-6">Logo</div>
-					<div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-						<NavItem label="Menu 1" />
-						<NavItem label="Menu 2" />
+				<Box title="">
+					<div className="flex items-center justify-between flex-wrap text-xl">
+						<div className="flex items-center flex-shrink-0 text-white mr-6">Logo</div>
+						<div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+							<NavItem label="Menu 1" />
+							<NavItem label="Menu 2" />
+						</div>
 					</div>
 				</Box>
 			</header>
