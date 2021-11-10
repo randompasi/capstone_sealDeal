@@ -23,13 +23,12 @@ function App() {
 					</div>
 				</Box>
 			</header>
-			
-			<main className="flex-auto h-full" style={{backgroundImage:'url("'+background+'")'}}>
+
+			<main className="flex-auto h-full" style={{backgroundImage: 'url("' + background + '")'}}>
 				<ProfilePage />
 			</main>
 
-			<footer className="w-full h-24 bg-gray-700">
-			</footer>
+			<footer className="w-full h-24 bg-gray-700"></footer>
 		</div>
 	);
 }

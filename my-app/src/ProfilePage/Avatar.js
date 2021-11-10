@@ -11,11 +11,11 @@ export default function Avatar({url}) {
 			}}*/
 	return (
 		<div className="mr-3">
-			<img 
+			<img
 				style={{
 					height: size,
 					width: size,
-					borderRadius: 50
+					borderRadius: 50,
 				}}
 				src={url}
 			/>
