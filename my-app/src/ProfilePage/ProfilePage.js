@@ -36,6 +36,11 @@ export default function ProfilePage() {
 					iconType: "trophy",
 				},
 			],
+			reviews: [
+				{title: "Item condition", rating: 4},
+				{title: "Delivery", rating: 3},
+				{title: "Friendliness", rating: 5},
+			],
 		};
 		return user;
 	});

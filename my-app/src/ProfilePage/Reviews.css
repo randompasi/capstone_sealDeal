@@ -1,0 +1,8 @@
+
+/*
+	Hack to change black star pngs to yellow stars.
+	https://stackoverflow.com/a/40444657/6184698
+*/
+.reviews-star-colorize {
+	filter: brightness(0) invert(1) sepia(1) saturate(20) hue-rotate(-35deg);
+}

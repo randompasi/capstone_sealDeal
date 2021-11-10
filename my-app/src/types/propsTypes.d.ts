@@ -8,7 +8,13 @@ declare namespace ProfilePage {
 		bday: string
 		city: string
 		avatarUrl: string
-		achievements: ProfilePage.AcievementProp[]
+		achievements: AcievementProp[]
+		reviews: Review[]
+	}
+
+	declare interface Review {
+		title: string
+		rating: number
 	}
 
 	declare interface ProfilePageProps {
@@ -21,11 +27,12 @@ declare namespace ProfilePage {
 
 	declare interface BoxProps {
 		children: React.ReactNode | React.ReactNode[]
+		title: string
 		className?: string
 	}
 
 	declare interface AcievementProp {
-		text: string 
+		text: string
 		iconType: string
 	}
 }
