@@ -21,11 +21,12 @@ declare namespace ProfilePage {
 
 	declare interface BoxProps {
 		children: React.ReactNode | React.ReactNode[]
+		title: string
 		className?: string
 	}
 
 	declare interface AcievementProp {
-		text: string 
+		text: string
 		iconType: string
 	}
 }
