@@ -5,11 +5,9 @@ import Achievements from "./Achievements";
 import Reviews from "./Reviews";
 import SellingHistory from "./SellingHistory";
 import EnvironmentalSavings from "./EnvironmentalSavings";
-import Achievement from "./Achievement";
 
 export default function ProfilePage() {
 	const [user] = useState(() => {
-
 		/** @type {ProfilePage.UserInfo} */
 		const user = {
 			avatarUrl: facepng,
@@ -19,31 +17,34 @@ export default function ProfilePage() {
 			achievements: [
 				{
 					text: "Seller No. 1",
-					iconType: "trophy"
+					iconType: "trophy",
 				},
 				{
 					text: "Top 100",
-					iconType: "trophy"
+					iconType: "trophy",
 				},
 				{
 					text: "Seal Approved",
-					iconType: "trophy"
+					iconType: "trophy",
 				},
 				{
 					text: "Trusted",
-					iconType: "trophy"
+					iconType: "trophy",
 				},
 				{
 					text: "Ecological",
-					iconType: "trophy"
-				}
-			]
+					iconType: "trophy",
+				},
+			],
 		};
 		return user;
 	});
 	return (
 		<div className="flex flex-col items-center">
-			<div className="w-5/12  p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"  style={{backgroundColor: "white"}}>
+			<div
+				className="w-5/12  p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"
+				style={{backgroundColor: "white"}}
+			>
 				<div className="col-span-2">
 					<BasicInfo user={user} />
 				</div>
@@ -51,11 +52,11 @@ export default function ProfilePage() {
 				<div className="col-span-2">
 					<Achievements user={user} />
 				</div>
-				
+
 				<Reviews user={user} />
 
 				<SellingHistory user={user} />
-				
+
 				<div className="col-span-2">
 					<EnvironmentalSavings user={user} />
 				</div>
