@@ -4,6 +4,11 @@
   hosts: azure
   become: true
   tasks:
+    - name: create a directory named old
+      path: ./old
+      state: directory
+      mode: "u=rwx,g=rwx,o=rwx"
+
     - name: Create new docker-compose.yml using Jinja2
       template:
         src: docker-compose-new.j2
