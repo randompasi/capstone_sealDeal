@@ -5,9 +5,10 @@
   become: true
   tasks:
     - name: create a directory named old
-      path: ./old
-      state: directory
-      mode: "u=rwx,g=rwx,o=rwx"
+      file:
+        path: ./old
+        state: directory
+        mode: 777
 
     - name: Create new docker-compose.yml using Jinja2
       template:
