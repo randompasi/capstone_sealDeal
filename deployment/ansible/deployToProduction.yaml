@@ -15,7 +15,7 @@
         src: docker-compose-new.j2
         dest: ./docker-compose.yml
 
-    - name: Create new docker-compose.yml using Jinja2
+    - name: Create old docker-compose.yml using Jinja2
       template:
         src: docker-compose-old.j2
         dest: ./old/docker-compose.yml
@@ -26,16 +26,11 @@
         username: "{{username}}"
         password: "{{password}}"
 
-    - name: Tear down old Container
+    - name: Tear down old Containers and remove images
       docker_compose:
         project_src: ./old
         state: absent
-
-    - name: Remove image
-      docker_image:
-        state: absent
-        name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-        tag: "{{previousCommit}}"
+        remove_images: all
 
     - name: Pull IMG From Azure Registery
       docker_image:
