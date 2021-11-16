@@ -6,12 +6,14 @@
   tasks:
     - name: Create new docker-compose.yml using Jinja2
       template:
-        src: docker-compose.j2
-        dest: ./docker-compose-new.yml
+        src: docker-compose-new.j2
+        dest: ./docker-compose.yml
+
     - name: Create new docker-compose.yml using Jinja2
       template:
         src: docker-compose-old.j2
         dest: ./old/docker-compose.yml
+
     - name: Log into private registry and force re-authorization
       docker_login:
         registry: "{{registery}}"
