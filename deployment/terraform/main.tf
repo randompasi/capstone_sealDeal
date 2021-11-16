@@ -351,7 +351,7 @@ resource "azurerm_linux_virtual_machine" "capstonevm" {
    admin_username      = "adminuser"
   resource_group_name   = azurerm_resource_group.capstoneterraformgroup.name
   network_interface_ids = [azurerm_network_interface.capstoneTerraformnic.id]
-  size                  = "Standard_DS1_v2"
+  size                  = "Standard_B2ms"
 
   os_disk {
     caching           = "ReadWrite"
