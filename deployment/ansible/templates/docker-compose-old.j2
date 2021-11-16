@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  prod_image:
+    container_name: capstone-production
+    image: {{registery}}:/capstone_sealdeal_prod_image:{{previousCommit}}
+    ports:
+      - '80:80'

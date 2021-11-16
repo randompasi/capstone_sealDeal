@@ -4,10 +4,14 @@
   hosts: azure
   become: true
   tasks:
-    - name: Create docker-compose.yml using Jinja2
+    - name: Create new docker-compose.yml using Jinja2
       template:
         src: docker-compose.j2
-        dest: ./docker-compose.yml
+        dest: ./docker-compose-new.yml
+    - name: Create new docker-compose.yml using Jinja2
+      template:
+        src: docker-compose-old.j2
+        dest: ./old/docker-compose.yml
     - name: Log into private registry and force re-authorization
       docker_login:
         registry: "{{registery}}"
@@ -16,19 +20,19 @@
 
     - name: Tear down old Container
       docker_compose:
-        project_src: .
+        project_src: ./old
         state: absent
 
     - name: Remove image
       docker_image:
         state: absent
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-        tag: "latest"
+        tag: "{{previousCommit}}"
 
     - name: Pull IMG From Azure Registery
       docker_image:
         name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-        tag: "latest"
+        tag: "{{commit}}"
         source: pull
 
     - name: Run project with docker-compose
