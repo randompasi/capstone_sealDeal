@@ -9,7 +9,7 @@ terraform {
 }
 
 locals {
-    # get json 
+    # get json
     credentials = jsondecode(file("${path.module}/credentials.json"))
 
    }
@@ -68,8 +68,8 @@ resource "azurerm_public_ip" "capstonePublicIP" {
   resource_group_name          = azurerm_resource_group.capstoneterraformgroup.name
   allocation_method            = "Static"
   idle_timeout_in_minutes      = 30
-  domain_name_label            = "capstoneseal" 
-  tags                         = azurerm_resource_group.capstoneterraformgroup.tags 
+  domain_name_label            = "capstoneseal"
+  tags                         = azurerm_resource_group.capstoneterraformgroup.tags
 }
 
 
@@ -296,11 +296,11 @@ resource "azurerm_network_interface" "capstoneTerraformnic" {
 #   }
 
 
- 
+
 
 # }
 
-# Create Network Security Group 
+# Create Network Security Group
 resource "azurerm_network_security_group" "securityGroup" {
   name                = "capstoneNetworkSecurityGroup"
   location            = var.azure_region
@@ -351,7 +351,7 @@ resource "azurerm_linux_virtual_machine" "capstonevm" {
    admin_username      = "adminuser"
   resource_group_name   = azurerm_resource_group.capstoneterraformgroup.name
   network_interface_ids = [azurerm_network_interface.capstoneTerraformnic.id]
-  size                  = "Standard_B2ms"
+  size                  = "Standard_B2s"
 
   os_disk {
     caching           = "ReadWrite"

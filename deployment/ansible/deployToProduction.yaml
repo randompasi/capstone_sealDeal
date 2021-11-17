@@ -10,15 +10,13 @@
         state: directory
         mode: 777
 
+    - name: move old docker-compose to old directory
+      command: mv ./docker-compose.yml ./old/docker-compose.yml
+
     - name: Create new docker-compose.yml using Jinja2
       template:
-        src: docker-compose-new.j2
+        src: docker-compose.j2
         dest: ./docker-compose.yml
-
-    - name: Create old docker-compose.yml using Jinja2
-      template:
-        src: docker-compose-old.j2
-        dest: ./old/docker-compose.yml
 
     - name: Log into private registry and force re-authorization
       docker_login:
