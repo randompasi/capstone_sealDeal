@@ -35,6 +35,9 @@ services:
     ports:
       - "1337:80"
 
+networks:
+  postgrest:
+
 volumes:
   db-data:
   db-run:
