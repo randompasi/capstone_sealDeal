@@ -1,16 +1,39 @@
-version: '3.7'
+version: '3.8'
 
 services:
-
-  sample:
-    container_name: capstone_dev
-    build:
-      context: .
-      dockerfile: Dockerfile
+  db:
+    image: docker.io/postgres:13.5-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: possupassu
     volumes:
-      - '.:/app'
-      - '/app/node_modules'
+      - db-data:/var/lib/postgresql/data
+      - db-run:/var/run/postgresql
+      - ./initdb:/docker-entrypoint-initdb.d:z
+
+  postgrest:
+    image: docker.io/postgrest/postgrest
+    restart: always
+    environment:
+      PGRST_DB_URI: 'postgresql:///postgres?user=postgres'
+      PGRST_DB_SCHEMA: api
+      PGRST_DB_ANON_ROLE: api_anon
+      PGRST_SECRET_IS_BASE64: 1
+      PGRST_JWT_SECRET: ${JWT_SECRET}
     ports:
       - 3000:3000
+    volumes:
+      - db-run:/run/postgresql
+
+  swagger:
+    image: docker.io/swaggerapi/swagger-ui
+    restart: always
+    ports:
+      - 8080:8080
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      API_URL: 'http://localhost:3000/'
+
+volumes:
+  db-data:
+  db-run:
+
