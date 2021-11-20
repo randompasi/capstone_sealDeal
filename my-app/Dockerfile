@@ -1,5 +1,5 @@
 #Creates React app on docker
-FROM node:16.13.0-alpine
+FROM docker.io/library/node:16.13.0-alpine
 
 # set working directory
 WORKDIR /app
