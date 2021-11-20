@@ -9,7 +9,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - db-run:/var/run/postgresql
-      - ./initdb:/docker-entrypoint-initdb.d:z
+      - ./my-app/initdb:/docker-entrypoint-initdb.d:z
 
   postgrest:
     image: docker.io/postgrest/postgrest
