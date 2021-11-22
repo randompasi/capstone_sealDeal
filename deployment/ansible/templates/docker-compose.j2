@@ -28,7 +28,7 @@ services:
       - db-run:/run/postgresql
 
   prod_image:
-    container_name: prod-capstone-container
+    container_name: capstone_sealdeal_prod_image
     depends_on:
       - postgrest
  {% if prod == true %}

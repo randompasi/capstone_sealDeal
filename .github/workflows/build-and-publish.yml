@@ -42,7 +42,7 @@ jobs:
           playbook: dockerLocalProduction.yaml
           directory: ./
           options: |
-            --extra-vars prod=true
+            --extra-vars prod=false
 
       - name: Build and push image to azure registery
         uses: azure/docker-login@v1
