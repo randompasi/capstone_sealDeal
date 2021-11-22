@@ -36,7 +36,9 @@ function History(list) {
 		<li key={historyList.id}>
 			{historyList.content}
 			{historyList.date}
-			{historyList.button}
+			<div>
+				{historyList.button}
+			</div>
 		</li>
 	)
 
