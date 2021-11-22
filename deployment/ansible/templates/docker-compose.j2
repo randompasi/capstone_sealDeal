@@ -31,12 +31,13 @@ services:
     container_name: capstone_sealdeal_prod_image
     depends_on:
       - postgrest
- {% if prod == true %}
+ {% if prod == 'true' %}
    image: {{dockerPath}}
  {% else %}
    build:
       context: .
       dockerfile: Dockerfile.prod
+
  {% endif %}
 
     networks:
