@@ -1,9 +1,5 @@
 # Initial server setup
-
 ---
-
-
-
 - name: Initial Config Of Server
   hosts: azure
   become: true
@@ -14,13 +10,13 @@
         update_cache: yes
         cache_valid_time: 60
 
-    - name: Upgrade installed apt packages 
+    - name: Upgrade installed apt packages
       apt:
         upgrade: dist
       register: upgrad
 
     - name: install pip3
-      apt: name=python3-pip state=present 
+      apt: name=python3-pip state=present
 
     - name: Ensure that these software packages are installed
       apt:
@@ -30,7 +26,7 @@
           - needrestart
           - sudo
         state: latest
-        
+
     - name: Check if a reboot is needed for Debian-based systems
       stat:
         path: /var/run/reboot-required

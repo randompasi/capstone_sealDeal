@@ -1,8 +1,52 @@
-version: '3.7'
+version: "3.7"
 
 services:
+  db:
+    image: docker.io/postgres:13.5-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 3XpwU6MeVErGXtqu
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - db-run:/var/run/postgresql
+      - ./my-app/initdb:/docker-entrypoint-initdb.d:z
+
+  postgrest:
+    image: docker.io/postgrest/postgrest
+    restart: always
+    depends_on:
+      - "db"
+    environment:
+      PGRST_DB_URI: 'postgresql:///postgres?user=postgres'
+      PGRST_DB_SCHEMA: api
+      PGRST_DB_ANON_ROLE: api_anon
+      PGRST_SECRET_IS_BASE64: 0
+      PGRST_JWT_SECRET: JZT7z9E3dA4t25jB
+    networks:
+      - backend
+    volumes:
+      - db-run:/run/postgresql
+
   prod_image:
-    container_name: {{branch}}-container
-    image: {{dockerPath}}
+    container_name: capstone_sealdeal_prod_image
+    depends_on:
+      - postgrest
+ {% if prod == 'true' %}
+   image: {{dockerPath}}
+ {% else %}
+   build:
+      context: .
+      dockerfile: Dockerfile.prod
+ {% endif %}
+
+    networks:
+      - backend
     ports:
-      - '80:80'
+      - "1337:80"
+
+networks:
+  backend:
+
+volumes:
+  db-data:
+  db-run:

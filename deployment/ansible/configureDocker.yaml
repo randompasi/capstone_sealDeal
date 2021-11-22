@@ -1,72 +1,76 @@
 #Setting up docker on the server for debugging and ansible
 ---
-
-- name: Configure Azure Virtual Machine
+- name: Configure Docker on Azure Virtual Machine
   hosts: azure
   become: yes
   tasks:
+    - name: Install Docker
+      remote_user: adminuser
+      apt:
+        name:
+          [
+            "apt-transport-https",
+            "ca-certificates",
+            "curl",
+            "software-properties-common",
+          ]
+        state: present
+        update_cache: yes
+      tags:
+        - docker
+    - name: Add Docker s official GPG key
+      remote_user: adminuser
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      tags:
+        - docker
+    - name: Verify that we have the key with the fingerprint
+      remote_user: adminuser
+      apt_key:
+        id: 0EBFCD88
+        state: present
+      tags:
+        - docker
+    - name: Set up the stable repository
+      remote_user: adminuser
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+        update_cache: yes
+      tags:
+        - docker
+    - name: Update apt packages
+      remote_user: adminuser
+      apt:
+        update_cache: yes
+      tags:
+        - docker
+    - name: Install docker
+      remote_user: adminuser
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+      #notify: Start docker on boot
+      tags:
+        - docker
+    - name: Add remote "adminuser" user to "docker" group
+      remote_user: adminuser
+      user:
+        name: "adminuser"
+        group: "docker"
+        append: yes
+      tags:
+        - docker
+    - name: get docker-compose
+      remote_user: adminuser
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: "u+x,g+x"
 
-      - name: Install Docker
-        remote_user : adminuser
-        apt:
-          name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
-          state: present
-          update_cache: yes
-        tags:
-          - docker
-      - name: Add Docker s official GPG key
-        remote_user: adminuser
-        apt_key:
-          url: https://download.docker.com/linux/ubuntu/gpg
-          state: present
-        tags:
-          - docker
-      - name: Verify that we have the key with the fingerprint
-        remote_user: adminuser
-        apt_key:
-          id: 0EBFCD88
-          state: present
-        tags:
-          - docker
-      - name: Set up the stable repository
-        remote_user: adminuser
-        apt_repository:
-          repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
-          state: present
-          update_cache: yes
-        tags:
-          - docker
-      - name: Update apt packages
-        remote_user: adminuser
-        apt:
-          update_cache: yes
-        tags:
-          - docker
-      - name: Install docker
-        remote_user: adminuser
-        apt:
-          name: docker-ce
-          state: present
-          update_cache: yes
-    #notify: Start docker on boot
-        tags:
-          - docker
-      - name: Add remote "adminuser" user to "docker" group
-        remote_user: adminuser
-        user:
-          name: "adminuser"
-          group: "docker"
-          append: yes
-        tags:
-          - docker
-      - name: Install docker-compose
-        remote_user: adminuser
-        get_url: 
-          url : https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-x86_64
-          dest: /usr/local/bin/docker-compose
-          mode: 'u+x,g+x'
-          
-      - name: Install docker for ansible
-        remote_user: adminuser
-        pip:
-          name: ["docker"]
+    - name: Install  docker compose for ansible
+      remote_user: adminuser
+      pip:
+        name: ["docker-compose"]

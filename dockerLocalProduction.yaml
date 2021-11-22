@@ -1,0 +1,14 @@
+#builds docker files for production docker. need to use variable prod on commands
+---
+- name: Build production docker on local machine
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Build docker
+      template:
+        src: ./deployment/ansible/templates/docker-file.j2
+        dest: ./Dockerfile.prod
+    - name: Build docker-compose
+      template:
+        src: ./deployment/ansible/templates/docker-compose.j2
+        dest: ./docker-compose-prod.yml

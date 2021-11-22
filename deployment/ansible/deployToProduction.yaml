@@ -1,55 +1,38 @@
 # Building DOcker image, pushing it to azure registery and building new container on server instance
 
 ---
-
-
-
 - name: Initial Config Of Server
   hosts: azure
   become: true
   tasks:
+    - name: create a directory named old
+      file:
+        path: ./old
+        state: directory
+        mode: 777
+    - name: Tear down old Containers
+      docker_compose:
+        project_src: ./
+        state: absent
+        remove_images: all
+
+    - name: move old docker-compose to old directory
+      command: mv ./docker-compose.yml ./old/docker-compose.yml
+
+    - name: Create new docker-compose.yml using Jinja2
+      template:
+        src: docker-compose.j2
+        dest: ./docker-compose.yml
 
     - name: Log into private registry and force re-authorization
       docker_login:
         registry: "{{registery}}"
         username: "{{username}}"
         password: "{{password}}"
-    
-    - name: Stop old Container
-      docker_compose:
-        project_name: koe
-        state: absent
-        remove_images: local
-        definition:
-          version: '2'
-          services: 
-            production:
-              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{previousCommit}}
-              ports:
-                  - "80:80"
 
-    - name: Remove image
-      docker_image:
-        state: absent
-        name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-        tag: "{{previousCommit}}"
-
-    - name: Pull IMG From Azure Registery
-      docker_image:
-        name: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image
-        tag: "{{commit}}"
-        source: pull
-    
     - name: Run project with docker-compose
       docker_compose:
-        project_name: koe
-        definition:
-          version: '2'
-          services:
-            production:
-              image: capstoneregistery.azurecr.io/capstone_sealdeal_prod_image:{{commit}}
-              ports:
-                  - "80:80"
+        project_src: .
       register: output
     - ansible.builtin.debug:
         var: output
