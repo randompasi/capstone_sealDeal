@@ -17,7 +17,7 @@ services:
     depends_on:
       - "db"
     environment:
-      PGRST_DB_URI: 'postgresql:///postgres?user=postgres'
+      PGRST_DB_URI: "postgresql:///postgres?user=postgres"
       PGRST_DB_SCHEMA: api
       PGRST_DB_ANON_ROLE: api_anon
       PGRST_SECRET_IS_BASE64: 0
@@ -31,12 +31,13 @@ services:
     container_name: prod-capstone-container
     depends_on:
       - postgrest
-    image: {{dockerPath}}
+    build:
+      context: .
       dockerfile: Dockerfile.prod
     networks:
       - backend
     ports:
-      - "{{port}}:80"
+      - "1337:80"
 
 networks:
   backend:

@@ -1,0 +1,11 @@
+---
+- name: Build production docker on local computer
+  hosts: localhost
+  gather_facts: false
+  vars:
+    my_name: Deepak P
+  tasks:
+    - name: Create Docker file
+      template:
+        src: deployment/ansible/templates/dockerfile.j2
+        dest: ./Dockerfile.prod

@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # deploy to production test
+=======
+# Building DOcker image, pushing it to azure registery and building new container on server instance
+
+>>>>>>> main
 ---
 - name: Initial Config Of Server
   hosts: azure
