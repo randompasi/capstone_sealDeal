@@ -21,7 +21,7 @@ services:
       PGRST_SECRET_IS_BASE64: 0
       PGRST_JWT_SECRET: JZT7z9E3dA4t25jB
     networks:
-      - postgrest
+      - backend
     volumes:
       - db-run:/run/postgresql
 
@@ -31,12 +31,12 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     networks:
-      - postgrest
+      - backend
     ports:
       - "1337:80"
 
 networks:
-  postgrest:
+  backend:
 
 volumes:
   db-data:
