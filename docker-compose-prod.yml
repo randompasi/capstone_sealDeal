@@ -34,6 +34,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
+ 
     networks:
       - backend
     ports:

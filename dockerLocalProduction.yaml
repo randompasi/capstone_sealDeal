@@ -1,11 +1,16 @@
 ---
-- name: Build production docker on local computer
+- name: Build production docker on local machine
   hosts: localhost
   gather_facts: false
   vars:
-    my_name: Deepak P
+    dockerPath: capstone-docker-image
+    prod: false
   tasks:
-    - name: Create Docker file
+    - name: Build docker
       template:
-        src: deployment/ansible/templates/dockerfile.j2
+        src: ./deployment/ansible/templates/docker-file.j2
         dest: ./Dockerfile.prod
+    - name: Build docker-compose
+      template:
+        src: ./deployment/ansible/templates/docker-compose.j2
+        dest: ./docker-compose-prod.yml

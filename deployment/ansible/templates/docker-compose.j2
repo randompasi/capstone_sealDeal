@@ -31,12 +31,18 @@ services:
     container_name: prod-capstone-container
     depends_on:
       - postgrest
-    image: {{dockerPath}}
+ {% if prod == true %}
+   image: {{dockerPath}}
+ {% else %}
+   build:
+      context: .
       dockerfile: Dockerfile.prod
+ {% endif %}
+
     networks:
       - backend
     ports:
-      - "{{port}}:80"
+      - "1337:80"
 
 networks:
   backend:

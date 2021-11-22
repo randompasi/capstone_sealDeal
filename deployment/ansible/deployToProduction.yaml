@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-# deploy to production test
-=======
 # Building DOcker image, pushing it to azure registery and building new container on server instance
 
->>>>>>> main
 ---
 - name: Initial Config Of Server
   hosts: azure
@@ -14,7 +10,7 @@
         path: ./old
         state: directory
         mode: 777
-    - name: Tear down old Containers and remove images
+    - name: Tear down old Containers
       docker_compose:
         project_src: ./
         state: absent
