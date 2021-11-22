@@ -1,21 +1,36 @@
 version: "3.7"
 
 services:
-  db:
+  database:
     image: docker.io/postgres:13.5-alpine
     restart: always
     environment:
-      POSTGRES_PASSWORD: 3XpwU6MeVErGXtqu
+      POSTGRES_PASSWORD: possupassu
+    networks:
+      - db_net
     volumes:
       - db-data:/var/lib/postgresql/data
       - db-run:/var/run/postgresql
-      - ./my-app/initdb:/docker-entrypoint-initdb.d:z
+      - ./my-app/db-config/initdb:/docker-entrypoint-initdb.d:ro
+
+  migrations:
+    image: docker.io/flyway/flyway
+    restart: "no"
+    command: "migrate"
+    depends_on:
+      - "database"
+    networks:
+      - db_net
+    volumes:
+      - ./my-app/db-config/flyway:/flyway/conf:ro
+      - ./my-app/db-config/migrations:/flyway/sql:ro
 
   postgrest:
     image: docker.io/postgrest/postgrest
     restart: always
     depends_on:
-      - "db"
+      - "database"
+      - "migrations"
     environment:
       PGRST_DB_URI: 'postgresql:///postgres?user=postgres'
       PGRST_DB_SCHEMA: api
@@ -23,7 +38,7 @@ services:
       PGRST_SECRET_IS_BASE64: 0
       PGRST_JWT_SECRET: JZT7z9E3dA4t25jB
     networks:
-      - backend
+      - backend_net
     volumes:
       - db-run:/run/postgresql
 
@@ -40,12 +55,13 @@ services:
  {% endif %}
 
     networks:
-      - backend
+      - backend_net
     ports:
       - "{{port}}:80"
 
 networks:
-  backend:
+  db_net:
+  backend_net:
 
 volumes:
   db-data:
