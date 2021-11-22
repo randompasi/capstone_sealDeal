@@ -36,6 +36,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: create docker files
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: dockerLocalProduction.yaml
+          directory: ./
+          options: |
+            --extra-vars prod=true
+
       - name: Build and push image to azure registery
         uses: azure/docker-login@v1
         with:

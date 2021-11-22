@@ -3,7 +3,6 @@
   hosts: localhost
   gather_facts: false
   vars:
-    dockerPath: capstone-docker-image
     prod: false
   tasks:
     - name: Build docker
