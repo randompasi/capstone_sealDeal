@@ -43,6 +43,7 @@ jobs:
           directory: ./
           options: |
             --extra-vars prod=false
+            --extra-vars port=80
 
       - name: Build and push image to azure registery
         uses: azure/docker-login@v1
@@ -74,3 +75,4 @@ jobs:
             --extra-vars password=${{ secrets.REGISTRY_PASSWORD }}
             --extra-vars previousCommit=${{github.event.before}}
             --extra-vars commit=${{github.sha}}
+            --extra-vars port=80

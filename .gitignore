@@ -1,5 +1,7 @@
 .vscode/*
 !.vscode/extensions.json
+docker-compose-prod.yml
+Dockerfile.prod
 
 .terraform/
 .terraform.lock.hcl

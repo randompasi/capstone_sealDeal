@@ -42,7 +42,7 @@ services:
     networks:
       - backend
     ports:
-      - "1337:80"
+      - "{{port}}:80"
 
 networks:
   backend:
