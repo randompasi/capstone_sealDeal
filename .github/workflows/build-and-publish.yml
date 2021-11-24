@@ -39,7 +39,7 @@ jobs:
       - name: Create docker files
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          playbook: dockerLocalProduction.yaml
+          playbook: buildProductionDockerFiles.yaml
           directory: ./
           options: |
             --extra-vars prod=false
