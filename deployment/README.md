@@ -4,7 +4,7 @@ Code and tools to create needed infrastructure in Azure and configuration how to
 
 # Terraform #
 
-Building Infrastructure for the project in Azure. 
+Building Infrastructure for the project in Azure.
 
 - All files will be in terraform folder
 
@@ -27,3 +27,7 @@ Building Infrastructure for the project in Azure.
 
 Updates and configuring linux virtual machine.
 Updates and deployes production docker containers with github CI/CD pipeline.
+
+# Building Docker Files of Production For Local use #
+
+- run ansible file deployToProduction.yml
