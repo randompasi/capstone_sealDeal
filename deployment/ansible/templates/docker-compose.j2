@@ -3,9 +3,6 @@ version: "3.7"
 services:
   prod_image:
     container_name: capstone_sealdeal_prod_image
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
  {% if prod == 'true' %}
     image: {{dockerPath}}
  {% else %}
