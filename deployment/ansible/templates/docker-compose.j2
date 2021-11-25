@@ -1,9 +1,32 @@
 version: "3.7"
 
 services:
+  prod_image:
+    container_name: capstone_sealdeal_prod_image
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+ {% if prod == 'true' %}
+    image: {{dockerPath}}
+ {% else %}
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+ {% endif %}
+    networks:
+      - backend_net
+    ports:
+      - "{{port}}:80"
+    volumes:
+      - db-config-initdb:/db-config/initdb
+      - db-config-migrations:/db-config/migrations
+      - db-config-flyway:/db-config/flyway
+
   database:
     image: docker.io/postgres:13.5-alpine
-    restart: always
+    restart: "no"
+    depends_on:
+      - "prod_image"
     environment:
       POSTGRES_PASSWORD: possupassu
     networks:
@@ -11,19 +34,19 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - db-run:/var/run/postgresql
-      - ./my-app/db-config/initdb:/docker-entrypoint-initdb.d:ro
+      - db-config-initdb:/docker-entrypoint-initdb.d:ro
 
   migrations:
     image: docker.io/flyway/flyway
     restart: "no"
-    command: "migrate"
     depends_on:
       - "database"
+    command: "migrate"
     networks:
       - db_net
     volumes:
-      - ./my-app/db-config/flyway:/flyway/conf:ro
-      - ./my-app/db-config/migrations:/flyway/sql:ro
+      - db-config-flyway:/flyway/conf:ro
+      - db-config-migrations:/flyway/sql:ro
 
   postgrest:
     image: docker.io/postgrest/postgrest
@@ -42,23 +65,6 @@ services:
     volumes:
       - db-run:/run/postgresql
 
-  prod_image:
-    container_name: capstone_sealdeal_prod_image
-    depends_on:
-      - postgrest
- {% if prod == 'true' %}
-   image: {{dockerPath}}
- {% else %}
-   build:
-      context: .
-      dockerfile: Dockerfile.prod
- {% endif %}
-
-    networks:
-      - backend_net
-    ports:
-      - "{{port}}:80"
-
 networks:
   db_net:
   backend_net:
@@ -66,3 +72,6 @@ networks:
 volumes:
   db-data:
   db-run:
+  db-config-initdb:
+  db-config-migrations:
+  db-config-flyway:
