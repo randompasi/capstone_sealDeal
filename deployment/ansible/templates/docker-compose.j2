@@ -10,14 +10,13 @@ services:
       context: .
       dockerfile: Dockerfile.prod
 {% endif %}
-    networks:
-      - backend_net
-    ports:
-      - "{{port}}:80"
     volumes:
       - db-config-initdb:/db-config/initdb
       - db-config-migrations:/db-config/migrations
       - db-config-flyway:/db-config/flyway
+      - web-files:/build
+      - nginx-config-confd:/nginx-config/conf.d
+      - nginx-config-auth:/nginx-config/auth
 
   database:
     image: docker.io/postgres:13.5-alpine
@@ -62,6 +61,22 @@ services:
     volumes:
       - db-run:/run/postgresql
 
+  nginx:
+    image: docker.io/nginx:stable-alpine
+    restart: "no"
+    command: ["nginx", "-g", "daemon off;"]
+    depends_on:
+      - "postgrest"
+      - "prod_image"
+    networks:
+      - backend_net
+    ports:
+      - "{{port}}:80"
+    volumes:
+      - web-files:/usr/share/nginx/html:ro
+      - nginx-config-confd:/etc/nginx/conf.d:ro
+      - nginx-config-auth:/auth:ro
+
 networks:
   db_net:
   backend_net:
@@ -72,3 +87,6 @@ volumes:
   db-config-initdb:
   db-config-migrations:
   db-config-flyway:
+  web-files:
+  nginx-config-confd:
+  nginx-config-auth:

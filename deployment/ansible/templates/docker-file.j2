@@ -8,10 +8,8 @@ COPY ./my-app/ ./
 RUN npm run build:prod
 
 # production environment
-FROM docker.io/nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
+FROM docker.io/alpine:3.14
+COPY --from=build /app/build /build
 COPY ./my-app/db-config/ /db-config
-COPY ./my-app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./http-auth-users.txt /etc/nginx/.htpasswd
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+COPY ./my-app/nginx/nginx.conf /nginx-config/conf.d/default.conf
+COPY ./http-auth-users.txt /nginx-config/auth/.htpasswd
