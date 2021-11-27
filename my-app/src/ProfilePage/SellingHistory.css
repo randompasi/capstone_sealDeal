@@ -1,0 +1,10 @@
+ul li {
+	display: flex;
+	justify-content: space-between;
+	max-width: 200px;
+}
+
+ul p {
+	margin-bottom: 5px;
+	text-align: right;
+}
