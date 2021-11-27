@@ -29,15 +29,13 @@ function History() {
 	];
 
 	const listAll = historyLists.map((historyList) => (
-		<li key={historyList.id}>
-			{historyList.content}
-			{historyList.date}
-			<div>
-				<a href={""}>
-					{historyList.button}
-				</a>
-			</div>
-		</li>
+		<ul className="flex flex-row justify-between">
+			<li key={historyList.id}>
+				<h1>{historyList.content}</h1>
+				<p>{historyList.date}</p>
+			</li>
+			<a href={""}>{historyList.button}</a>
+		</ul>
 	));
 
 	return (
