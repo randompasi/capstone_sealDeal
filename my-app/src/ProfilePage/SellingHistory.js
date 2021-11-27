@@ -32,7 +32,11 @@ function History() {
 		<li key={historyList.id}>
 			{historyList.content}
 			{historyList.date}
-			<div>{historyList.button}</div>
+			<div>
+				<button>
+					{historyList.button}
+				</button>
+			</div>
 		</li>
 	));
 
