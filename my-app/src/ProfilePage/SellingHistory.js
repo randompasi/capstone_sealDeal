@@ -33,9 +33,9 @@ function History() {
 			{historyList.content}
 			{historyList.date}
 			<div>
-				<button>
+				<a href={""}>
 					{historyList.button}
-				</button>
+				</a>
 			</div>
 		</li>
 	));
