@@ -15,24 +15,31 @@ export default function ProfilePage() {
 			bday: "22.10.1987",
 			city: "Turku",
 			achievements: [
+				//Note: The description could eventually be hardcoded to the icon type
+				//Doesn't make sense currently since we only have two icons
 				{
 					text: "Seller No. 1",
+					description: "This trophy was awarded to the number 1 seller of the month!",
 					iconType: "trophy",
 				},
 				{
 					text: "Top 100",
+					description: "This trophy was awarded to the top 100 sellers this month!",
 					iconType: "trophy",
 				},
 				{
 					text: "Seal Approved",
+					description: "This seller is recognized as trustworthy by the Seal Team!",
 					iconType: "trophy",
 				},
 				{
 					text: "Trusted",
+					description: "This seller has made +20 completed sales!",
 					iconType: "trophy",
 				},
 				{
 					text: "Ecological",
+					description: "This seller has saved +20 products from the trashcan!",
 					iconType: "trophy",
 				},
 			],
@@ -60,7 +67,7 @@ export default function ProfilePage() {
 
 				<Reviews user={user} />
 
-				<SellingHistory user={user} />
+				<SellingHistory />
 
 				<div className="col-span-2">
 					<EnvironmentalSavings user={user} />

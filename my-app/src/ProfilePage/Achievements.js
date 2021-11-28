@@ -1,5 +1,6 @@
 import Box from "../Box";
 import Achievement from "./Achievement";
+
 /**
  * @param {ProfilePage.ProfilePageProps} props
  */

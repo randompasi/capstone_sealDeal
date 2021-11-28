@@ -28,8 +28,8 @@ function History() {
 		},
 	];
 
-	const listAll = historyLists.map((historyList) => (
-		<ul className="flex flex-row justify-between">
+	const listAll = historyLists.map((historyList, index) => (
+		<ul key={index} className="flex flex-row justify-between">
 			<li key={historyList.id}>
 				<h1>{historyList.content}</h1>
 				<p>{historyList.date}</p>

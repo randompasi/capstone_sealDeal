@@ -33,6 +33,7 @@ declare namespace ProfilePage {
 
 	declare interface AcievementProp {
 		text: string
+		description: string
 		iconType: string
 	}
 }
