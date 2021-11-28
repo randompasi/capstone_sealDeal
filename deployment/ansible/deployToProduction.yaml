@@ -16,6 +16,9 @@
         state: absent
         remove_images: all
 
+    - name: Remove configuration volumes
+      command: "docker volume rm $(docker volume ls -q | grep -v 'db-data')"
+
     - name: move old docker-compose to old directory
       command: mv ./docker-compose.yml ./old/docker-compose.yml
 
