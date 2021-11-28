@@ -2,7 +2,6 @@ import Modal from "react-modal"; //https://www.npmjs.com/package/react-modal
 
 export default function ImageSelectModal({showModal, setModal, setImage, imageSources}) {
 	const images = imageSources;
-	console.log(images);
 
 	return (
 		<Modal
@@ -37,7 +36,6 @@ export default function ImageSelectModal({showModal, setModal, setImage, imageSo
 							onClick={() => {
 								setModal(false);
 								setImage(src);
-								console.log({showModal});
 							}}
 						>
 							<img
@@ -58,7 +56,6 @@ export default function ImageSelectModal({showModal, setModal, setImage, imageSo
 					className="w-32 h-8 rounded-3xl min-h-40"
 					onClick={() => {
 						setModal(false);
-						console.log({showModal});
 					}}
 				>
 					Cancel
