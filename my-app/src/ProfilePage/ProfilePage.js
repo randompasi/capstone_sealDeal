@@ -67,7 +67,7 @@ export default function ProfilePage() {
 
 				<Reviews user={user} />
 
-				<SellingHistory user={user} />
+				<SellingHistory />
 
 				<div className="col-span-2">
 					<EnvironmentalSavings user={user} />
