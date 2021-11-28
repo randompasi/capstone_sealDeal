@@ -9,7 +9,9 @@
 		"@testing-library/user-event": "^12.8.3",
 		"core-js": "^3.19.0",
 		"react": "^17.0.2",
-		"react-dom": "^17.0.2"
+		"react-dom": "^17.0.2",
+		"react-modal": "^3.14.4",
+		"react-tooltip": "^4.2.21"
 	},
 	"scripts": {
 		"start": "webpack serve --config webpack.config.js",
