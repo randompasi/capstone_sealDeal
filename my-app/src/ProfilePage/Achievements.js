@@ -5,7 +5,7 @@ import Achievement from "./Achievement";
  * @param {ProfilePage.ProfilePageProps} props
  */
 export default function Achievements({user}) {
-	var parsedAcievements = [];
+	const parsedAcievements = [];
 	user.achievements.forEach((element, index) => {
 		parsedAcievements.push(<Achievement key={index} {...element} />);
 	});

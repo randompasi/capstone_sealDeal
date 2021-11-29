@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const path = require("path");
@@ -29,6 +30,10 @@ module.exports = {
 			filename: "index.html",
 		}),
 		isDevelopment && new ReactRefreshWebpackPlugin(),
+		new webpack.DefinePlugin({
+			"process.env.NODE_ENV": JSON.stringify(isDevelopment ? "development" : "production"),
+			API_BASE_URL: JSON.stringify(isDevelopment ? "http://localhost:3000" : "/"),
+		}),
 	].filter(Boolean),
 	module: {
 		rules: [
@@ -87,7 +92,7 @@ module.exports = {
 			publicPath,
 		},
 		historyApiFallback: {
-			index: "/build/index.html",
+			index: path.join(publicPath, "index.html"),
 		},
 		devMiddleware: {
 			publicPath,

@@ -38,4 +38,25 @@ declare namespace ProfilePage {
 	}
 }
 
+declare namespace UtilityTypes {
+	declare interface TimesUtilityFunction {
+		<T>(n: number, fn: (i: number) => T): T[];
+	}
+
+	declare type AsyncResourceState<T> =
+		{status: 'loading'}
+		| {status: 'error', error: Error}
+		| {status: 'success', value: T}
+
+	declare type UseResource = (fn: () => Promise<any>) => AsyncResourceState<any>
+}
+
+declare namespace AuthContext {
+	declare interface AuthState {
+		user: any;
+		signin: (firstName: string, lastName: string) => Promise<any>;
+		signout: () => Promise<any>;
+	}
+}
+
 }

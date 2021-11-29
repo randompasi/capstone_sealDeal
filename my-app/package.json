@@ -11,7 +11,8 @@
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-modal": "^3.14.4",
-		"react-tooltip": "^4.2.21"
+		"react-tooltip": "^4.2.21",
+		"react-router-dom": "^6.0.2"
 	},
 	"scripts": {
 		"start": "webpack serve --config webpack.config.js",
@@ -47,7 +48,8 @@
 		"typescript": "^4.4.4",
 		"webpack": "^5.60.0",
 		"webpack-cli": "^4.9.1",
-		"webpack-dev-server": "^4.3.1"
+		"webpack-dev-server": "^4.3.1",
+		"zapatos": "^5.0.0"
 	},
 	"engines": {
 		"node": ">=16"
