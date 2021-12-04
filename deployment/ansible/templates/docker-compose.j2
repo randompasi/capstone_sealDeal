@@ -3,6 +3,7 @@ version: "3.7"
 services:
   prod_image:
     container_name: capstone_sealdeal_prod_image
+		restart: "on-failure"
 {% if prod == 'true' %}
     image: {{dockerPath}}
 {% else %}
@@ -76,6 +77,8 @@ services:
       - web-files:/usr/share/nginx/html:ro
       - nginx-config-confd:/etc/nginx/conf.d:ro
       - nginx-config-auth:/auth:ro
+		restart: "on-failure"
+
 
 networks:
   db_net:
