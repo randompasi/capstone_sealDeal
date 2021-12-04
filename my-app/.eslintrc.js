@@ -22,10 +22,15 @@ module.exports = {
 	rules: {
 		"react/prop-types": "off",
 		"eol-last": "warn",
+		"no-var": "error",
+		"prefer-const": "error",
 	},
 	settings: {
 		react: {
 			version: "detect",
 		},
+	},
+	globals: {
+		API_BASE_URL: "readonly",
 	},
 };

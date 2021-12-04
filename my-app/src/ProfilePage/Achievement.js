@@ -5,16 +5,14 @@ import ReactTooltip from "react-tooltip"; //https://www.npmjs.com/package/react-
 /**
  * @param {ProfilePage.AcievementProp} prop
  */
-export default function Achievement(prop, width) {
+export default function Achievement(prop) {
 	const nameToUrlMap = {
 		trophy: trophy_url,
 		award: award_url,
 	};
 
-	var width_value = width > 0 ? width : 100;
-
 	return (
-		<div style={{width: width_value}} className="flex flex-col justify-center text-center">
+		<div className="flex flex-col justify-center text-center">
 			<img src={nameToUrlMap[prop.iconType]} alt="Achievement" data-tip={prop.description} />
 			<ReactTooltip place="right" type="dark" effect="float" multiline={true} />
 			<span>{prop.text}</span>

@@ -12,7 +12,7 @@ export default function Avatar({url}) {
 	 * https://shaquillegalimba.medium.com/how-to-import-multiple-images-in-react-1936efeeae7b
 	 */
 	function importAll(r) {
-		let images = [];
+		const images = [];
 		r.keys().map((item) => {
 			images.push(r(item));
 		});
