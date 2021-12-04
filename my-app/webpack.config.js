@@ -32,7 +32,7 @@ module.exports = {
 		isDevelopment && new ReactRefreshWebpackPlugin(),
 		new webpack.DefinePlugin({
 			"process.env.NODE_ENV": JSON.stringify(isDevelopment ? "development" : "production"),
-			API_BASE_URL: JSON.stringify(isDevelopment ? "http://localhost:3000" : "/"),
+			API_BASE_URL: JSON.stringify(isDevelopment ? "http://localhost:3000" : ""),
 		}),
 	].filter(Boolean),
 	module: {

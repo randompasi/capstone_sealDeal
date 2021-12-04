@@ -9,7 +9,7 @@ function LoginOrSignupMessage({firstName, lastName}) {
 	/** @type {UtilityTypes.AsyncResourceState<Map<string, any>>} */
 	const usersFetchState = useResource(() => fetchAllUsers());
 	console.log(usersFetchState);
-	if (usersFetchState.status !== "success") return null;
+	if (usersFetchState.status !== "success") return <span>Signup</span>;
 
 	const user = getUserByName(usersFetchState.value, firstName, lastName);
 	console.log(user, firstName, lastName);
