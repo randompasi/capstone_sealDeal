@@ -1,5 +1,4 @@
 import facepng from "../assets/face.jpg";
-import {useState} from "react";
 import BasicInfo from "./BasicInfo";
 import Achievements from "./Achievements";
 import Reviews from "./Reviews";
@@ -11,7 +10,8 @@ export default function ProfilePage() {
 	const loggedInUser = useAuth().user;
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
-		avatarUrl: facepng,
+		id: loggedInUser.id,
+		avatarUrl: loggedInUser.avatarBase64 ?? facepng,
 		name: `${loggedInUser.firstName} ${loggedInUser.lastName}`,
 		bday: "22.10.1987",
 		city: "Turku",

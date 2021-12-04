@@ -4,6 +4,7 @@ declare global {
 
 declare namespace ProfilePage {
 	declare interface UserInfo {
+		id: number
 		name: string
 		bday: string
 		city: string
