@@ -77,7 +77,6 @@ services:
       - web-files:/usr/share/nginx/html:ro
       - nginx-config-confd:/etc/nginx/conf.d:ro
       - nginx-config-auth:/auth:ro
-		restart: "on-failure"
 
 
 networks:
