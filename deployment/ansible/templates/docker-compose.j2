@@ -28,7 +28,7 @@ services:
       - db-run:/run/postgresql
 
   prod_image:
-    container_name: capstone_sealdeal_prod_image
+    container_name: capstone_sealdeal_prod_container
     depends_on:
       - postgrest
  {% if prod == 'true' %}
@@ -43,6 +43,8 @@ services:
       - backend
     ports:
       - "1337:80"
+		restart: "on-failure"
+
 
 networks:
   backend:
