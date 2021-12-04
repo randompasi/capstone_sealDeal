@@ -15,8 +15,8 @@ export default function Navbar() {
 						<NavItem label="Menu 1" />
 						<NavItem label="Menu 2" />
 					</div>
+					<NavItem label={<button onClick={signout}>Logout</button>} />
 				</div>
-				<NavItem label={<button onClick={signout}>Logout</button>} />
 			</Box>
 		</header>
 	);

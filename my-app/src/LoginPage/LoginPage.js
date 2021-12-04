@@ -8,12 +8,13 @@ import {useInput, useResource} from "../utils/hooks";
 function LoginOrSignupMessage({firstName, lastName}) {
 	/** @type {UtilityTypes.AsyncResourceState<Map<string, any>>} */
 	const usersFetchState = useResource(() => fetchAllUsers());
-	console.log(usersFetchState);
-	if (usersFetchState.status !== "success") return <span>Signup</span>;
-
-	const user = getUserByName(usersFetchState.value, firstName, lastName);
-	console.log(user, firstName, lastName);
-	return <span>{user ? "Login" : "Sign up"}</span>;
+	if (
+		usersFetchState.status !== "success" ||
+		!getUserByName(usersFetchState.value, firstName, lastName)
+	) {
+		return <span>Sign up</span>;
+	}
+	return <span>Login</span>;
 }
 
 export default function LoginPage() {
@@ -24,7 +25,6 @@ export default function LoginPage() {
 	const onSignup = async () => {
 		await signin(firstNameInput.value, lastNameInput.value);
 	};
-	console.log(firstNameInput.value, lastNameInput.value);
 
 	return (
 		<div className="w-full content-center">
@@ -38,7 +38,7 @@ export default function LoginPage() {
 							First Name
 						</label>
 						<input
-							className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+							className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 							id="grid-first-name"
 							type="text"
 							placeholder="Matti"
