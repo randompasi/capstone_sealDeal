@@ -31,3 +31,8 @@ export function useResource(fetchData) {
 	}, []);
 	return state;
 }
+
+export const useAsyncEffect = (fn, deps) =>
+	useEffect(() => {
+		fn();
+	}, deps);

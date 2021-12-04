@@ -44,6 +44,30 @@ export const post = (url, payload) =>
 		body: JSON.stringify(payload),
 	}).then(parseResp);
 
+/**
+ * @param {string} entity
+ * @param {number} id
+ * @param {any} patch
+ * @returns {Promise<any>}
+ */
+export const patch = (entity, id, patch) =>
+	fetch(getApiUrl(`${entity}?id=eq.${id}`), {
+		method: "PATCH",
+		headers: baseHeaders,
+		body: JSON.stringify(patch),
+	}).then(parseResp);
+
+/**
+ * @param {any} authContext
+ * @param {any} userPatch
+ * @returns {Promise<any>}
+ */
+export async function patchUser(authContext, userPatch) {
+	const {user} = authContext;
+	await patch("users", user.id, userPatch);
+	authContext.setCachedUser({...user, ...userPatch});
+}
+
 export async function fetchAllUsers() {
 	if (!usersMap) {
 		const users = await fetch(getApiUrl("users")).then(parseResp);

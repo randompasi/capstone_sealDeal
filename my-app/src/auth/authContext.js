@@ -37,7 +37,11 @@ function useProvideAuth() {
 		location.reload();
 	};
 
-	return {signin, signout, user};
+	const setCachedUser = (user) => {
+		localStorage.setItem("sealdeal.user", JSON.stringify(user));
+	};
+
+	return {signin, signout, setCachedUser, user};
 }
 
 /**
