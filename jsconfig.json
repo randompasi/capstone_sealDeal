@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"module": "es6",
+		"target": "es6",
+		"checkJs": true,
+		"jsx":"react-jsx",
+		"moduleResolution": "node",
+		"allowJs": true,
+		"noEmit": true,
+		"typeRoots": ["my-app/node_modules/@types"]
+	},
+	"exclude": ["**/node_modules/*", "node_modules/"],
+	"include": ["my-app/src/**/*"],
+	"typeAcquisition": {
+		"include": ["react", "./my-app/src/types/*.d.ts"]
+	}
+}
