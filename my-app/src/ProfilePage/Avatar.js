@@ -23,8 +23,8 @@ export default function Avatar({url}) {
 		});
 		return images;
 	}
-	//require.context complains about an error but still works hmm.
-	// @ts-ignore
+
+	//@ts-ignore
 	const images = importAll(require.context("../assets/ProfileImages", false, /\.(png|jpe?g|svg)$/));
 
 	const [showModal, setModal] = useState(false);
