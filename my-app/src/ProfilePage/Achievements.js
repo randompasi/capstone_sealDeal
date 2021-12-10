@@ -12,9 +12,8 @@ export default function Achievements({user}) {
 
 	return (
 		<Box className="my-5" title="Achievements">
-			<div className="grid grid-cols5 w-full gap-2">
+			<div className="grid grid-cols-5  gap-x-2 items-stretch w-full">
 				<div className="col-span-5 flex justify-start">{user.name}&apos;s Achievements!</div>
-
 				{parsedAcievements}
 			</div>
 		</Box>
