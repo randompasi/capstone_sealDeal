@@ -1,22 +1,35 @@
 import "./App.css";
 import SealdealRoutes from "./Routes";
-import jpgBackground from "./assets/BackgroundImages/bg1.jpg";
+import defaultBackground from "./assets/BackgroundImages/bg0.jpg";
 import {ProvideAuth, useAuth} from "./auth/authContext";
 import LoginPage from "./LoginPage/LoginPage";
 import Navbar from "./Navbar";
 import {useState} from "react";
+import {loadImageToBase64} from "./common/utils";
+import {useAsyncEffect} from "./utils/hooks";
+import {patchUser} from "./api/api";
 
 const makeCssUrl = (url) => `url(${JSON.stringify(url)})`;
 
 function RequireLogin() {
-	const {user} = useAuth();
+	const authContext = useAuth();
+	const user = authContext.user;
 	if (!user) {
 		return <LoginPage />;
 	}
 
 	const [settings, setSettings] = useState(false);
 
-	const [backgroundImage, setBackgroundImage] = useState(jpgBackground);
+	const [backgroundImage, setBackgroundImage] = useState(null);
+
+	//Update state change to DB on SettingsModal call
+	useAsyncEffect(async () => {
+		if (!backgroundImage) return;
+		const base64 = await loadImageToBase64(backgroundImage);
+		await patchUser(authContext, {
+			backgroundBase64: base64,
+		});
+	}, [backgroundImage]);
 
 	return (
 		<div className="text-white h-screen w-screen">
@@ -25,10 +38,13 @@ function RequireLogin() {
 				className="flex-auto min-h-screen bg-cover pb-6"
 				style={{
 					/**
-					 * TODO: Selection support for original format support
+					 * TODO: Support for double format. Is it needed ?
 					 * backgroundImage: [backgroundImage].map(makeCssUrl).join(","),
 					 */
-					backgroundImage: makeCssUrl(backgroundImage),
+					backgroundImage: makeCssUrl(
+						//Fallback values for bg image: state -> database -> hardcoded default
+						backgroundImage ?? authContext.user.backgroundBase64 ?? defaultBackground
+					),
 				}}
 			>
 				<SealdealRoutes

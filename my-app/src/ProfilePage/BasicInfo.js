@@ -13,7 +13,7 @@ export default function BasicInfo({user}) {
 				<div>
 					<Avatar url={user.avatarUrl} />
 				</div>
-				<div className="col-span-2 h-2/3 mt-2 w-2/3 ">
+				<div className="col-span-2 h-2/3 mt-2 w-full">
 					<SectionTitle className="mb-3">{user.name + ", " + user.city}</SectionTitle>
 
 					{/* 

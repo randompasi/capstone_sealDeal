@@ -2,8 +2,14 @@ import {useState} from "react";
 import Modal from "react-modal"; //https://www.npmjs.com/package/react-modal
 import ImageSelectModal from "./ImageSelectModal";
 
-export default function SettingsModal({settings, setSettings, setBackgroundImage}) {
+export default function SettingsModal({
+	settings,
+	setSettings,
+	setBackgroundImage,
+	setProfileImage,
+}) {
 	const [backgroundModalVisible, setBackgroundModalVisible] = useState(false);
+	const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 
 	function importAll(r) {
 		const images = [];
@@ -18,6 +24,11 @@ export default function SettingsModal({settings, setSettings, setBackgroundImage
 		require.context("../assets/BackgroundImages", false, /\.(png|jpe?g|svg)$/)
 	);
 
+	//@ts-ignore
+	const profileImages = importAll(
+		require.context("../assets/ProfileImages", false, /\.(png|jpe?g|svg)$/)
+	);
+
 	return (
 		<div>
 			<Modal
@@ -29,17 +40,17 @@ export default function SettingsModal({settings, setSettings, setBackgroundImage
 					overlay: {display: "flex", justifyContent: "center"},
 					content: {
 						flex: "1",
-						maxWidth: "970px",
+						maxWidth: "760px",
 						position: "relative",
 						display: "flex",
 						flexDirection: "column",
 						justifyContent: "center",
 						alignItems: "center",
-						height: "95%",
+						height: "50%",
 					},
 				}}
 			>
-				<h1 style={{textDecoration: "underline #a855f7"}} className="text-3xl font-bold">
+				<h1 style={{textDecoration: "underline #a855f7"}} className="text-3xl">
 					Customise your profile!
 				</h1>
 				<div className="flex-1 w-full">
@@ -53,7 +64,13 @@ export default function SettingsModal({settings, setSettings, setBackgroundImage
 						>
 							Profile background
 						</button>
-						<button className="w-60 m-4 shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+						<button
+							onClick={() => {
+								setSettings(false);
+								setAvatarModalVisible(true);
+							}}
+							className="w-60 m-4 shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+						>
 							Profile picture
 						</button>
 					</div>
@@ -72,11 +89,22 @@ export default function SettingsModal({settings, setSettings, setBackgroundImage
 				</div>
 			</Modal>
 
+			{/* Background image selection modal */}
 			<ImageSelectModal
 				showModal={backgroundModalVisible}
 				setModal={setBackgroundModalVisible}
 				setImage={setBackgroundImage}
 				imageSources={bgImages}
+				headerText="Select a new profile background!"
+			></ImageSelectModal>
+
+			{/* Profile image selection modal */}
+			<ImageSelectModal
+				showModal={avatarModalVisible}
+				setModal={setAvatarModalVisible}
+				setImage={setProfileImage}
+				imageSources={profileImages}
+				headerText="Select a new profile picture!"
 			></ImageSelectModal>
 		</div>
 	);

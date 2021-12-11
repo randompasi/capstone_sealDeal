@@ -1,4 +1,4 @@
-import facepng from "../assets/face.jpg";
+import defaultProfile from "../assets/ProfileImages/bird1.jpg";
 import BasicInfo from "./BasicInfo";
 import Achievements from "./Achievements";
 import Reviews from "./Reviews";
@@ -6,13 +6,30 @@ import SellingHistory from "./SellingHistory";
 import SettingsModal from "./SettingsModal";
 import EnvironmentalSavings from "./EnvironmentalSavings";
 import {useAuth} from "../auth/authContext";
+import {useState} from "react";
+import {loadImageToBase64} from "../common/utils";
+import {useAsyncEffect} from "../utils/hooks";
+import {patchUser} from "../api/api";
 
 export default function ProfilePage({settings, setSettings, setBackgroundImage}) {
-	const loggedInUser = useAuth().user;
+	const authContext = useAuth();
+	const loggedInUser = authContext.user;
+
+	const [profileImage, setProfileImage] = useState(null);
+
+	//Update state change to DB on SettingsModal call
+	useAsyncEffect(async () => {
+		if (!profileImage) return;
+		const base64 = await loadImageToBase64(profileImage);
+		await patchUser(authContext, {
+			avatarBase64: base64,
+		});
+	}, [profileImage]);
+
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
 		id: loggedInUser.id,
-		avatarUrl: loggedInUser.avatarBase64 ?? facepng,
+		avatarUrl: profileImage ?? loggedInUser.avatarBase64 ?? defaultProfile, //Fallback: state -> database -> hardcoded default
 		name: `${loggedInUser.firstName} ${loggedInUser.lastName}`,
 		bday: "22.10.1987",
 		city: "Turku",
@@ -51,6 +68,7 @@ export default function ProfilePage({settings, setSettings, setBackgroundImage})
 			{title: "Friendliness", rating: 5},
 		],
 	};
+
 	return (
 		<div className="flex flex-col items-center">
 			<div
@@ -78,6 +96,7 @@ export default function ProfilePage({settings, setSettings, setBackgroundImage})
 				settings={settings}
 				setSettings={setSettings}
 				setBackgroundImage={setBackgroundImage}
+				setProfileImage={setProfileImage}
 			></SettingsModal>
 		</div>
 	);

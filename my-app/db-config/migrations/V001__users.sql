@@ -19,6 +19,7 @@ create table api.users (
 	"firstName" text not null,
 	"lastName" text not null,
 	"avatarBase64" text null,
+	"backgroundBase64" text null,
 	"city" text null,
 	"birthday" date null,
 
