@@ -7,9 +7,6 @@ export default function ImageSelectModal({showModal, setModal, setImage, imageSo
 		<Modal
 			id="avatar-modal"
 			isOpen={showModal}
-			//onAfterOpen={afterOpenModal}
-			//onRequestClose={closeModal}
-			//style={customStyles}
 			contentLabel="Example Modal"
 			ariaHideApp={false}
 			style={{

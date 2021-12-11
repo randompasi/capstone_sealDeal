@@ -13,8 +13,8 @@ export default function BasicInfo({user}) {
 				<div>
 					<Avatar url={user.avatarUrl} />
 				</div>
-				<div className="col-span-2 h-2/3 mt-2">
-					<SectionTitle>{user.name + ", " + user.city}</SectionTitle>
+				<div className="col-span-2 h-2/3 mt-2 w-2/3 ">
+					<SectionTitle className="mb-3">{user.name + ", " + user.city}</SectionTitle>
 
 					{/* 
 					<div className="flex flex-row justify-start">
@@ -22,12 +22,12 @@ export default function BasicInfo({user}) {
 					</div>
 					*/}
 
-					<div className="flex flex-row">
-						<div className="flex flex-col m-4 ml-0 justify-center items-center w-1/4">
+					<div className="flex flex-row w-1/4 ">
+						<div className="flex flex-col m-4 ml-3 justify-center items-center">
 							<strong>10</strong>
 							<span className="text-sm">Mutuals</span>
 						</div>
-						<div className="flex flex-col m-4 justify-center items-center w-1/4">
+						<div className="flex flex-col m-4 justify-center items-center">
 							<strong>24</strong>
 							<span className="text-sm">Sales</span>
 						</div>

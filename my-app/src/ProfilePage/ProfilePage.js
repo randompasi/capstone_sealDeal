@@ -3,10 +3,11 @@ import BasicInfo from "./BasicInfo";
 import Achievements from "./Achievements";
 import Reviews from "./Reviews";
 import SellingHistory from "./SellingHistory";
+import SettingsModal from "./SettingsModal";
 import EnvironmentalSavings from "./EnvironmentalSavings";
 import {useAuth} from "../auth/authContext";
 
-export default function ProfilePage() {
+export default function ProfilePage({settings, setSettings, setBackgroundImage}) {
 	const loggedInUser = useAuth().user;
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
@@ -50,7 +51,6 @@ export default function ProfilePage() {
 			{title: "Friendliness", rating: 5},
 		],
 	};
-
 	return (
 		<div className="flex flex-col items-center">
 			<div
@@ -73,6 +73,12 @@ export default function ProfilePage() {
 					<EnvironmentalSavings user={user} />
 				</div>
 			</div>
+
+			<SettingsModal
+				settings={settings}
+				setSettings={setSettings}
+				setBackgroundImage={setBackgroundImage}
+			></SettingsModal>
 		</div>
 	);
 }
