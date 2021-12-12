@@ -12,6 +12,9 @@
   src: url('./assets/Montserrat/Montserrat-Bold.woff2') format('woff2');
 }
 
-html, body {
+html, body , #root{
 	background-color: white;
+	margin:0px;
+	height:100%;
+	  
 }

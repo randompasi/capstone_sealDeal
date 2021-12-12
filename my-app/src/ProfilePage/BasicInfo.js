@@ -13,11 +13,24 @@ export default function BasicInfo({user}) {
 				<div>
 					<Avatar url={user.avatarUrl} />
 				</div>
-				<div className="col-span-2">
-					<SectionTitle>{user.name}</SectionTitle>
-					<div className="h-1/2 flex flex-col justify-end">
-						<span>{user.bday}</span>
-						<span>{user.city}</span>
+				<div className="col-span-2 h-2/3 mt-2 w-full">
+					<SectionTitle className="mb-3">{user.name + ", " + user.city}</SectionTitle>
+
+					{/* 
+					<div className="flex flex-row justify-start">
+						<span className="m-2 ml-0">{user.bday + ", " + user.city}</span>
+					</div>
+					*/}
+
+					<div className="flex flex-row w-1/4 ">
+						<div className="flex flex-col m-4 ml-3 justify-center items-center">
+							<strong>10</strong>
+							<span className="text-sm">Mutuals</span>
+						</div>
+						<div className="flex flex-col m-4 justify-center items-center">
+							<strong>24</strong>
+							<span className="text-sm">Sales</span>
+						</div>
 					</div>
 				</div>
 				<div className="col-span-2">

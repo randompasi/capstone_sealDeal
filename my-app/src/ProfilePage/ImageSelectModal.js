@@ -1,16 +1,19 @@
 import Modal from "react-modal"; //https://www.npmjs.com/package/react-modal
 
-export default function ImageSelectModal({showModal, setModal, setImage, imageSources}) {
+export default function ImageSelectModal({
+	showModal,
+	setModal,
+	setImage,
+	imageSources,
+	headerText,
+}) {
 	const images = imageSources;
 
 	return (
 		<Modal
 			id="avatar-modal"
 			isOpen={showModal}
-			//onAfterOpen={afterOpenModal}
-			//onRequestClose={closeModal}
-			//style={customStyles}
-			contentLabel="Example Modal"
+			contentLabel="Settings Modal"
 			ariaHideApp={false}
 			style={{
 				overlay: {display: "flex", justifyContent: "center"},
@@ -26,7 +29,7 @@ export default function ImageSelectModal({showModal, setModal, setImage, imageSo
 				},
 			}}
 		>
-			<h1 className="text-3xl">Select a new profile picture</h1>
+			<h1 className="text-3xl">{headerText}</h1>
 			<div className="flex-1 w-full">
 				<div className="grid grid-cols-4 gap-4 w-full p-8">
 					{images.map((src, index) => (

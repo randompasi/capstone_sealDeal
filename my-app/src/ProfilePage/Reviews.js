@@ -9,7 +9,14 @@ import "./Reviews.css";
 function Review({item}) {
 	const ratingIndex = item.rating - 1;
 	const stars = times(5, (i) => (
-		<div className="flex-auto" key={i}>
+		<div
+			className="flex-auto"
+			style={{
+				/* Can't get the arbitrary width values working in tailwind syntax :( */
+				maxWidth: "50px",
+			}}
+			key={i}
+		>
 			<img
 				src={starSrc}
 				alt="Star"

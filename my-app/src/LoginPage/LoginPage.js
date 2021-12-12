@@ -27,8 +27,8 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className="w-full content-center">
-			<form className="max-w-md">
+		<div className="w-full h-96 flex justify-center items-center">
+			<form className="max-w-md p-10 border-2 rounded-lg border-purple-500">
 				<div className="flex flex-wrap -mx-3 mb-6">
 					<div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
 						<label
@@ -61,21 +61,15 @@ export default function LoginPage() {
 						/>
 					</div>
 				</div>
-				<div className="md:flex md:items-center">
-					<div className="md:w-1/3"></div>
-					<div className="md:w-2/3">
-						<button
-							className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-							type="button"
-							onClick={onSignup}
-							disabled={!firstNameInput.value || !lastNameInput.value}
-						>
-							<LoginOrSignupMessage
-								firstName={firstNameInput.value}
-								lastName={lastNameInput.value}
-							/>
-						</button>
-					</div>
+				<div className="w-100 flex items-center justify-center">
+					<button
+						className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+						type="button"
+						onClick={onSignup}
+						disabled={!firstNameInput.value || !lastNameInput.value}
+					>
+						<LoginOrSignupMessage firstName={firstNameInput.value} lastName={lastNameInput.value} />
+					</button>
 				</div>
 			</form>
 		</div>
