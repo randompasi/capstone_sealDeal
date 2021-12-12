@@ -42,11 +42,7 @@ export default function ImageSelectModal({
 							}}
 						>
 							<img
-								style={{
-									height: "100%",
-									width: "100%",
-									border: "2px solid #ccc",
-								}}
+								className="w-100 h-100 border-4 border-gray-700 hover:border-blue-300"
 								src={src}
 							/>
 						</div>
@@ -55,8 +51,7 @@ export default function ImageSelectModal({
 			</div>
 			<div className="w-100">
 				<button
-					style={{backgroundColor: "rgb(56, 72, 97)", color: "#FFFFFF"}}
-					className="w-32 h-8 rounded-3xl min-h-40"
+					className="w-32 h-8 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
 					onClick={() => {
 						setModal(false);
 					}}

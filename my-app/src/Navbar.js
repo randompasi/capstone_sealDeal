@@ -11,8 +11,7 @@ export default function Navbar({setSettings}) {
 	if (!user) {
 		return null;
 	}
-	console.log(logoImage);
-	console.log(makeCssUrl(logoImage));
+
 	return (
 		<header>
 			<Box className="pt-2 pb-2" title="">
