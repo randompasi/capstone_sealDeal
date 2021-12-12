@@ -4,15 +4,12 @@ import {CgLogOut} from "react-icons/cg"; //react-icons.github.io/react-icons
 import {IoSettingsOutline} from "react-icons/io5";
 import logoImage from "./assets/logo.png";
 
-const makeCssUrl = (url) => `url(${url})`;
-
 export default function Navbar({setSettings}) {
 	const {user, signout} = useAuth();
 	if (!user) {
 		return null;
 	}
-	console.log(logoImage);
-	console.log(makeCssUrl(logoImage));
+
 	return (
 		<header>
 			<Box className="pt-2 pb-2" title="">
