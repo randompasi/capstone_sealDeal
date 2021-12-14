@@ -7,6 +7,7 @@ import EnvironmentalSavings from "./EnvironmentalSavings";
 import {useResource} from "../utils/hooks";
 import {fetchAllUsers} from "../api/api";
 import {useParams} from "react-router-dom";
+import {makeCssUrl} from "../common/utils";
 
 export default function ViewUserProfile() {
 	const params = useParams();
@@ -68,11 +69,11 @@ export default function ViewUserProfile() {
 	};
 
 	return (
-		<div className="flex flex-col items-center">
-			<div
-				className="w-5/12  p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"
-				style={{backgroundColor: "white"}}
-			>
+		<div
+			className="flex flex-col items-center"
+			style={{backgroundImage: makeCssUrl(fetchedUser.avatarBase64), backgroundSize: "cover"}}
+		>
+			<div className="w-5/12 p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8 bg-white">
 				<div className="col-span-2">
 					<BasicInfo user={user} />
 				</div>

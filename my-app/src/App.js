@@ -5,11 +5,9 @@ import {ProvideAuth, useAuth} from "./auth/authContext";
 import LoginPage from "./LoginPage/LoginPage";
 import Navbar from "./Navbar";
 import {useState} from "react";
-import {loadImageToBase64} from "./common/utils";
+import {loadImageToBase64, makeCssUrl} from "./common/utils";
 import {useAsyncEffect} from "./utils/hooks";
 import {patchUser} from "./api/api";
-
-const makeCssUrl = (url) => `url(${JSON.stringify(url)})`;
 
 function RequireLogin() {
 	const authContext = useAuth();

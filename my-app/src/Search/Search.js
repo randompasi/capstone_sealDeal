@@ -1,7 +1,28 @@
-import {useRef} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useInput, useResource} from "../utils/hooks";
 import * as api from "../api/api";
 import Modal from "react-modal";
+import debounce from "lodash/debounce";
+
+function DebouncedInput({onChange, forwardedRef}) {
+	const inputState = useInput("");
+	const changeCallback = useCallback(
+		debounce((...args) => onChange(...args), 300),
+		[onChange]
+	);
+	useEffect(() => {
+		changeCallback(inputState.value);
+	}, [inputState, changeCallback]);
+	return (
+		<input
+			className="rounded border-gray-300 border bg-transparent p-2"
+			type="search"
+			placeholder="Search user"
+			{...inputState}
+			ref={forwardedRef}
+		/>
+	);
+}
 
 export default function Search() {
 	const usersResource = useResource(async () => {
@@ -11,31 +32,23 @@ export default function Search() {
 			return {searchTerm, user};
 		});
 	});
-	const searchState = useInput("");
+	const [searchValue, setSearch] = useState("");
 	/** @type{React.MutableRefObject<HTMLInputElement>} */
 	const searchRef = useRef();
-	const isOpen = searchState.value.length > 0;
+	const isOpen = searchValue.length > 0;
 
 	const filteredUsers =
 		usersResource.status === "success" && isOpen
-			? usersResource.value.filter((user) =>
-					user.searchTerm.includes(searchState.value.toLowerCase())
-			  )
+			? usersResource.value.filter((user) => user.searchTerm.includes(searchValue.toLowerCase()))
 			: [];
 
 	return (
 		<div>
-			<input
-				ref={searchRef}
-				className="rounded border-gray-300 border bg-transparent p-2"
-				type="search"
-				{...searchState}
-				placeholder="Search user"
-			/>
+			<DebouncedInput forwardedRef={searchRef} onChange={setSearch} />
 			{searchRef.current && (
 				<Modal
 					isOpen={isOpen}
-					ariaHideApp
+					ariaHideApp={false}
 					style={{
 						overlay: {
 							position: "absolute",

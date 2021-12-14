@@ -25,3 +25,9 @@ export const loadImageToBase64 = (imageUrl) =>
 		xhr.responseType = "blob";
 		xhr.send();
 	});
+
+/**
+ * @param {string} url
+ * @returns {string}
+ */
+export const makeCssUrl = (url) => `url(${JSON.stringify(url)})`;
