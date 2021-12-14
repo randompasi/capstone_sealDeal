@@ -35,7 +35,7 @@ export const get = (url) => fetch(getApiUrl(url)).then(parseResp);
 /**
  * @param {string} url
  * @param {any} payload
- * @returns {Promise<any>}
+ * @returns {Promise<any[]>}
  */
 export const post = (url, payload) =>
 	fetch(getApiUrl(url), {
@@ -71,6 +71,7 @@ export async function patchUser(authContext, userPatch) {
 export async function fetchAllUsers() {
 	if (!usersMap) {
 		const users = await fetch(getApiUrl("users")).then(parseResp);
+		console.log({users});
 		usersMap = new Map(users.map((user) => [usersMapKey(user.firstName, user.lastName), user]));
 	}
 	return usersMap;
@@ -95,7 +96,10 @@ export async function login(firstName, lastName) {
  * @param {string} lastName
  */
 export async function signin(firstName, lastName) {
-	const newUser = await post("users", {firstName, lastName});
+	const [newUser] = await post("users", {firstName, lastName});
+	if (!newUser) {
+		throw new Error(`Failed to create user ${firstName} ${lastName}`);
+	}
 	usersMap.set(usersMapKey(firstName, lastName), newUser);
 	return newUser;
 }

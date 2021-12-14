@@ -26,6 +26,8 @@ export default function ProfilePage({settings, setSettings, setBackgroundImage})
 		});
 	}, [profileImage]);
 
+	console.log("user", loggedInUser);
+
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
 		id: loggedInUser.id,

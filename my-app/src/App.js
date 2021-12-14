@@ -14,22 +14,21 @@ const makeCssUrl = (url) => `url(${JSON.stringify(url)})`;
 function RequireLogin() {
 	const authContext = useAuth();
 	const user = authContext.user;
-	if (!user) {
-		return <LoginPage />;
-	}
-
 	const [settings, setSettings] = useState(false);
-
 	const [backgroundImage, setBackgroundImage] = useState(null);
 
 	//Update state change to DB on SettingsModal call
 	useAsyncEffect(async () => {
-		if (!backgroundImage) return;
+		if (!user || !backgroundImage) return;
 		const base64 = await loadImageToBase64(backgroundImage);
 		await patchUser(authContext, {
 			backgroundBase64: base64,
 		});
-	}, [backgroundImage]);
+	}, [user, backgroundImage]);
+
+	if (!user) {
+		return <LoginPage />;
+	}
 
 	return (
 		<div className="text-white h-screen w-screen">
