@@ -71,7 +71,6 @@ export async function patchUser(authContext, userPatch) {
 export async function fetchAllUsers() {
 	if (!usersMap) {
 		const users = await fetch(getApiUrl("users")).then(parseResp);
-		console.log({users});
 		usersMap = new Map(users.map((user) => [usersMapKey(user.firstName, user.lastName), user]));
 	}
 	return usersMap;

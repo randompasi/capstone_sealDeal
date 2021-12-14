@@ -1,5 +1,6 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import ProfilePage from "./ProfilePage/ProfilePage";
+import ViewUserProfile from "./ProfilePage/ViewUserProfile";
 
 export default function SealdealRoutes({settings, setSettings, setBackgroundImage}) {
 	return (
@@ -15,6 +16,7 @@ export default function SealdealRoutes({settings, setSettings, setBackgroundImag
 						/>
 					}
 				/>
+				<Route path="/user-profile/:id" element={<ViewUserProfile />} />
 			</Routes>
 		</Router>
 	);

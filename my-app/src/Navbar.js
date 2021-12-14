@@ -3,6 +3,7 @@ import Box from "./Box";
 import {CgLogOut} from "react-icons/cg"; //react-icons.github.io/react-icons
 import {IoSettingsOutline} from "react-icons/io5";
 import logoImage from "./assets/logo.png";
+import Search from "./Search/Search";
 
 export default function Navbar({setSettings}) {
 	const {user, signout} = useAuth();
@@ -18,12 +19,13 @@ export default function Navbar({setSettings}) {
 						className="flex items-center flex-shrink-0 text-white mr-6 w-12"
 						style={{backgroundImage: logoImage, minWidth: "200px"}}
 					>
-						<img src={logoImage}></img>
+						<a href="/">
+							<img src={logoImage}></img>
+						</a>
 					</div>
-					{/*<div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-						<NavItem label="Menu 1" link="/" />
-						<NavItem label="Menu 2" link="/" />
-					</div>*/}
+					<div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+						<Search />
+					</div>
 					<div className="flex flex-row items-center">
 						<button
 							style={{borderColor: "white"}}
