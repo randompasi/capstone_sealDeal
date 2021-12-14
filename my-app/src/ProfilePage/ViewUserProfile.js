@@ -3,34 +3,32 @@ import BasicInfo from "./BasicInfo";
 import Achievements from "./Achievements";
 import Reviews from "./Reviews";
 import SellingHistory from "./SellingHistory";
-import SettingsModal from "./SettingsModal";
 import EnvironmentalSavings from "./EnvironmentalSavings";
-import {useAuth} from "../auth/authContext";
-import {useState} from "react";
-import {loadImageToBase64} from "../common/utils";
-import {useAsyncEffect} from "../utils/hooks";
-import {patchUser} from "../api/api";
+import {useResource} from "../utils/hooks";
+import {fetchAllUsers} from "../api/api";
+import {useParams} from "react-router-dom";
 
-export default function ProfilePage({settings, setSettings, setBackgroundImage}) {
-	const authContext = useAuth();
-	const loggedInUser = authContext.user;
-
-	const [profileImage, setProfileImage] = useState(null);
-
-	//Update state change to DB on SettingsModal call
-	useAsyncEffect(async () => {
-		if (!profileImage) return;
-		const base64 = await loadImageToBase64(profileImage);
-		await patchUser(authContext, {
-			avatarBase64: base64,
-		});
-	}, [profileImage]);
+export default function ViewUserProfile() {
+	const params = useParams();
+	const userId = Number(params.id);
+	const userResource = useResource(async () => {
+		const usersMap = await fetchAllUsers();
+		const user = Array.from(usersMap.values()).find((user) => user.id === userId);
+		return user;
+	});
+	if (userResource.status !== "success") {
+		return null;
+	}
+	const fetchedUser = userResource.value;
+	if (!fetchedUser) {
+		return <div>Ei käyttäjää id:llä {userId}</div>;
+	}
 
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
-		id: loggedInUser.id,
-		avatarUrl: profileImage ?? loggedInUser.avatarBase64 ?? defaultProfile, //Fallback: state -> database -> hardcoded default
-		name: `${loggedInUser.firstName} ${loggedInUser.lastName}`,
+		id: fetchedUser.id,
+		avatarUrl: fetchedUser.avatarBase64 ?? defaultProfile, //Fallback: state -> database -> hardcoded default
+		name: `${fetchedUser.firstName} ${fetchedUser.lastName}`,
 		bday: "22.10.1987",
 		city: "Turku",
 		achievements: [
@@ -91,13 +89,6 @@ export default function ProfilePage({settings, setSettings, setBackgroundImage})
 					<EnvironmentalSavings user={user} />
 				</div>
 			</div>
-
-			<SettingsModal
-				settings={settings}
-				setSettings={setSettings}
-				setBackgroundImage={setBackgroundImage}
-				setProfileImage={setProfileImage}
-			></SettingsModal>
 		</div>
 	);
 }
