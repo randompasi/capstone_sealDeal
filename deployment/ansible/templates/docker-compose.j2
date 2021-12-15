@@ -3,7 +3,7 @@ version: "3.7"
 services:
   prod_image:
     container_name: capstone_sealdeal_prod_image
-    restart: "on-failure"
+    restart: "always"
 {% if prod == 'true' %}
     image: {{dockerPath}}
 {% else %}
@@ -64,7 +64,7 @@ services:
 
   nginx:
     image: docker.io/nginx:stable-alpine
-    restart: "on-failure"
+    restart: "always"
     command: ["nginx", "-g", "daemon off;"]
     depends_on:
       - "postgrest"
