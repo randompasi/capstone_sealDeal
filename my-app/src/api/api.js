@@ -1,9 +1,7 @@
+import once from "lodash/once";
 /** @type {string} */
 const baseUrl = API_BASE_URL;
 const getApiUrl = (/** @type {string} */ url) => `${baseUrl}/${url}`;
-
-/** @type {Map<string, any>} */
-let usersMap;
 
 const usersMapKey = (/** @type {string} */ firstName, /** @type {string} */ lastName) =>
 	`${firstName}_${lastName}`;
@@ -29,9 +27,15 @@ const baseHeaders = {
 /**
  *
  * @param {string} url
+ * @param {any} [params]
  * @returns {Promise<any>}
  */
-export const get = (url) => fetch(getApiUrl(url)).then(parseResp);
+export function get(url, params) {
+	const paramsStr = params ? new URLSearchParams(params).toString() : "";
+	const fullUrl = [getApiUrl(url), paramsStr].filter(Boolean).join("?");
+	return fetch(fullUrl).then(parseResp);
+}
+
 /**
  * @param {string} url
  * @param {any} payload
@@ -68,10 +72,42 @@ export async function patchUser(authContext, userPatch) {
 	authContext.setCachedUser({...user, ...userPatch});
 }
 
+// eslint-disable-next-line no-unused-vars
+const userType = {
+	id: 0,
+	createdAt: "",
+	firstName: "",
+	lastName: "",
+	city: "",
+	birthday: "",
+	// Note: avatar and background images are not included in the response
+	// by default because they are quite large. Use a separate request
+	// to fetch them as needed.
+};
+/**
+ * @typedef {typeof userType} User
+ */
+
+/** @type {Map<string, User>} */
+let usersMap;
+
+/**
+ * @returns {Promise<Map<string, User>>}
+ */
+const fetchUsersListOnce = once(async () => {
+	const userKeys = Object.keys(userType);
+	const users = await get("users", {
+		select: userKeys.join(","),
+	}).then(parseResp);
+	return new Map(users.map((user) => [usersMapKey(user.firstName, user.lastName), user]));
+});
+
+/**
+ * @returns {Promise<Map<string, User>>}
+ */
 export async function fetchAllUsers() {
 	if (!usersMap) {
-		const users = await fetch(getApiUrl("users")).then(parseResp);
-		usersMap = new Map(users.map((user) => [usersMapKey(user.firstName, user.lastName), user]));
+		usersMap = await fetchUsersListOnce();
 	}
 	return usersMap;
 }
