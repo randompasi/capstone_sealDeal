@@ -5,32 +5,28 @@ import Reviews from "./Reviews";
 import SellingHistory from "./SellingHistory";
 import SettingsModal from "./SettingsModal";
 import EnvironmentalSavings from "./EnvironmentalSavings";
-import {useAuth} from "../auth/authContext";
-import {useState} from "react";
-import {loadImageToBase64} from "../common/utils";
-import {useAsyncEffect} from "../utils/hooks";
-import {patchUser} from "../api/api";
+import useFullUserProfile from "./useFullUserProfile";
 
-export default function ProfilePage({settings, setSettings, setBackgroundImage}) {
-	const authContext = useAuth();
-	const loggedInUser = authContext.user;
+/**
+ * @param {ProfilePage.UserProfileInfoProps} props
+ */
+export default function ProfilePage({user: userBase, settingsProps}) {
+	const fullProfileResource = useFullUserProfile(userBase.id);
 
-	const [profileImage, setProfileImage] = useState(null);
+	if (fullProfileResource.status !== "success") {
+		return null; // TODO: Loading spinner / error handling
+	}
+	const fullProfile = fullProfileResource.value;
 
-	//Update state change to DB on SettingsModal call
-	useAsyncEffect(async () => {
-		if (!profileImage) return;
-		const base64 = await loadImageToBase64(profileImage);
-		await patchUser(authContext, {
-			avatarBase64: base64,
-		});
-	}, [profileImage]);
+	if (!fullProfile) {
+		return <div>Ei käyttäjää id:llä {userBase.id}</div>;
+	}
 
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
-		id: loggedInUser.id,
-		avatarUrl: profileImage ?? loggedInUser.avatarBase64 ?? defaultProfile, //Fallback: state -> database -> hardcoded default
-		name: `${loggedInUser.firstName} ${loggedInUser.lastName}`,
+		id: fullProfile.id,
+		avatarUrl: userBase.avatarBase64 ?? fullProfile.avatarBase64 ?? defaultProfile,
+		name: `${fullProfile.firstName} ${fullProfile.lastName}`,
 		bday: "22.10.1987",
 		city: "Turku",
 		achievements: [
@@ -92,12 +88,7 @@ export default function ProfilePage({settings, setSettings, setBackgroundImage})
 				</div>
 			</div>
 
-			<SettingsModal
-				settings={settings}
-				setSettings={setSettings}
-				setBackgroundImage={setBackgroundImage}
-				setProfileImage={setProfileImage}
-			></SettingsModal>
+			{settingsProps && <SettingsModal {...settingsProps} />}
 		</div>
 	);
 }

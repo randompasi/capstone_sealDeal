@@ -20,7 +20,7 @@ export function useInput(initialValue) {
 /**
  * @type {UtilityTypes.UseResource}
  */
-export function useResource(fetchData) {
+export function useResource(fetchData, dependencies = []) {
 	/** @type{any} */
 	const [state, setState] = useState({status: "loading"});
 	useEffect(() => {
@@ -28,7 +28,7 @@ export function useResource(fetchData) {
 			(value) => setState({status: "success", value}),
 			(error) => setState({status: "error", error})
 		);
-	}, []);
+	}, dependencies);
 	return state;
 }
 

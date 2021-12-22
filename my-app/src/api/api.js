@@ -98,7 +98,7 @@ const fetchUsersListOnce = once(async () => {
 	const userKeys = Object.keys(userType);
 	const users = await get("users", {
 		select: userKeys.join(","),
-	}).then(parseResp);
+	});
 	return new Map(users.map((user) => [usersMapKey(user.firstName, user.lastName), user]));
 });
 
@@ -138,3 +138,12 @@ export async function signin(firstName, lastName) {
 	usersMap.set(usersMapKey(firstName, lastName), newUser);
 	return newUser;
 }
+
+/**
+ * Helpers to create Postgrest query string filters
+ */
+export const matchers = {
+	eq(value) {
+		return `eq.${value}`;
+	},
+};

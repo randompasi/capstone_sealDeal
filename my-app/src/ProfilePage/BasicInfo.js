@@ -14,9 +14,9 @@ export default function BasicInfo({user}) {
 					<Avatar url={user.avatarUrl} />
 				</div>
 				<div className="col-span-2 h-2/3 mt-2 w-full">
-					<SectionTitle className="mb-3">{user.name + ", " + user.city}</SectionTitle>
+					<SectionTitle>{user.name + ", " + user.city}</SectionTitle>
 
-					{/* 
+					{/*
 					<div className="flex flex-row justify-start">
 						<span className="m-2 ml-0">{user.bday + ", " + user.city}</span>
 					</div>
