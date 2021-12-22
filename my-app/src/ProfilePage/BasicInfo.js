@@ -2,6 +2,7 @@ import Box from "../Box";
 import Avatar from "./Avatar";
 import crown from "../assets/crown_2.png";
 import SectionTitle from "../common/components/SectionTitle";
+import FollowerList from "./Followers/FollowerList";
 
 /**
  * @param {ProfilePage.ProfilePageProps} props
@@ -15,12 +16,6 @@ export default function BasicInfo({user}) {
 				</div>
 				<div className="col-span-2 h-2/3 mt-2 w-full">
 					<SectionTitle>{user.name + ", " + user.city}</SectionTitle>
-
-					{/*
-					<div className="flex flex-row justify-start">
-						<span className="m-2 ml-0">{user.bday + ", " + user.city}</span>
-					</div>
-					*/}
 
 					<div className="flex flex-row w-1/4 ">
 						<div className="flex flex-col m-4 ml-3 justify-center items-center">
@@ -39,9 +34,7 @@ export default function BasicInfo({user}) {
 							<img style={{height: 30, width: 40}} src={crown} />
 							<SectionTitle>Sealdeal PRO Seller</SectionTitle>
 
-							<div className="h-100 mt-3">
-								<span>162 Profile Likes</span>
-							</div>
+							<FollowerList user={user} />
 						</div>
 					</div>
 				</div>

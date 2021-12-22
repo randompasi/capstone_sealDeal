@@ -1,4 +1,3 @@
-import defaultProfile from "../assets/ProfileImages/bird1.jpg";
 import BasicInfo from "./BasicInfo";
 import Achievements from "./Achievements";
 import Reviews from "./Reviews";
@@ -6,6 +5,7 @@ import SellingHistory from "./SellingHistory";
 import SettingsModal from "./SettingsModal";
 import EnvironmentalSavings from "./EnvironmentalSavings";
 import useFullUserProfile from "./useFullUserProfile";
+import {defaultAvatarImage} from "./helpers";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
@@ -25,10 +25,11 @@ export default function ProfilePage({user: userBase, settingsProps}) {
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
 		id: fullProfile.id,
-		avatarUrl: userBase.avatarBase64 ?? fullProfile.avatarBase64 ?? defaultProfile,
+		avatarUrl: userBase.avatarBase64 ?? fullProfile.avatarBase64 ?? defaultAvatarImage,
 		name: `${fullProfile.firstName} ${fullProfile.lastName}`,
 		bday: "22.10.1987",
 		city: "Turku",
+		followers: fullProfile.followers,
 		achievements: [
 			//Note: The description could eventually be hardcoded to the icon type
 			//Doesn't make sense currently since we only have two icons
@@ -68,7 +69,7 @@ export default function ProfilePage({user: userBase, settingsProps}) {
 	return (
 		<div className="flex flex-col items-center">
 			<div
-				className="w-5/12  p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"
+				className="w-full sm:w-10/12 xl:w-5/12 p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"
 				style={{backgroundColor: "white"}}
 			>
 				<div className="col-span-2">

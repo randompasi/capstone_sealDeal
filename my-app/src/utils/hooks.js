@@ -18,6 +18,17 @@ export function useInput(initialValue) {
 }
 
 /**
+ * @param {boolean} [initialValue] Default: false
+ */
+export function useToggle(initialValue) {
+	const [isOpen, setValue] = useState(Boolean(initialValue));
+	const toggle = () => {
+		setValue(!isOpen);
+	};
+	return {isOpen, toggle};
+}
+
+/**
  * @type {UtilityTypes.UseResource}
  */
 export function useResource(fetchData, dependencies = []) {

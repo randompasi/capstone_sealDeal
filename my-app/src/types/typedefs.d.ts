@@ -3,6 +3,11 @@ import React from "react";
 declare global {
 
 declare namespace ProfilePage {
+	declare interface FollowerInfo {
+		id: number
+		userId: number
+		followedUserId: number
+	}
 	declare interface UserInfo {
 		id: number
 		name: string
@@ -11,6 +16,7 @@ declare namespace ProfilePage {
 		avatarUrl: string
 		achievements: AcievementProp[]
 		reviews: Review[]
+		followers: FollowerInfo[]
 	}
 
 	declare interface Review {

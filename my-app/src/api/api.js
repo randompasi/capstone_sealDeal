@@ -24,17 +24,27 @@ const baseHeaders = {
 	Prefer: "return=representation",
 };
 
+function request({url, params, ...options}) {
+	const paramsStr = params ? new URLSearchParams(params).toString() : "";
+	const fullUrl = [getApiUrl(url), paramsStr].filter(Boolean).join("?");
+	return fetch(fullUrl, {method: "GET", ...options}).then(parseResp);
+}
+
 /**
  *
  * @param {string} url
  * @param {any} [params]
  * @returns {Promise<any>}
  */
-export function get(url, params) {
-	const paramsStr = params ? new URLSearchParams(params).toString() : "";
-	const fullUrl = [getApiUrl(url), paramsStr].filter(Boolean).join("?");
-	return fetch(fullUrl).then(parseResp);
-}
+export const get = (url, params) => request({url, params});
+
+/**
+ * @param {any} entity
+ * @param {number} id
+ * @returns
+ */
+export const remove = (entity, id) =>
+	request({url: entity, params: {id: matchers.eq(id)}, method: "DELETE", headers: baseHeaders});
 
 /**
  * @param {string} url
@@ -145,5 +155,8 @@ export async function signin(firstName, lastName) {
 export const matchers = {
 	eq(value) {
 		return `eq.${value}`;
+	},
+	in(options) {
+		return `in.${options.join(",")}`;
 	},
 };

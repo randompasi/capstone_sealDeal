@@ -7,7 +7,13 @@ import {head} from "lodash";
  */
 export default function useFullUserProfile(id, dependencies = []) {
 	return useResource(
-		() => api.get("users", {id: api.matchers.eq(id)}).then(head),
+		() =>
+			api
+				.get("users", {
+					select: ["*", "followers:following!followedUserId(*)"].join(","),
+					id: api.matchers.eq(id),
+				})
+				.then(head),
 		[id, ...dependencies]
 	);
 }
