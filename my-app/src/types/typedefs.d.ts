@@ -3,6 +3,11 @@ import React from "react";
 declare global {
 
 declare namespace ProfilePage {
+	declare interface FollowerInfo {
+		id: number
+		userId: number
+		followedUserId: number
+	}
 	declare interface UserInfo {
 		id: number
 		name: string
@@ -11,6 +16,7 @@ declare namespace ProfilePage {
 		avatarUrl: string
 		achievements: AcievementProp[]
 		reviews: Review[]
+		followers: FollowerInfo[]
 	}
 
 	declare interface Review {
@@ -37,6 +43,19 @@ declare namespace ProfilePage {
 		description: string
 		iconType: string
 	}
+
+	declare interface SettingsProps {
+		settings: any
+		setSettings: Function
+		setBackgroundImage: Function
+		setProfileImage: Function
+	}
+
+	declare interface UserProfileInfoProps {
+		user: any
+		settingsProps: null | ProfilePage.SettingsProps
+	}
+
 }
 
 declare namespace UtilityTypes {
@@ -49,7 +68,7 @@ declare namespace UtilityTypes {
 		| {status: 'error', error: Error}
 		| {status: 'success', value: T}
 
-	declare type UseResource = (fn: () => Promise<any>) => AsyncResourceState<any>
+	declare type UseResource = (fn: () => Promise<any>, dependencies?: any[]) => AsyncResourceState<any>
 }
 
 declare namespace AuthContext {

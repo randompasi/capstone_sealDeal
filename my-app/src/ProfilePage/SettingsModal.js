@@ -23,13 +23,13 @@ export default function SettingsModal({
 		return images;
 	}
 
-	//@ts-ignore
 	const bgImages = importAll(
+		// @ts-ignore
 		require.context("../assets/BackgroundImages", false, /\.(png|jpe?g|svg)$/)
 	);
 
-	//@ts-ignore
 	const profileImages = importAll(
+		// @ts-ignore
 		require.context("../assets/ProfileImages", false, /\.(png|jpe?g|svg)$/)
 	);
 

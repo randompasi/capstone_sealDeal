@@ -18,9 +18,20 @@ export function useInput(initialValue) {
 }
 
 /**
+ * @param {boolean} [initialValue] Default: false
+ */
+export function useToggle(initialValue) {
+	const [isOpen, setValue] = useState(Boolean(initialValue));
+	const toggle = () => {
+		setValue(!isOpen);
+	};
+	return {isOpen, toggle};
+}
+
+/**
  * @type {UtilityTypes.UseResource}
  */
-export function useResource(fetchData) {
+export function useResource(fetchData, dependencies = []) {
 	/** @type{any} */
 	const [state, setState] = useState({status: "loading"});
 	useEffect(() => {
@@ -28,7 +39,7 @@ export function useResource(fetchData) {
 			(value) => setState({status: "success", value}),
 			(error) => setState({status: "error", error})
 		);
-	}, []);
+	}, dependencies);
 	return state;
 }
 
