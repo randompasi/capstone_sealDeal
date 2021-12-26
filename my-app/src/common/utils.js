@@ -31,3 +31,12 @@ export const loadImageToBase64 = (imageUrl) =>
  * @returns {string}
  */
 export const makeCssUrl = (url) => `url(${JSON.stringify(url)})`;
+
+/**
+ * @param {never} _impossibleValue
+ * @returns {null}
+ */
+// eslint-disable-next-line no-unused-vars
+export function impossibleCase(_impossibleValue) {
+	return null;
+}

@@ -7,6 +7,7 @@ import useFullUserProfile from "./useFullUserProfile";
 import {defaultAvatarImage} from "./helpers";
 import defaultBackground from "../assets/BackgroundImages/bg_default.jpg";
 import {makeCssUrl} from "../common/utils";
+import EditableGrid from "../EditableGrid/EditableGrid";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
@@ -92,16 +93,10 @@ export default function ProfilePage({user: userBase}) {
 	};
 
 	return (
-		<div
-			id="page-container"
-			className="flex flex-col items-center"
-			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
-		>
-			<div
-				className="w-full sm:w-10/12 xl:w-5/12 p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8 mb-8"
-				style={{backgroundColor: "white"}}
-			>
-				<div className="col-span-2">
+		<div className="flex flex-col items-center">
+			<div className="w-full p-8" style={{backgroundColor: "white"}}>
+				<EditableGrid profilePageProps={{user}} />
+				{/* <div className="col-span-2">
 					<BasicInfo user={user} />
 				</div>
 
@@ -115,7 +110,7 @@ export default function ProfilePage({user: userBase}) {
 
 				<div className="col-span-2">
 					<EnvironmentalSavings user={user} />
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

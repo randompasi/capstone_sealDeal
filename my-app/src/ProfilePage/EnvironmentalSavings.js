@@ -8,7 +8,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
  */
 export default function EnvironmentalSavings({user}) {
 	return (
-		<Box className="my-5" title="Environmental savings">
+		<Box title="Environmental savings">
 			<div className="grid grid-cols-2 w-full gap-4">
 				<div className="col-span-2">
 					Thank you {user.name} for helping us save the Environment !

@@ -79,4 +79,25 @@ declare namespace AuthContext {
 	}
 }
 
+declare namespace EditableGrid {
+
+	declare type GridIdentifier =
+		"BasicInfo"
+		| "Achievements"
+		| "EnvironmentalSavings"
+
+	declare interface GridRow {
+		a: null | GridIdentifier;
+		b: null | GridIdentifier;
+	}
+	declare type GridModel = GridRow[]
+
+	declare interface EditableGridItemProps {
+		item: EditableGrid.GridIdentifier,
+		profilePageProps: ProfilePage.ProfilePageProps,
+		dragging: null | string,
+		setDragging: (direction: string) => any
+	}
+}
+
 }

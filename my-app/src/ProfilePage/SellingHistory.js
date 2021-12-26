@@ -44,7 +44,7 @@ function History() {
 
 export default function SellingHistory() {
 	return (
-		<Box className="my-5" title="Selling history">
+		<Box title="Selling history">
 			<div className="w-full">
 				<History />
 			</div>
