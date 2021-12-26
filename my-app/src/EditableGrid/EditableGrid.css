@@ -1,3 +1,7 @@
+.seal-editable-grid {
+	grid-template-columns: 1fr 1fr;
+}
+
 .seal-editable-grid-border {
 	--seal-editable-grid-border-weight-dynamic: 0px;
 	--seal-editable-grid-border-weight: calc(var(--seal-editable-grid-border-weight-dynamic) + 10px);

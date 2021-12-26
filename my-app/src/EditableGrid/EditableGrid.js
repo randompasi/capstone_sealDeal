@@ -1,7 +1,7 @@
-import {clamp} from "lodash";
+import {clamp, times} from "lodash";
 import uniq from "lodash/uniq";
 import {useCallback, useRef, useState} from "react";
-import {impossibleCase} from "../common/utils";
+import {cloneDeepJson, impossibleCase} from "../common/utils";
 import Achievements from "../ProfilePage/Achievements";
 import BasicInfo from "../ProfilePage/BasicInfo";
 import EnvironmentalSavings from "../ProfilePage/EnvironmentalSavings";
@@ -26,18 +26,13 @@ function getContent(item, profilePageProps) {
 
 /**
  * @param {MouseEvent} event
- * @param {string} direction
+ * @param {EditableGrid.GridResizeDirection} direction
  */
 function getMouseMovedRelativeAmount(event, direction) {
-	switch (direction) {
-		case "left":
-			return event.movementX * -1;
-		case "right":
-			return event.movementX;
-		case "top":
-			return event.movementY * -1;
-		case "bottom":
-			return event.movementY;
+	if (direction === "left" || direction === "right") {
+		return event.movementX;
+	} else {
+		return event.movementY;
 	}
 }
 
@@ -52,58 +47,74 @@ function EditableGridItem(props) {
 	let dragging = false;
 
 	/** @type {React.MouseEventHandler} */
-	const mouseDown = useCallback((event) => {
-		event.preventDefault();
-		if (dragging) {
-			return;
-		}
-		dragging = true;
-		let mouseMoved = 0;
+	const mouseDown = useCallback(
+		(event) => {
+			event.preventDefault();
+			if (dragging) {
+				return;
+			}
+			dragging = true;
+			let mouseMoved = 0;
 
-		/** @type {HTMLDivElement} */
-		// @ts-ignore
-		const borderElem = event.target;
-		const direction = borderElem.dataset?.direction;
-		if (!direction) {
-			console.warn("Cannot find direction from dragged element");
-			return;
-		}
-		props.setDragging(props.item);
+			/** @type {HTMLDivElement} */
+			// @ts-ignore
+			const borderElem = event.target;
+			/** @type {string} */
+			const _direction = borderElem.dataset?.direction;
+			/** @type {EditableGrid.GridResizeDirection} */
+			// @ts-ignore
+			const direction = _direction;
 
-		const mouseMove = (/** @type {MouseEvent} */ event) => {
-			mouseMoved = clamp(
-				Math.round(mouseMoved + getMouseMovedRelativeAmount(event, direction)),
-				0,
-				400
-			);
+			if (!direction) {
+				console.warn("Cannot find direction from dragged element");
+				return;
+			}
+			props.setDragging(props.item);
 
-			const {style} = borderElem;
-			style.setProperty("--seal-editable-grid-border-weight-dynamic", mouseMoved + "px");
-			borderElem.classList.add("sealdeal-editable-grid-border-active");
-		};
-		const mouseUp = () => {
-			dragging = false;
-			const {style} = borderElem;
-			style.setProperty("--seal-editable-grid-border-weight-dynamic", "0px");
-			borderElem.classList.remove("sealdeal-editable-grid-border-active");
-			document.body.removeEventListener("mouseup", mouseUp);
-			document.body.removeEventListener("mousemove", mouseMove);
-			props.setDragging(null);
-		};
+			const mouseMove = (/** @type {MouseEvent} */ event) => {
+				mouseMoved = clamp(
+					Math.round(mouseMoved + getMouseMovedRelativeAmount(event, direction)),
+					-200,
+					800
+				);
 
-		document.body.addEventListener("mouseup", mouseUp);
-		document.body.addEventListener("mousemove", mouseMove);
-	}, []);
+				const {style} = borderElem;
+				style.setProperty("--seal-editable-grid-border-weight-dynamic", mouseMoved + "px");
+				borderElem.classList.add("sealdeal-editable-grid-border-active");
+			};
+			const mouseUp = () => {
+				dragging = false;
+				const {style} = borderElem;
+				style.setProperty("--seal-editable-grid-border-weight-dynamic", "0px");
+				borderElem.classList.remove("sealdeal-editable-grid-border-active");
+				document.body.removeEventListener("mouseup", mouseUp);
+				document.body.removeEventListener("mousemove", mouseMove);
+				props.setDragging(null);
+				props.resize(direction, mouseMoved, props.item);
+			};
 
-	const draggingClassName =
-		props.dragging && props.dragging !== props.item ? "seal-editable-grid-resize-target" : "";
+			document.body.addEventListener("mouseup", mouseUp);
+			document.body.addEventListener("mousemove", mouseMove);
+		},
+		[props.setDragging, props.resize, props.item]
+	);
+
+	const draggingClassName = props.dragging ? "seal-editable-grid-resize-target" : "";
+	const emptyBlockClassName = props.item === null ? "seal-editable-grid-empty" : "";
+
+	if (props.item === null) {
+		return null;
+	}
 
 	const style = {
-		gridArea: props.item,
+		gridArea: props.item || `null-${props.index}`,
 	};
 
 	return (
-		<div className={`w-full h-full relative ${draggingClassName}`} style={style}>
+		<div
+			className={`w-full h-full relative ${draggingClassName} ${emptyBlockClassName}`}
+			style={style}
+		>
 			<div onMouseDown={mouseDown} ref={borderRef}>
 				<div
 					data-direction="left"
@@ -141,20 +152,29 @@ export default function EditableGrid(props) {
 	const gridItems = getGridItems(gridState);
 	const {profilePageProps} = props;
 
+	const resize = useCallback(makeResizeCallback(gridState, setGridState), [
+		gridState,
+		setGridState,
+	]);
+
 	/** @type {Record<string, string>} */
 	const style = {
 		gridTemplateAreas: parseGridTemplateAreas(gridState),
 	};
 
+	console.log(gridState, style.gridTemplateAreas);
+
 	return (
-		<div className="grid gap-4 w-full" style={style}>
-			{gridItems.map((item) => (
+		<div className="grid gap-4 w-full seal-editable-grid" style={style}>
+			{gridItems.map((item, i) => (
 				<EditableGridItem
-					key={item}
+					key={item || `null-${i}`}
+					index={i}
 					item={item}
 					profilePageProps={profilePageProps}
 					dragging={dragging}
 					setDragging={setDragging}
+					resize={resize}
 				></EditableGridItem>
 			))}
 		</div>
@@ -176,3 +196,72 @@ function parseGridTemplateAreas(gridState) {
 function getGridItems(gridState) {
 	return uniq(gridState.flatMap((_) => [_.a, _.b]));
 }
+
+/**
+ * @param {EditableGrid.GridModel} gridState
+ * @param {(newState: EditableGrid.GridModel) => any} setGridState
+ * @returns {EditableGrid.EditableGridItemProps["resize"]}
+ * */
+const makeResizeCallback = (gridState, setGridState) => (border, amount, item) => {
+	const currentRowIndex = gridState.findIndex((_) => _.a === item || _.b === item);
+	if (currentRowIndex === -1) {
+		console.warn("Cannot find item from current grid state");
+		return;
+	}
+	const currentRow = gridState[currentRowIndex];
+	console.log({border, amount, item, currentRow});
+
+	const newState = cloneDeepJson(gridState);
+
+	const isScalingUp = amount * (border === "top" || border === "left" ? -1 : 1) > 0;
+	const isAxisX = border === "left" || border === "right";
+
+	console.log({isAxisX, isScalingUp});
+	if (isAxisX) {
+		if (isScalingUp) {
+			const currentColumn = currentRow.a === item ? "a" : "b";
+			const moveToColumn = currentColumn === "a" ? "b" : "a";
+
+			// Move possibly existing item out of the way
+			const currentOccupant = currentRow[moveToColumn];
+			if (currentOccupant) {
+				if (currentOccupant === item) {
+					return; // We already occupy this space? Skip
+				}
+
+				let rowsCount = 0;
+				for (const row of newState) {
+					if (row[moveToColumn] === currentOccupant) {
+						row[moveToColumn] = null;
+						rowsCount++;
+					}
+				}
+
+				/** @type{EditableGrid.GridModel} */
+				const newRowsForOccupant = times(rowsCount, () => ({
+					a: null,
+					b: null,
+					[moveToColumn]: currentOccupant,
+				}));
+				newState.splice(currentRowIndex + 1, 0, ...newRowsForOccupant);
+			}
+
+			for (const row of newState) {
+				if (row[currentColumn] === item) {
+					row[moveToColumn] = item;
+				}
+			}
+		} else {
+			// Scaling down
+			const clearColumn = border === "left" ? "a" : "b";
+			for (const row of newState) {
+				if (row[clearColumn] === item) {
+					row[clearColumn] = null;
+				}
+			}
+		}
+	}
+
+	setGridState(newState);
+	console.log(newState);
+};

@@ -40,3 +40,10 @@ export const makeCssUrl = (url) => `url(${JSON.stringify(url)})`;
 export function impossibleCase(_impossibleValue) {
 	return null;
 }
+
+/**
+ * @type {UtilityTypes.IdentityFunction}
+ */
+export const cloneDeepJson = (value) => {
+	return JSON.parse(JSON.stringify(value));
+};

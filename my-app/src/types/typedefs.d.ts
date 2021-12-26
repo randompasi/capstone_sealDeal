@@ -63,6 +63,8 @@ declare namespace UtilityTypes {
 		<T>(n: number, fn: (i: number) => T): T[];
 	}
 
+	declare type IdentityFunction = <T>(value: T) => T
+
 	declare type AsyncResourceState<T> =
 		{status: 'loading'}
 		| {status: 'error', error: Error}
@@ -93,11 +95,16 @@ declare namespace EditableGrid {
 	declare type GridModel = GridRow[]
 
 	declare interface EditableGridItemProps {
-		item: EditableGrid.GridIdentifier,
-		profilePageProps: ProfilePage.ProfilePageProps,
-		dragging: null | string,
-		setDragging: (direction: string) => any
+		item: EditableGrid.GridIdentifier;
+		profilePageProps: ProfilePage.ProfilePageProps;
+		dragging: null | string;
+		setDragging: (direction: string) => any;
+		index: number;
+		resize: (border: GridResizeDirection, dragAmount: number, item: GridIdentifier) => any;
 	}
+
+	declare type GridResizeDirection = "top" | "right" | "bottom" | "left";
+
 }
 
 }
