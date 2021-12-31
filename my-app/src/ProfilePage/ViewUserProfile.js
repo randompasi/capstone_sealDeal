@@ -5,5 +5,9 @@ export default function ViewUserProfile() {
 	const params = useParams();
 	const userId = Number(params.id);
 
-	return <ProfilePage user={{id: userId}} settingsProps={null} />;
+	return (
+		<div className="h-screen w-full">
+			<ProfilePage user={{id: userId}} settingsProps={null} />
+		</div>
+	);
 }

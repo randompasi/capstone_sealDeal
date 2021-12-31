@@ -4,12 +4,7 @@ import ImageSelectModal from "./ImageSelectModal";
 import profilePlaceholder from "../assets/ProfileImages/bird1.jpg";
 import backgroundPlaceholder from "../assets/BackgroundImages/bg0.jpg";
 
-export default function SettingsModal({
-	settings,
-	setSettings,
-	setBackgroundImage,
-	setProfileImage,
-}) {
+export default function SettingsModal({user, control, setBackgroundImage, setProfileImage}) {
 	const makeCssUrl = (url) => `url('${url}')`;
 
 	const [backgroundModalVisible, setBackgroundModalVisible] = useState(false);
@@ -33,11 +28,25 @@ export default function SettingsModal({
 		require.context("../assets/ProfileImages", false, /\.(png|jpe?g|svg)$/)
 	);
 
+	function getPremiumText(isPremium) {
+		if (!isPremium) {
+			return "Sorry! This feature is only available for premium users";
+		}
+		return;
+	}
+
+	function disableOnPremium(isPremium) {
+		if (!isPremium) {
+			return "flex flex-row justify-center items-center w-full p-8 filter grayscale pointer-events-none";
+		}
+		return "flex flex-row justify-center items-center w-full p-8";
+	}
+
 	return (
 		<div>
 			<Modal
 				id="settings-modal"
-				isOpen={settings}
+				isOpen={control.showSettingsModal}
 				contentLabel="Example Modal"
 				ariaHideApp={false}
 				style={{
@@ -55,8 +64,9 @@ export default function SettingsModal({
 				}}
 			>
 				<h1 className="text-3xl">Profile customization</h1>
+				<p className="mt-2">{getPremiumText(user.premium)}</p>
 				<div className="flex-1 w-full">
-					<div className="flex flex-row justify-center items-center w-full p-8">
+					<div className={disableOnPremium(user.premium)}>
 						<div className="flex flex-col items-center justify-center mt-8">
 							<div
 								id="profile-image"
@@ -75,7 +85,7 @@ export default function SettingsModal({
 							></div>
 							<button
 								onClick={() => {
-									setSettings(false);
+									control.setSettingsModal(false);
 									setAvatarModalVisible(true);
 								}}
 								className="w-60 m-4 shadow bg-gray-700 hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
@@ -100,10 +110,10 @@ export default function SettingsModal({
 							></div>
 							<button
 								onClick={() => {
-									setSettings(false);
+									control.setSettingsModal(false);
 									setBackgroundModalVisible(true);
 								}}
-								className="w-60 m-4 shadow bg-gray-700 hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+								className="w-60 m-4 shadow bg-gray-700  hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
 							>
 								Profile background
 							</button>
@@ -115,7 +125,7 @@ export default function SettingsModal({
 					<button
 						className="w-32 h-8 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
 						onClick={() => {
-							setSettings(false);
+							control.setSettingsModal(false);
 						}}
 					>
 						Cancel
