@@ -2,7 +2,13 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import OwnProfilePage from "./ProfilePage/OwnProfilePage";
 import ViewUserProfile from "./ProfilePage/ViewUserProfile";
 
-export default function SealdealRoutes({settings, setSettings, setBackgroundImage}) {
+export default function SealdealRoutes({
+	settings,
+	setSettings,
+	showPremiumModal,
+	setPremiumModal,
+	setBackgroundImage,
+}) {
 	return (
 		<Router>
 			<Routes>
@@ -10,8 +16,14 @@ export default function SealdealRoutes({settings, setSettings, setBackgroundImag
 					path="/"
 					element={
 						<OwnProfilePage
-							setSettings={setSettings}
-							settings={settings}
+							controlPremiumModal={{
+								showPremiumModal: showPremiumModal,
+								setPremiumModal: setPremiumModal,
+							}}
+							controlSettingsModal={{
+								showSettingsModal: settings,
+								setSettingsModal: setSettings,
+							}}
 							setBackgroundImage={setBackgroundImage}
 						/>
 					}

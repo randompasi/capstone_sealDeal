@@ -1,3 +1,3 @@
-import defaultAvatarImage from "../assets/ProfileImages/bird1.jpg";
+import defaultAvatarImage from "../assets/ProfileImages/avatar_default.jpg";
 
 export {defaultAvatarImage};

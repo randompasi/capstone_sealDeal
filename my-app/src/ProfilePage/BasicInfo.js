@@ -3,11 +3,14 @@ import Avatar from "./Avatar";
 import crown from "../assets/crown_2.png";
 import SectionTitle from "../common/components/SectionTitle";
 import FollowerList from "./Followers/FollowerList";
-
+import {ProvideAuth, useAuth} from "../auth/authContext";
 /**
  * @param {ProfilePage.ProfilePageProps} props
  */
 export default function BasicInfo({user}) {
+	const authContext = useAuth();
+	const userC = authContext.user;
+
 	return (
 		<Box className="my-5" title="">
 			<div className="grid grid-cols-5 w-full">
@@ -31,14 +34,28 @@ export default function BasicInfo({user}) {
 				<div className="col-span-2">
 					<div className="h-1 flex flex-col items-end">
 						<div className="flex flex-col items-center">
-							<img style={{height: 30, width: 40}} src={crown} />
-							<SectionTitle>Sealdeal PRO Seller</SectionTitle>
-
+							{getSellerStatus(userC.premium)}
 							<FollowerList user={user} />
 						</div>
 					</div>
 				</div>
 			</div>
 		</Box>
+	);
+}
+
+function getSellerStatus(isPremium) {
+	if (isPremium) {
+		return (
+			<div className="flex flex-col items-center">
+				<img style={{height: 30, width: 40}} src={crown} />
+				<SectionTitle>Sealdeal PRO Seller</SectionTitle>
+			</div>
+		);
+	}
+	return(
+		<div className="mt-4 flex-1 flex flex-col">
+			<SectionTitle>Sealdeal Free User</SectionTitle>
+		</div>
 	);
 }

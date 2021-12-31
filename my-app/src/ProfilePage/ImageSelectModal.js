@@ -43,6 +43,10 @@ export default function ImageSelectModal({
 						>
 							<img
 								className="w-100 h-100 border-4 border-gray-700 hover:border-blue-300"
+								style={{
+									height: 125,
+									width: 200,
+								}}
 								src={src}
 							/>
 						</div>

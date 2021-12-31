@@ -2,15 +2,16 @@ import BasicInfo from "./BasicInfo";
 import Achievements from "./Achievements";
 import Reviews from "./Reviews";
 import SellingHistory from "./SellingHistory";
-import SettingsModal from "./SettingsModal";
 import EnvironmentalSavings from "./EnvironmentalSavings";
 import useFullUserProfile from "./useFullUserProfile";
 import {defaultAvatarImage} from "./helpers";
+import defaultBackground from "../assets/BackgroundImages/bg_default.jpg";
+import {makeCssUrl} from "../common/utils";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
  */
-export default function ProfilePage({user: userBase, settingsProps}) {
+export default function ProfilePage({user: userBase}) {
 	const fullProfileResource = useFullUserProfile(userBase.id);
 
 	if (fullProfileResource.status !== "success") {
@@ -22,14 +23,38 @@ export default function ProfilePage({user: userBase, settingsProps}) {
 		return <div>Ei käyttäjää id:llä {userBase.id}</div>;
 	}
 
+	//Dumb fix for handling none local profile viewing
+	const isPremium = userBase.premium ?? fullProfile.premium;
+	let parsedAvatarUrl;
+	let parsedBgUrl;
+	if (!isPremium) {
+		//Simple API that generates Avatars based on names, https://eu.ui-avatars.com/
+		//Only requesting with innitials to be extra safe with privacy :P
+		parsedAvatarUrl =
+			"https://eu.ui-avatars.com/api/?name=" +
+			fullProfile.firstName.charAt(0) +
+			"+" +
+			fullProfile.lastName.charAt(0);
+
+		//Force none reactive default bg for none premium users
+		parsedBgUrl = makeCssUrl(defaultBackground);
+	} else {
+		parsedAvatarUrl = userBase.avatarBase64 ?? fullProfile.avatarBase64 ?? defaultAvatarImage;
+
+		parsedBgUrl = makeCssUrl(
+			userBase.backgroundBase64 ?? fullProfile.backgroundBase64 ?? defaultBackground
+		);
+	}
+
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
 		id: fullProfile.id,
-		avatarUrl: userBase.avatarBase64 ?? fullProfile.avatarBase64 ?? defaultAvatarImage,
+		avatarUrl: parsedAvatarUrl,
 		name: `${fullProfile.firstName} ${fullProfile.lastName}`,
 		bday: "22.10.1987",
 		city: "Turku",
 		followers: fullProfile.followers,
+		premium: isPremium,
 		achievements: [
 			//Note: The description could eventually be hardcoded to the icon type
 			//Doesn't make sense currently since we only have two icons
@@ -67,7 +92,11 @@ export default function ProfilePage({user: userBase, settingsProps}) {
 	};
 
 	return (
-		<div className="flex flex-col items-center">
+		<div
+			id="page-container"
+			className="flex flex-col items-center w-full h-full"
+			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
+		>
 			<div
 				className="w-full sm:w-10/12 xl:w-5/12 p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"
 				style={{backgroundColor: "white"}}
@@ -88,8 +117,6 @@ export default function ProfilePage({user: userBase, settingsProps}) {
 					<EnvironmentalSavings user={user} />
 				</div>
 			</div>
-
-			{settingsProps && <SettingsModal {...settingsProps} />}
 		</div>
 	);
 }

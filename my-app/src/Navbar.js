@@ -5,12 +5,11 @@ import {IoSettingsOutline} from "react-icons/io5";
 import logoImage from "./assets/logo.png";
 import Search from "./Search/Search";
 
-export default function Navbar({setSettings}) {
+export default function Navbar({setSettings, setPremiumModal}) {
 	const {user, signout} = useAuth();
 	if (!user) {
 		return null;
 	}
-
 	return (
 		<header>
 			<Box className="pt-2 pb-2" title="">
@@ -27,6 +26,14 @@ export default function Navbar({setSettings}) {
 						<Search />
 					</div>
 					<div className="flex flex-row items-center">
+						<p
+							onClick={() => {
+								setPremiumModal(true);
+							}}
+							className="mr-4 cursor-pointer hover:underline hover:underline-offset-4"
+						>
+							<b>Premium</b>
+						</p>
 						<button
 							style={{borderColor: "white"}}
 							className="flex items-center border-r-2 border-solid"
@@ -34,7 +41,7 @@ export default function Navbar({setSettings}) {
 								setSettings(true);
 							}}
 						>
-							<IoSettingsOutline className="mr-4 text-3xl"></IoSettingsOutline>
+							<IoSettingsOutline className="mr-4 ml-4 text-3xl"></IoSettingsOutline>
 						</button>
 						<NavItem
 							className="m-4 flex justify-self-end"
