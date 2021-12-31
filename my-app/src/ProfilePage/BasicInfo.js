@@ -3,7 +3,7 @@ import Avatar from "./Avatar";
 import crown from "../assets/crown_2.png";
 import SectionTitle from "../common/components/SectionTitle";
 import FollowerList from "./Followers/FollowerList";
-import {ProvideAuth, useAuth} from "../auth/authContext";
+import {useAuth} from "../auth/authContext";
 /**
  * @param {ProfilePage.ProfilePageProps} props
  */
@@ -53,7 +53,7 @@ function getSellerStatus(isPremium) {
 			</div>
 		);
 	}
-	return(
+	return (
 		<div className="mt-4 flex-1 flex flex-col">
 			<SectionTitle>Sealdeal Free User</SectionTitle>
 		</div>
