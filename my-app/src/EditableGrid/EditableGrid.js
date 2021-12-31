@@ -1,4 +1,4 @@
-import {clamp, times} from "lodash";
+import {clamp, findIndex, findLastIndex, times} from "lodash";
 import uniq from "lodash/uniq";
 import {useCallback, useRef, useState} from "react";
 import {cloneDeepJson, impossibleCase} from "../common/utils";
@@ -162,8 +162,6 @@ export default function EditableGrid(props) {
 		gridTemplateAreas: parseGridTemplateAreas(gridState),
 	};
 
-	console.log(gridState, style.gridTemplateAreas);
-
 	return (
 		<div className="grid gap-4 w-full seal-editable-grid" style={style}>
 			{gridItems.map((item, i) => (
@@ -203,20 +201,21 @@ function getGridItems(gridState) {
  * @returns {EditableGrid.EditableGridItemProps["resize"]}
  * */
 const makeResizeCallback = (gridState, setGridState) => (border, amount, item) => {
-	const currentRowIndex = gridState.findIndex((_) => _.a === item || _.b === item);
+	const rowHasItem = (_) => _.a === item || _.b === item;
+	const findFn = border === "bottom" ? findLastIndex : findIndex;
+	const currentRowIndex = findFn(gridState, rowHasItem);
+
 	if (currentRowIndex === -1) {
 		console.warn("Cannot find item from current grid state");
 		return;
 	}
 	const currentRow = gridState[currentRowIndex];
-	console.log({border, amount, item, currentRow});
 
 	const newState = cloneDeepJson(gridState);
 
 	const isScalingUp = amount * (border === "top" || border === "left" ? -1 : 1) > 0;
 	const isAxisX = border === "left" || border === "right";
 
-	console.log({isAxisX, isScalingUp});
 	if (isAxisX) {
 		if (isScalingUp) {
 			const currentColumn = currentRow.a === item ? "a" : "b";
@@ -252,7 +251,6 @@ const makeResizeCallback = (gridState, setGridState) => (border, amount, item) =
 				}
 			}
 		} else {
-			// Scaling down
 			const clearColumn = border === "left" ? "a" : "b";
 			for (const row of newState) {
 				if (row[clearColumn] === item) {
@@ -260,8 +258,65 @@ const makeResizeCallback = (gridState, setGridState) => (border, amount, item) =
 				}
 			}
 		}
+	} else {
+		// Resizing up/down
+		if (isScalingUp) {
+			const replacementRows = [
+				newState[currentRowIndex - 1],
+				currentRow,
+				newState[currentRowIndex + 1],
+			].flatMap((row, i) => {
+				const indexToReplace = border === "top" ? 0 : 2;
+				if (indexToReplace !== i) {
+					return row || [];
+				}
+
+				const newRow = {
+					a: currentRow.a === item ? item : null,
+					b: currentRow.b === item ? item : null,
+				};
+				const fullRow = Boolean(newRow.a && newRow.b);
+				if (!fullRow && newRow.a && !row.a) {
+					return {
+						a: newRow.a,
+						b: row.b,
+					};
+				}
+				if (!fullRow && newRow.b && !row.b) {
+					return {
+						a: row.a,
+						b: newRow.b,
+					};
+				}
+				const newRows = [row, newRow];
+				if (border === "bottom") {
+					newRows.reverse();
+				}
+				return newRows;
+			});
+			newState.splice(
+				Math.max(0, currentRowIndex - 1),
+				currentRowIndex === 0 ? 2 : 3,
+				...replacementRows
+			);
+		} else {
+			const newRows = [
+				{
+					a: currentRow.a === item ? null : currentRow.a,
+					b: currentRow.b === item ? null : currentRow.b,
+				},
+			].filter((_) => _.a || _.b);
+			newState.splice(currentRowIndex, 1, ...newRows);
+		}
 	}
 
-	setGridState(newState);
-	console.log(newState);
+	const newStateIsValid =
+		// Make sure scaling down didn't result in the item getting removed altogether.
+		// Removing items is done with another explicit remove-function.
+		newState.some(rowHasItem);
+
+	if (newStateIsValid) {
+		const withoutEmptyRows = newState.filter((_) => _.a || _.b);
+		setGridState(withoutEmptyRows);
+	}
 };

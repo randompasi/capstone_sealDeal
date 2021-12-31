@@ -1,8 +1,3 @@
-import BasicInfo from "./BasicInfo";
-import Achievements from "./Achievements";
-import Reviews from "./Reviews";
-import SellingHistory from "./SellingHistory";
-import EnvironmentalSavings from "./EnvironmentalSavings";
 import useFullUserProfile from "./useFullUserProfile";
 import {defaultAvatarImage} from "./helpers";
 import defaultBackground from "../assets/BackgroundImages/bg_default.jpg";
@@ -93,7 +88,11 @@ export default function ProfilePage({user: userBase}) {
 	};
 
 	return (
-		<div className="flex flex-col items-center">
+		<div
+			id="page-container"
+			className="flex flex-col items-center w-full h-full"
+			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
+		>
 			<div className="w-full p-8" style={{backgroundColor: "white"}}>
 				<EditableGrid profilePageProps={{user}} />
 				{/* <div className="col-span-2">

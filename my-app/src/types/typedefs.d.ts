@@ -17,6 +17,7 @@ declare namespace ProfilePage {
 		achievements: AcievementProp[]
 		reviews: Review[]
 		followers: FollowerInfo[]
+		premium: boolean
 	}
 
 	declare interface Review {
