@@ -49,7 +49,7 @@ declare namespace ProfilePage {
 		setBackgroundImage: Function
 		setProfileImage: Function
 		gridStateProps: EditableGrid.GridStateProps
-		dashboardComponents: EditableGrid.EditableGridProps["components"]
+		gridComponents: EditableGrid.EditableGridProps["components"]
 		control: any
 		user: any
 	}
@@ -61,7 +61,7 @@ declare namespace ProfilePage {
 
 	declare interface GridComponentsModalProps {
 		openState: {isOpen: boolean, toggle: ()=> void};
-		dashboardComponents: EditableGrid.EditableGridProps["components"];
+		gridComponents: EditableGrid.EditableGridProps["components"];
 		gridStateProps: EditableGrid.GridStateProps
 	}
 	declare interface GridComponentsModalCardProps {
@@ -83,6 +83,16 @@ declare namespace UtilityTypes {
 		| {status: 'success', value: T}
 
 	declare type UseResource = (fn: () => Promise<any>, dependencies?: any[]) => AsyncResourceState<any>
+}
+
+declare namespace CommonComponents {
+	declare interface ModalProps {
+		children: ReactNode;
+		isOpen: boolean;
+		contentLabel: string;
+		title: string;
+		onCancel: () => any;
+	}
 }
 
 declare namespace AuthContext {

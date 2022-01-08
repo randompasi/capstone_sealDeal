@@ -6,6 +6,9 @@ import {patchUser} from "../api/api";
 import ProfilePageInfo from "./ProfilePageInfo";
 import PremiumModal from "./PremiumModal";
 import SettingsModal from "./SettingsModal";
+import gridComponents from "./gridComponents";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend as DnDHTML5Backend} from "react-dnd-html5-backend";
 
 export default function ProfilePage({controlPremiumModal, controlSettingsModal}) {
 	const authContext = useAuth();
@@ -51,15 +54,18 @@ export default function ProfilePage({controlPremiumModal, controlSettingsModal})
 
 	return (
 		<div className="w-full h-screen">
-			<ProfilePageInfo user={user} gridStateProps={gridStateProps} />
-			<PremiumModal control={controlPremiumModal} />
-			<SettingsModal
-				user={user}
-				control={controlSettingsModal}
-				setBackgroundImage={setBackgroundImage}
-				setProfileImage={setProfileImage}
-				gridStateProps={gridStateProps}
-			/>
+			<DndProvider backend={DnDHTML5Backend}>
+				<ProfilePageInfo user={user} gridStateProps={gridStateProps} />
+				<PremiumModal control={controlPremiumModal} />
+				<SettingsModal
+					user={user}
+					control={controlSettingsModal}
+					setBackgroundImage={setBackgroundImage}
+					setProfileImage={setProfileImage}
+					gridStateProps={gridStateProps}
+					gridComponents={gridComponents}
+				/>
+			</DndProvider>
 		</div>
 	);
 }

@@ -3,6 +3,16 @@
 	grid-auto-rows: minmax(200px, auto);
 }
 
+.seal-editable-grid-btn {
+	z-index: 1;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.seal-editable-grid-item:hover .seal-editable-grid-btn {
+	opacity: 1;
+}
+
 .seal-editable-grid-border {
 	--seal-editable-grid-border-weight-dynamic: 0px;
 	--seal-editable-grid-border-weight: calc(var(--seal-editable-grid-border-weight-dynamic) + 10px);
