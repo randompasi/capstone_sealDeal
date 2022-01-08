@@ -14,6 +14,14 @@ export default function ProfilePage({controlPremiumModal, controlSettingsModal})
 	const [profileImage, setProfileImage] = useState(null);
 	const [backgroundImage, setBackgroundImage] = useState(null);
 
+	/** @type {EditableGrid.GridModel} */
+	const gridDefaultState = [
+		{a: "BasicInfo", b: "Achievements"},
+		{a: "EnvironmentalSavings", b: "EnvironmentalSavings"},
+	];
+	const [gridState, setGridState] = useState(gridDefaultState);
+	const gridStateProps = {gridState, setGridState};
+
 	//Update state changes to DB on SettingsModal call
 	useAsyncEffect(async () => {
 		if (!profileImage) return;
@@ -42,14 +50,15 @@ export default function ProfilePage({controlPremiumModal, controlSettingsModal})
 	};
 
 	return (
-		<div>
-			<ProfilePageInfo user={user} />
+		<div className="w-full h-screen">
+			<ProfilePageInfo user={user} gridStateProps={gridStateProps} />
 			<PremiumModal control={controlPremiumModal} />
 			<SettingsModal
 				user={user}
 				control={controlSettingsModal}
 				setBackgroundImage={setBackgroundImage}
 				setProfileImage={setProfileImage}
+				gridStateProps={gridStateProps}
 			/>
 		</div>
 	);

@@ -46,15 +46,16 @@ declare namespace ProfilePage {
 	}
 
 	declare interface SettingsProps {
-		settings: any
-		setSettings: Function
 		setBackgroundImage: Function
 		setProfileImage: Function
+		gridStateProps: EditableGrid.GridStateProps
+		control: any
+		user: any
 	}
 
 	declare interface UserProfileInfoProps {
 		user: any
-		settingsProps: null | ProfilePage.SettingsProps
+		gridStateProps: EditableGrid.GridStateProps
 	}
 
 }
@@ -106,8 +107,14 @@ declare namespace EditableGrid {
 
 	declare type GridResizeDirection = "top" | "right" | "bottom" | "left";
 
+	declare interface GridStateProps {
+		gridState: GridModel;
+		setGridState: (newState: GridModel) => any;
+	}
+
 	declare interface EditableGridProps extends ProfilePage.ProfilePageProps {
-		components: Record<GridIdentifier, ComponentType<ProfilePageProps>>
+		components: Record<GridIdentifier, ComponentType<ProfilePageProps>>;
+		gridStateProps: GridStateProps;
 	}
 
 }

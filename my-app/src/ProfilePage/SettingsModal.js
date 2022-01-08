@@ -4,6 +4,10 @@ import ImageSelectModal from "./ImageSelectModal";
 import profilePlaceholder from "../assets/ProfileImages/bird1.jpg";
 import backgroundPlaceholder from "../assets/BackgroundImages/bg0.jpg";
 
+/**
+ *
+ * @param {ProfilePage.SettingsProps} props
+ */
 export default function SettingsModal({user, control, setBackgroundImage, setProfileImage}) {
 	const makeCssUrl = (url) => `url('${url}')`;
 

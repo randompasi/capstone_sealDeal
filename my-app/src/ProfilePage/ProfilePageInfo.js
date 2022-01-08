@@ -8,7 +8,7 @@ import gridComponents from "./gridComponents";
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
  */
-export default function ProfilePage({user: userBase}) {
+export default function ProfilePage({user: userBase, gridStateProps}) {
 	const fullProfileResource = useFullUserProfile(userBase.id);
 
 	if (fullProfileResource.status !== "success") {
@@ -95,7 +95,7 @@ export default function ProfilePage({user: userBase}) {
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div className="w-full p-8" style={{backgroundColor: "white"}}>
-				<EditableGrid user={user} components={gridComponents} />
+				<EditableGrid user={user} components={gridComponents} gridStateProps={gridStateProps} />
 				{/* <div className="col-span-2">
 					<BasicInfo user={user} />
 				</div>

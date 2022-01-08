@@ -135,13 +135,8 @@ function EditableGridItem(props) {
  * @param {EditableGrid.EditableGridProps} props
  */
 export default function EditableGrid(props) {
+	const {gridState, setGridState} = props.gridStateProps;
 	const [dragging, setDragging] = useState(null);
-	/** @type {EditableGrid.GridModel} */
-	const gridDefaultState = [
-		{a: "BasicInfo", b: "Achievements"},
-		{a: "EnvironmentalSavings", b: "EnvironmentalSavings"},
-	];
-	const [gridState, setGridState] = useState(gridDefaultState);
 	const gridItems = getGridItems(gridState);
 
 	const resize = useCallback(makeResizeCallback(gridState, setGridState), [
