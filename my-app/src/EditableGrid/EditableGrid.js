@@ -1,27 +1,20 @@
 import {clamp, findIndex, findLastIndex, times} from "lodash";
 import uniq from "lodash/uniq";
 import {useCallback, useRef, useState} from "react";
-import {cloneDeepJson, impossibleCase} from "../common/utils";
-import Achievements from "../ProfilePage/Achievements";
-import BasicInfo from "../ProfilePage/BasicInfo";
-import EnvironmentalSavings from "../ProfilePage/EnvironmentalSavings";
+import {cloneDeepJson} from "../common/utils";
 import "./EditableGrid.css";
 
 /**
  * @param {EditableGrid.GridIdentifier} item
- * @param {ProfilePage.ProfilePageProps} profilePageProps
+ * @param {EditableGrid.EditableGridProps} gridProps
  */
-function getContent(item, profilePageProps) {
-	switch (item) {
-		case "BasicInfo":
-			return <BasicInfo {...profilePageProps} />;
-		case "Achievements":
-			return <Achievements {...profilePageProps} />;
-		case "EnvironmentalSavings":
-			return <EnvironmentalSavings {...profilePageProps} />;
-		default:
-			return impossibleCase(item);
+function getContent(item, {components, ...profilePageProps}) {
+	const Component = components[item];
+	if (!Component) {
+		console.warn(`No component handler configured for ${item}`);
+		return null;
 	}
+	return <Component {...profilePageProps} />;
 }
 
 /**
@@ -42,7 +35,7 @@ function getMouseMovedRelativeAmount(event, direction) {
 function EditableGridItem(props) {
 	/** @type {React.MutableRefObject<HTMLDivElement>} */
 	const borderRef = useRef();
-	const content = getContent(props.item, props.profilePageProps);
+	const content = getContent(props.item, props.gridProps);
 
 	let dragging = false;
 
@@ -139,7 +132,7 @@ function EditableGridItem(props) {
 }
 
 /**
- * @param {{profilePageProps: ProfilePage.ProfilePageProps}} props
+ * @param {EditableGrid.EditableGridProps} props
  */
 export default function EditableGrid(props) {
 	const [dragging, setDragging] = useState(null);
@@ -150,7 +143,6 @@ export default function EditableGrid(props) {
 	];
 	const [gridState, setGridState] = useState(gridDefaultState);
 	const gridItems = getGridItems(gridState);
-	const {profilePageProps} = props;
 
 	const resize = useCallback(makeResizeCallback(gridState, setGridState), [
 		gridState,
@@ -169,7 +161,7 @@ export default function EditableGrid(props) {
 					key={item || `null-${i}`}
 					index={i}
 					item={item}
-					profilePageProps={profilePageProps}
+					gridProps={{...props}}
 					dragging={dragging}
 					setDragging={setDragging}
 					resize={resize}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentType } from "react";
 
 declare global {
 
@@ -97,7 +97,7 @@ declare namespace EditableGrid {
 
 	declare interface EditableGridItemProps {
 		item: EditableGrid.GridIdentifier;
-		profilePageProps: ProfilePage.ProfilePageProps;
+		gridProps: EditableGridProps;
 		dragging: null | string;
 		setDragging: (direction: string) => any;
 		index: number;
@@ -105,6 +105,10 @@ declare namespace EditableGrid {
 	}
 
 	declare type GridResizeDirection = "top" | "right" | "bottom" | "left";
+
+	declare interface EditableGridProps extends ProfilePage.ProfilePageProps {
+		components: Record<GridIdentifier, ComponentType<ProfilePageProps>>
+	}
 
 }
 

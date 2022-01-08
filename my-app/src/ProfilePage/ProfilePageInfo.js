@@ -3,6 +3,7 @@ import {defaultAvatarImage} from "./helpers";
 import defaultBackground from "../assets/BackgroundImages/bg_default.jpg";
 import {makeCssUrl} from "../common/utils";
 import EditableGrid from "../EditableGrid/EditableGrid";
+import gridComponents from "./gridComponents";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
@@ -94,7 +95,7 @@ export default function ProfilePage({user: userBase}) {
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div className="w-full p-8" style={{backgroundColor: "white"}}>
-				<EditableGrid profilePageProps={{user}} />
+				<EditableGrid user={user} components={gridComponents} />
 				{/* <div className="col-span-2">
 					<BasicInfo user={user} />
 				</div>
