@@ -47,3 +47,14 @@ export function impossibleCase(_impossibleValue) {
 export const cloneDeepJson = (value) => {
 	return JSON.parse(JSON.stringify(value));
 };
+
+/**
+ * Object.keys, but with better type definition so that enum-typed keys
+ * remain as enum types, not string[].
+ *
+ * @type {UtilityTypes.ObjectKeysFn}
+ */
+export const objectKeys = (obj) => {
+	// @ts-ignore
+	return Object.keys(obj);
+};

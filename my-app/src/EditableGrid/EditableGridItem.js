@@ -10,10 +10,20 @@ export function EditableGridItem(props) {
 	/** @type {React.MutableRefObject<HTMLDivElement>} */
 	const borderRef = useRef();
 	const content = getContent(props.item, props.gridProps);
-	const [{canDrop}, dropRef] = useDrop({
+	const [{canDrop}, dropRef] = useDrop(() => ({
 		accept: "GridComponentCard",
 		collect: collectDropProps,
-	});
+		drop(item) {
+			/** @type {EditableGrid.GridIdentifier} */
+			const newItem = item.id;
+			const currentItem = props.item;
+			const newState = props.gridProps.gridStateProps.gridState.map((_) => ({
+				a: _.a === currentItem ? newItem : _.a,
+				b: _.b === currentItem ? newItem : _.b,
+			}));
+			props.gridProps.gridStateProps.setGridState(newState);
+		},
+	}));
 
 	let dragging = false;
 

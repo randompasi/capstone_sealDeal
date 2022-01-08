@@ -65,7 +65,7 @@ declare namespace ProfilePage {
 		gridStateProps: EditableGrid.GridStateProps
 	}
 	declare interface GridComponentsModalCardProps {
-		children: ReactNode;
+		item: EditableGrid.GridIdentifier;
 	}
 
 }
@@ -83,6 +83,8 @@ declare namespace UtilityTypes {
 		| {status: 'success', value: T}
 
 	declare type UseResource = (fn: () => Promise<any>, dependencies?: any[]) => AsyncResourceState<any>
+
+	declare type ObjectKeysFn = <T>(obj: T) => Array<keyof T>
 }
 
 declare namespace CommonComponents {
@@ -92,6 +94,10 @@ declare namespace CommonComponents {
 		contentLabel: string;
 		title: string;
 		onCancel: () => any;
+		styles?: {
+			overlay?: Record<string, void | string | number>,
+			content?: Record<string, void | string | number>,
+		}
 	}
 }
 
@@ -110,9 +116,14 @@ declare namespace EditableGrid {
 		| "Achievements"
 		| "EnvironmentalSavings"
 
+	declare interface EmptySlot {
+		type: "empty slot";
+		uniqueId: string;
+	}
+
 	declare interface GridRow {
-		a: null | GridIdentifier;
-		b: null | GridIdentifier;
+		a: EmptySlot | GridIdentifier;
+		b: EmptySlot | GridIdentifier;
 	}
 	declare type GridModel = GridRow[]
 

@@ -1,4 +1,9 @@
+import omitBy from "lodash/omitBy";
 import ReactModal from "react-modal";
+
+function getOverrides(obj) {
+	return omitBy(obj, (_) => _ == null);
+}
 
 /**
  * @param {CommonComponents.ModalProps} props
@@ -10,16 +15,24 @@ export default function Modal(props) {
 			contentLabel="Settings Modal"
 			ariaHideApp={false}
 			style={{
-				overlay: {display: "flex", justifyContent: "center"},
+				overlay: {
+					display: "flex",
+					justifyContent: "center",
+					zIndex: 20,
+					...getOverrides(props.styles?.overlay),
+				},
 				content: {
 					flex: "1",
-					maxWidth: "970px",
 					position: "relative",
 					display: "flex",
 					flexDirection: "column",
 					justifyContent: "center",
 					alignItems: "center",
-					height: "95%",
+					// Overrides react-modals default inset CSS property, which doesn't work
+					// as well with width sizing as normal margin does.
+					inset: undefined,
+					margin: 40,
+					...getOverrides(props.styles?.content),
 				},
 			}}
 		>

@@ -1,9 +1,9 @@
 import {findIndex, findLastIndex, times} from "lodash";
-import uniq from "lodash/uniq";
 import {useCallback, useState} from "react";
 import {cloneDeepJson} from "../common/utils";
 import "./EditableGrid.css";
 import {EditableGridItem} from "./EditableGridItem";
+import {getAllGridItems} from "./editableGridUtils";
 
 /**
  * @param {EditableGrid.EditableGridProps} props
@@ -11,7 +11,7 @@ import {EditableGridItem} from "./EditableGridItem";
 export default function EditableGrid(props) {
 	const {gridState, setGridState} = props.gridStateProps;
 	const [dragging, setDragging] = useState(null);
-	const gridItems = getGridItems(gridState);
+	const gridItems = getAllGridItems(gridState);
 
 	const resize = useCallback(makeResizeCallback(gridState, setGridState), [
 		gridState,
@@ -27,7 +27,7 @@ export default function EditableGrid(props) {
 		<div className="grid gap-4 w-full seal-editable-grid" style={style}>
 			{gridItems.map((item, i) => (
 				<EditableGridItem
-					key={item || `null-${i}`}
+					key={item.toString()}
 					index={i}
 					item={item}
 					gridProps={{...props}}
@@ -46,14 +46,6 @@ export default function EditableGrid(props) {
  */
 function parseGridTemplateAreas(gridState) {
 	return gridState.map((state) => `"${state.a || "."} ${state.b || "."}"`).join("\n");
-}
-
-/**
- * @param {EditableGrid.GridModel} gridState
- * @returns {EditableGrid.GridIdentifier[]}
- */
-function getGridItems(gridState) {
-	return uniq(gridState.flatMap((_) => [_.a, _.b]));
 }
 
 /**
