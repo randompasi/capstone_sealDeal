@@ -2,6 +2,7 @@ import {clamp} from "lodash";
 import {useCallback, useRef, useState} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {RiDeleteBin2Line as DeleteIcon} from "react-icons/ri";
+import {AiOutlineDrag as DragIcon} from "react-icons/ai";
 import {GRID_CARD_DND_TYPE, replaceGridStateItems} from "./editableGridUtils";
 
 /**
@@ -23,14 +24,12 @@ export function EditableGridItem(props) {
 			/** @type {EditableGrid.GridIdentifier} */
 			const newItem = dropItem.id;
 			const currentItem = props.item;
-			let newState = replaceGridStateItems(
-				props.gridProps.gridStateProps.gridState,
-				currentItem,
-				newItem
-			);
+			let newState = props.gridProps.gridStateProps.gridState;
 			if (shouldClearOriginals) {
 				newState = replaceGridStateItems(newState, newItem, null);
 			}
+			newState = replaceGridStateItems(newState, currentItem, newItem);
+			console.log({newState});
 			props.gridProps.gridStateProps.setGridState(newState);
 		},
 		canDrop() {
@@ -38,7 +37,7 @@ export function EditableGridItem(props) {
 		},
 	}));
 	// Allow dragging this slot on top of some other slot
-	const [, dragRef] = useDrag({
+	const [, dragRef, dragPreviewRef] = useDrag({
 		type: GRID_CARD_DND_TYPE,
 		item: {
 			id: props.item,
@@ -126,7 +125,7 @@ export function EditableGridItem(props) {
 		>
 			<div>
 				{!isEmptySlot && (
-					<div ref={dragRef}>
+					<div ref={dragPreviewRef}>
 						<div>
 							<div onMouseDown={mouseDown} ref={borderRef}>
 								<div
@@ -146,12 +145,14 @@ export function EditableGridItem(props) {
 									className="seal-editable-grid-border seal-editable-grid-border-bottom"
 								/>
 							</div>
-							<button
-								className="absolute top-2 right-4 text-xl seal-editable-grid-btn"
-								onClick={removeItemFromGrid}
-							>
-								<DeleteIcon />
-							</button>
+							<div className="absolute top-2 right-4 text-xl seal-editable-grid-btn">
+								<button onClick={removeItemFromGrid}>
+									<DeleteIcon />
+								</button>
+								<button ref={dragRef}>
+									<DragIcon />
+								</button>
+							</div>
 							{content}
 						</div>
 					</div>
