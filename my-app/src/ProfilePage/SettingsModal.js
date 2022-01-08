@@ -1,8 +1,8 @@
-import {useState} from "react";
 import Modal from "react-modal"; //https://www.npmjs.com/package/react-modal
 import ImageSelectModal from "./ImageSelectModal";
 import profilePlaceholder from "../assets/ProfileImages/bird1.jpg";
 import backgroundPlaceholder from "../assets/BackgroundImages/bg0.jpg";
+import {useToggle} from "../utils/hooks";
 
 /**
  *
@@ -11,8 +11,11 @@ import backgroundPlaceholder from "../assets/BackgroundImages/bg0.jpg";
 export default function SettingsModal({user, control, setBackgroundImage, setProfileImage}) {
 	const makeCssUrl = (url) => `url('${url}')`;
 
-	const [backgroundModalVisible, setBackgroundModalVisible] = useState(false);
-	const [avatarModalVisible, setAvatarModalVisible] = useState(false);
+	const modalStates = {
+		background: useToggle(),
+		avatar: useToggle(),
+		dashboard: useToggle(),
+	};
 
 	function importAll(r) {
 		const images = [];
@@ -90,7 +93,7 @@ export default function SettingsModal({user, control, setBackgroundImage, setPro
 							<button
 								onClick={() => {
 									control.setSettingsModal(false);
-									setAvatarModalVisible(true);
+									modalStates.avatar.toggle();
 								}}
 								className="w-60 m-4 shadow bg-gray-700 hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
 							>
@@ -115,7 +118,7 @@ export default function SettingsModal({user, control, setBackgroundImage, setPro
 							<button
 								onClick={() => {
 									control.setSettingsModal(false);
-									setBackgroundModalVisible(true);
+									modalStates.avatar.toggle();
 								}}
 								className="w-60 m-4 shadow bg-gray-700  hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
 							>
@@ -139,8 +142,7 @@ export default function SettingsModal({user, control, setBackgroundImage, setPro
 
 			{/* Background image selection modal */}
 			<ImageSelectModal
-				showModal={backgroundModalVisible}
-				setModal={setBackgroundModalVisible}
+				openState={modalStates.background}
 				setImage={setBackgroundImage}
 				imageSources={bgImages}
 				headerText="Select a new profile background!"
@@ -148,8 +150,7 @@ export default function SettingsModal({user, control, setBackgroundImage, setPro
 
 			{/* Profile image selection modal */}
 			<ImageSelectModal
-				showModal={avatarModalVisible}
-				setModal={setAvatarModalVisible}
+				openState={modalStates.avatar}
 				setImage={setProfileImage}
 				imageSources={profileImages}
 				headerText="Select a new profile picture!"

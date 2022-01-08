@@ -58,6 +58,13 @@ declare namespace ProfilePage {
 		gridStateProps: EditableGrid.GridStateProps
 	}
 
+	declare interface DashboardComponentsModalProps {
+		openState: {isOpen: boolean, toggle: ()=> void};
+		dashboardComponents: EditableGrid.EditableGridProps["components"];
+		dashboardState: EditableGrid.GridModel;
+		setDashboardState: (newValue: EditableGrid.GridModel) => void;
+	}
+
 }
 
 declare namespace UtilityTypes {
