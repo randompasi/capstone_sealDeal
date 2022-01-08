@@ -93,7 +93,8 @@ declare namespace CommonComponents {
 		isOpen: boolean;
 		contentLabel: string;
 		title: string;
-		onCancel: () => any;
+		onClose: () => any,
+		closeLabel?: string,
 		styles?: {
 			overlay?: Record<string, void | string | number>,
 			content?: Record<string, void | string | number>,
@@ -128,10 +129,8 @@ declare namespace EditableGrid {
 	declare type GridModel = GridRow[]
 
 	declare interface EditableGridItemProps {
-		item: EditableGrid.GridIdentifier;
+		item: EditableGrid.GridIdentifier | EditableGrid.EmptySlot | null;
 		gridProps: EditableGridProps;
-		dragging: null | string;
-		setDragging: (direction: string) => any;
 		index: number;
 		resize: (border: GridResizeDirection, dragAmount: number, item: GridIdentifier) => any;
 	}

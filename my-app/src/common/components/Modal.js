@@ -12,6 +12,7 @@ export default function Modal(props) {
 	return (
 		<ReactModal
 			isOpen={props.isOpen}
+			onRequestClose={props.onClose}
 			contentLabel="Settings Modal"
 			ariaHideApp={false}
 			style={{
@@ -42,9 +43,9 @@ export default function Modal(props) {
 				<div className="w-100">
 					<button
 						className="w-32 h-8 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
-						onClick={props.onCancel}
+						onClick={props.onClose}
 					>
-						Cancel
+						{props.closeLabel || "Close"}
 					</button>
 				</div>
 			</div>

@@ -1,5 +1,5 @@
 import {findIndex, findLastIndex, times} from "lodash";
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import {cloneDeepJson} from "../common/utils";
 import "./EditableGrid.css";
 import {EditableGridItem} from "./EditableGridItem";
@@ -10,7 +10,6 @@ import {getAllGridItems} from "./editableGridUtils";
  */
 export default function EditableGrid(props) {
 	const {gridState, setGridState} = props.gridStateProps;
-	const [dragging, setDragging] = useState(null);
 	const gridItems = getAllGridItems(gridState);
 
 	const resize = useCallback(makeResizeCallback(gridState, setGridState), [
@@ -31,8 +30,6 @@ export default function EditableGrid(props) {
 					index={i}
 					item={item}
 					gridProps={{...props}}
-					dragging={dragging}
-					setDragging={setDragging}
 					resize={resize}
 				></EditableGridItem>
 			))}

@@ -1,10 +1,11 @@
 import {useDrag} from "react-dnd";
+import {GRID_CARD_DND_TYPE} from "../../EditableGrid/editableGridUtils";
 /**
  * @param {ProfilePage.GridComponentsModalCardProps} props
  */
 export default function GridComponentsModalCard(props) {
 	const [, dragRef] = useDrag({
-		type: "GridComponentCard",
+		type: GRID_CARD_DND_TYPE,
 		item: {
 			id: props.item,
 		},

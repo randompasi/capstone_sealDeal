@@ -1,40 +1,60 @@
 import {clamp} from "lodash";
-import {useCallback, useRef} from "react";
-import {useDrop} from "react-dnd";
+import {useCallback, useRef, useState} from "react";
+import {useDrag, useDrop} from "react-dnd";
 import {RiDeleteBin2Line as DeleteIcon} from "react-icons/ri";
+import {GRID_CARD_DND_TYPE, replaceGridStateItems} from "./editableGridUtils";
 
 /**
  * @param {EditableGrid.EditableGridItemProps} props
  */
 export function EditableGridItem(props) {
+	const {item} = props;
+	const isEmptySlot = typeof item !== "string";
+
 	/** @type {React.MutableRefObject<HTMLDivElement>} */
 	const borderRef = useRef();
 	const content = getContent(props.item, props.gridProps);
+	// Allow dragging some other slot on top of this one
 	const [{canDrop}, dropRef] = useDrop(() => ({
-		accept: "GridComponentCard",
+		accept: GRID_CARD_DND_TYPE,
 		collect: collectDropProps,
-		drop(item) {
+		drop(dropItem) {
+			const {shouldClearOriginals} = dropItem;
 			/** @type {EditableGrid.GridIdentifier} */
-			const newItem = item.id;
+			const newItem = dropItem.id;
 			const currentItem = props.item;
-			const newState = props.gridProps.gridStateProps.gridState.map((_) => ({
-				a: _.a === currentItem ? newItem : _.a,
-				b: _.b === currentItem ? newItem : _.b,
-			}));
+			let newState = replaceGridStateItems(
+				props.gridProps.gridStateProps.gridState,
+				currentItem,
+				newItem
+			);
+			if (shouldClearOriginals) {
+				newState = replaceGridStateItems(newState, newItem, null);
+			}
 			props.gridProps.gridStateProps.setGridState(newState);
 		},
+		canDrop() {
+			return true;
+		},
 	}));
-
-	let dragging = false;
+	// Allow dragging this slot on top of some other slot
+	const [, dragRef] = useDrag({
+		type: GRID_CARD_DND_TYPE,
+		item: {
+			id: props.item,
+			shouldClearOriginals: true,
+		},
+	});
+	const [isResizing, setIsResizing] = useState(false);
 
 	/** @type {React.MouseEventHandler} */
 	const mouseDown = useCallback(
 		(event) => {
 			event.preventDefault();
-			if (dragging) {
+			if (isResizing) {
 				return;
 			}
-			dragging = true;
+			setIsResizing(true);
 			let mouseMoved = 0;
 
 			/** @type {HTMLDivElement} */
@@ -50,7 +70,6 @@ export function EditableGridItem(props) {
 				console.warn("Cannot find direction from dragged element");
 				return;
 			}
-			props.setDragging(props.item);
 
 			const mouseMove = (/** @type {MouseEvent} */ event) => {
 				mouseMoved = clamp(
@@ -64,42 +83,39 @@ export function EditableGridItem(props) {
 				borderElem.classList.add("sealdeal-editable-grid-border-active");
 			};
 			const mouseUp = () => {
-				dragging = false;
+				setIsResizing(false);
 				const {style} = borderElem;
 				style.setProperty("--seal-editable-grid-border-weight-dynamic", "0px");
 				borderElem.classList.remove("sealdeal-editable-grid-border-active");
 				document.body.removeEventListener("mouseup", mouseUp);
 				document.body.removeEventListener("mousemove", mouseMove);
-				props.setDragging(null);
-				props.resize(direction, mouseMoved, props.item);
+				if (typeof props.item === "string") {
+					props.resize(direction, mouseMoved, props.item);
+				}
 			};
 
 			document.body.addEventListener("mouseup", mouseUp);
 			document.body.addEventListener("mousemove", mouseMove);
 		},
-		[props.setDragging, props.resize, props.item]
+		[props.resize, props.item]
 	);
 
 	const removeItemFromGrid = () => {
-		const {item} = props;
 		props.gridProps.gridStateProps.setGridState(
-			props.gridProps.gridStateProps.gridState.map((_) => ({
-				a: _.a === item ? null : _.a,
-				b: _.b === item ? null : _.b,
-			}))
+			replaceGridStateItems(props.gridProps.gridStateProps.gridState, item, null)
 		);
 	};
 
-	const draggingClassName = props.dragging ? "seal-editable-grid-resize-target" : "";
-	const emptyBlockClassName = props.item === null ? "seal-editable-grid-empty" : "";
+	const draggingClassName = isResizing ? "seal-editable-grid-resize-target" : "";
+	const emptyBlockClassName = isEmptySlot ? "seal-editable-grid-empty" : "";
 
-	if (props.item === null) {
+	if (isEmptySlot && !canDrop) {
 		return null;
 	}
 
 	const style = {
-		gridArea: props.item || `null-${props.index}`,
-		color: canDrop ? "red" : undefined,
+		gridArea: isEmptySlot ? `empty-slot-${props.index}` : item,
+		cursor: canDrop ? "pointer" : undefined,
 	};
 
 	return (
@@ -108,41 +124,50 @@ export function EditableGridItem(props) {
 			className={`w-full h-full relative seal-editable-grid-item ${draggingClassName} ${emptyBlockClassName}`}
 			style={style}
 		>
-			<div onMouseDown={mouseDown} ref={borderRef}>
-				<div
-					data-direction="left"
-					className="seal-editable-grid-border seal-editable-grid-border-left"
-				/>
-				<div
-					data-direction="right"
-					className="seal-editable-grid-border seal-editable-grid-border-right"
-				/>
-				<div
-					data-direction="top"
-					className="seal-editable-grid-border seal-editable-grid-border-top"
-				/>
-				<div
-					data-direction="bottom"
-					className="seal-editable-grid-border seal-editable-grid-border-bottom"
-				/>
+			<div>
+				{!isEmptySlot && (
+					<div ref={dragRef}>
+						<div>
+							<div onMouseDown={mouseDown} ref={borderRef}>
+								<div
+									data-direction="left"
+									className="seal-editable-grid-border seal-editable-grid-border-left"
+								/>
+								<div
+									data-direction="right"
+									className="seal-editable-grid-border seal-editable-grid-border-right"
+								/>
+								<div
+									data-direction="top"
+									className="seal-editable-grid-border seal-editable-grid-border-top"
+								/>
+								<div
+									data-direction="bottom"
+									className="seal-editable-grid-border seal-editable-grid-border-bottom"
+								/>
+							</div>
+							<button
+								className="absolute top-2 right-4 text-xl seal-editable-grid-btn"
+								onClick={removeItemFromGrid}
+							>
+								<DeleteIcon />
+							</button>
+							{content}
+						</div>
+					</div>
+				)}
+				{isEmptySlot && canDrop && <div className="w-full inline-block text-center">Empty</div>}
 			</div>
-			<button
-				className="absolute top-2 right-4 text-xl seal-editable-grid-btn"
-				onClick={removeItemFromGrid}
-			>
-				<DeleteIcon />
-			</button>
-			{content}
 		</div>
 	);
 }
 
 /**
- * @param {EditableGrid.GridIdentifier} item
+ * @param {EditableGrid.GridIdentifier | EditableGrid.EmptySlot | null} item
  * @param {EditableGrid.EditableGridProps} gridProps
  */
 function getContent(item, {components, ...profilePageProps}) {
-	const Component = components[item];
+	const Component = typeof item === "string" ? components[item] : null;
 	if (!Component) {
 		console.warn(`No component handler configured for ${item}`);
 		return null;

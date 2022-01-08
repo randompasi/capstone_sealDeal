@@ -24,7 +24,7 @@ export default function GridComponentsModal({openState, gridComponents, gridStat
 			title="Valitse komponentit profiilisivulle"
 			isOpen={openState.isOpen}
 			contentLabel="Grid components selection"
-			onCancel={openState.toggle}
+			onClose={openState.toggle}
 			styles={{
 				overlay: hideWhenDraggingStyle,
 				content: hideWhenDraggingStyle,

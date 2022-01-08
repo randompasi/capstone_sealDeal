@@ -9,8 +9,7 @@ import SettingsModal from "./SettingsModal";
 import gridComponents from "./gridComponents";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend as DnDHTML5Backend} from "react-dnd-html5-backend";
-import {mapValues} from "lodash";
-import {emptySlotToNull, nullToEmptySlot} from "../EditableGrid/editableGridUtils";
+import {useGridState} from "../EditableGrid/editableGridUtils";
 
 export default function ProfilePage({controlPremiumModal, controlSettingsModal}) {
 	const authContext = useAuth();
@@ -24,13 +23,8 @@ export default function ProfilePage({controlPremiumModal, controlSettingsModal})
 		{a: "BasicInfo", b: "Achievements"},
 		{a: "EnvironmentalSavings", b: "EnvironmentalSavings"},
 	];
-	const [gridStateRaw, setGridStateRaw] = useState(gridDefaultState);
-	const gridState = gridStateRaw.map((_) => mapValues(_, nullToEmptySlot));
-	const setGridState = (val) => {
-		setGridStateRaw(val.map((_) => mapValues(_, emptySlotToNull)));
-	};
 
-	const gridStateProps = {gridState, setGridState};
+	const gridStateProps = useGridState(gridDefaultState);
 
 	//Update state changes to DB on SettingsModal call
 	useAsyncEffect(async () => {
