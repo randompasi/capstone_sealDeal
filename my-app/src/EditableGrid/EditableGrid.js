@@ -1,6 +1,7 @@
 import {clamp, findIndex, findLastIndex, times} from "lodash";
 import uniq from "lodash/uniq";
 import {useCallback, useRef, useState} from "react";
+import {useDrop} from "react-dnd";
 import {cloneDeepJson} from "../common/utils";
 import "./EditableGrid.css";
 
@@ -29,6 +30,12 @@ function getMouseMovedRelativeAmount(event, direction) {
 	}
 }
 
+function collectDropProps(monitor) {
+	return {
+		canDrop: monitor.canDrop(),
+	};
+}
+
 /**
  * @param {EditableGrid.EditableGridItemProps} props
  */
@@ -36,6 +43,10 @@ function EditableGridItem(props) {
 	/** @type {React.MutableRefObject<HTMLDivElement>} */
 	const borderRef = useRef();
 	const content = getContent(props.item, props.gridProps);
+	const [{canDrop}, dropRef] = useDrop({
+		accept: "GridComponentCard",
+		collect: collectDropProps,
+	});
 
 	let dragging = false;
 
@@ -101,10 +112,12 @@ function EditableGridItem(props) {
 
 	const style = {
 		gridArea: props.item || `null-${props.index}`,
+		color: canDrop ? "red" : undefined,
 	};
 
 	return (
 		<div
+			ref={dropRef}
 			className={`w-full h-full relative ${draggingClassName} ${emptyBlockClassName}`}
 			style={style}
 		>

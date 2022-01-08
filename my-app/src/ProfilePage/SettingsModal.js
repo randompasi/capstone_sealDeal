@@ -3,12 +3,20 @@ import ImageSelectModal from "./ImageSelectModal";
 import profilePlaceholder from "../assets/ProfileImages/bird1.jpg";
 import backgroundPlaceholder from "../assets/BackgroundImages/bg0.jpg";
 import {useToggle} from "../utils/hooks";
+import GridComponentsModal from "./GridComponentsModal/GridComponentsModal";
 
 /**
  *
  * @param {ProfilePage.SettingsProps} props
  */
-export default function SettingsModal({user, control, setBackgroundImage, setProfileImage}) {
+export default function SettingsModal({
+	user,
+	control,
+	setBackgroundImage,
+	setProfileImage,
+	gridStateProps,
+	dashboardComponents,
+}) {
 	const makeCssUrl = (url) => `url('${url}')`;
 
 	const modalStates = {
@@ -155,6 +163,12 @@ export default function SettingsModal({user, control, setBackgroundImage, setPro
 				imageSources={profileImages}
 				headerText="Select a new profile picture!"
 			></ImageSelectModal>
+
+			<GridComponentsModal
+				openState={modalStates.dashboard}
+				gridStateProps={gridStateProps}
+				dashboardComponents={dashboardComponents}
+			/>
 		</div>
 	);
 }

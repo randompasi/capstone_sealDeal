@@ -1,4 +1,4 @@
-import React, { ComponentType } from "react";
+import React, { ComponentType, ReactNode } from "react";
 
 declare global {
 
@@ -49,6 +49,7 @@ declare namespace ProfilePage {
 		setBackgroundImage: Function
 		setProfileImage: Function
 		gridStateProps: EditableGrid.GridStateProps
+		dashboardComponents: EditableGrid.EditableGridProps["components"]
 		control: any
 		user: any
 	}
@@ -58,11 +59,13 @@ declare namespace ProfilePage {
 		gridStateProps: EditableGrid.GridStateProps
 	}
 
-	declare interface DashboardComponentsModalProps {
+	declare interface GridComponentsModalProps {
 		openState: {isOpen: boolean, toggle: ()=> void};
 		dashboardComponents: EditableGrid.EditableGridProps["components"];
-		dashboardState: EditableGrid.GridModel;
-		setDashboardState: (newValue: EditableGrid.GridModel) => void;
+		gridStateProps: EditableGrid.GridStateProps
+	}
+	declare interface GridComponentsModalCardProps {
+		children: ReactNode;
 	}
 
 }

@@ -1,16 +1,17 @@
-import uniq from "lodash/uniq";
 import Modal from "react-modal";
+import GridComponentsModalCard from "./GridComponentsModalCard";
 
 /**
- * @param {ProfilePage.DashboardComponentsModalProps} props
+ * @param {ProfilePage.GridComponentsModalProps} props
  */
-export default function DashboardComponentsModal({
-	openState,
-	dashboardComponents,
-	dashboardState,
-	setDashboardState,
-}) {
-	const availableComponents = uniq(dashboardState.flatMap((_) => [_.a, _.b]).filter(Boolean));
+export default function GridComponentsModal({openState, dashboardComponents, gridStateProps}) {
+	const usedComponents = new Set(
+		gridStateProps.gridState.flatMap((_) => [_.a, _.b]).filter(Boolean)
+	);
+	const availableComponents = Object.keys(dashboardComponents).filter(
+		// @ts-ignore
+		(_) => !usedComponents.has(_)
+	);
 
 	return (
 		<Modal
@@ -38,15 +39,17 @@ export default function DashboardComponentsModal({
 					{openState.isOpen &&
 						availableComponents.map((name) => (
 							<li key={name} className="h-36">
-								<div
-									className="w-100 inline-block h-100 border-4 border-gray-700 hover:border-blue-300"
-									style={{
-										height: 150,
-										width: 300,
-									}}
-								>
-									{name}
-								</div>
+								<GridComponentsModalCard>
+									<div
+										className="w-100 inline-block h-100 border-4 border-gray-700 hover:border-blue-300"
+										style={{
+											height: 150,
+											width: 300,
+										}}
+									>
+										{name}
+									</div>
+								</GridComponentsModalCard>
 							</li>
 						))}
 				</ul>
