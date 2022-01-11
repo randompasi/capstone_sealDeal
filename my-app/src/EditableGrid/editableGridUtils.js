@@ -3,12 +3,10 @@ import {useCallback, useState} from "react";
 
 /**
  * @param {EditableGrid.GridModel} gridState
- * @returns {EditableGrid.GridIdentifier[]}
+ * @returns {Array<EditableGrid.GridIdentifier | EditableGrid.EmptySlot>}
  */
 export function getAllGridItems(gridState) {
-	return uniq(gridState.flatMap((_) => [_.a, _.b]))
-		.map((_) => (typeof _ === "string" ? _ : null))
-		.filter(Boolean);
+	return uniq(gridState.flatMap((_) => [_.a, _.b]));
 }
 
 /**
@@ -27,10 +25,18 @@ export class EmptySlot {
 
 /**
  * @param {EditableGrid.GridIdentifier | EditableGrid.EmptySlot} val
+ * @returns {val is EditableGrid.EmptySlot | null}
+ */
+export function isEmptySlot(val) {
+	return val === null || (typeof val === "object" && val.type === "empty slot");
+}
+
+/**
+ * @param {EditableGrid.GridIdentifier | EditableGrid.EmptySlot} val
  * @returns {EditableGrid.GridIdentifier | null}
  */
 export function emptySlotToNull(val) {
-	return typeof val === "string" ? val : null;
+	return isEmptySlot(val) ? null : val;
 }
 
 /**

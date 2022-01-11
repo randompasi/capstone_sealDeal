@@ -3,18 +3,18 @@ import {useCallback, useRef, useState} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {RiDeleteBin2Line as DeleteIcon} from "react-icons/ri";
 import {AiOutlineDrag as DragIcon} from "react-icons/ai";
-import {GRID_CARD_DND_TYPE, replaceGridStateItems} from "./editableGridUtils";
+import {GRID_CARD_DND_TYPE, isEmptySlot, replaceGridStateItems} from "./editableGridUtils";
 
 /**
  * @param {EditableGrid.EditableGridItemProps} props
  */
 export function EditableGridItem(props) {
 	const {item} = props;
-	const isEmptySlot = typeof item !== "string";
+	const emptySlot = isEmptySlot(item);
 
 	/** @type {React.MutableRefObject<HTMLDivElement>} */
 	const borderRef = useRef();
-	const content = getContent(props.item, props.gridProps);
+	const content = getContent(item, props.gridProps);
 	// Allow dragging some other slot on top of this one
 	const [{canDrop}, dropRef] = useDrop(() => ({
 		accept: GRID_CARD_DND_TYPE,
@@ -29,7 +29,6 @@ export function EditableGridItem(props) {
 				newState = replaceGridStateItems(newState, newItem, null);
 			}
 			newState = replaceGridStateItems(newState, currentItem, newItem);
-			console.log({newState});
 			props.gridProps.gridStateProps.setGridState(newState);
 		},
 		canDrop() {
@@ -106,14 +105,15 @@ export function EditableGridItem(props) {
 	};
 
 	const draggingClassName = isResizing ? "seal-editable-grid-resize-target" : "";
-	const emptyBlockClassName = isEmptySlot ? "seal-editable-grid-empty" : "";
+	const emptyBlockClassName = emptySlot ? "seal-editable-grid-empty" : "";
 
-	if (isEmptySlot && !canDrop) {
+	console.log(emptySlot, canDrop);
+	if (emptySlot && !canDrop) {
 		return null;
 	}
 
 	const style = {
-		gridArea: isEmptySlot ? `empty-slot-${props.index}` : item,
+		gridArea: emptySlot ? `empty-slot-${props.index}` : item,
 		cursor: canDrop ? "pointer" : undefined,
 	};
 
@@ -123,10 +123,10 @@ export function EditableGridItem(props) {
 			className={`w-full h-full relative seal-editable-grid-item ${draggingClassName} ${emptyBlockClassName}`}
 			style={style}
 		>
-			<div>
-				{!isEmptySlot && (
-					<div ref={dragPreviewRef}>
-						<div>
+			<div className="w-full h-full">
+				{!emptySlot && (
+					<div className="w-full h-full" ref={dragPreviewRef}>
+						<div className="w-full h-full">
 							<div onMouseDown={mouseDown} ref={borderRef}>
 								<div
 									data-direction="left"
@@ -157,7 +157,9 @@ export function EditableGridItem(props) {
 						</div>
 					</div>
 				)}
-				{isEmptySlot && canDrop && <div className="w-full inline-block text-center">Empty</div>}
+				{emptySlot && canDrop && (
+					<div className="w-full h-full bg-red-500 inline-block text-center">Empty</div>
+				)}
 			</div>
 		</div>
 	);

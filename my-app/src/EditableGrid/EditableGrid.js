@@ -3,7 +3,7 @@ import {useCallback} from "react";
 import {cloneDeepJson} from "../common/utils";
 import "./EditableGrid.css";
 import {EditableGridItem} from "./EditableGridItem";
-import {getAllGridItems} from "./editableGridUtils";
+import {getAllGridItems, isEmptySlot} from "./editableGridUtils";
 
 /**
  * @param {EditableGrid.EditableGridProps} props
@@ -22,11 +22,13 @@ export default function EditableGrid(props) {
 		gridTemplateAreas: parseGridTemplateAreas(gridState),
 	};
 
+	console.log("Grid template: \n" + style.gridTemplateAreas);
+
 	return (
 		<div className="grid gap-4 w-full seal-editable-grid" style={style}>
 			{gridItems.map((item, i) => (
 				<EditableGridItem
-					key={item.toString()}
+					key={item?.toString() || `empty-slot-${i}`}
 					index={i}
 					item={item}
 					gridProps={{...props}}
@@ -42,7 +44,8 @@ export default function EditableGrid(props) {
  * @returns {string} CSS string that can be used for value to grid-template-areas rule
  */
 function parseGridTemplateAreas(gridState) {
-	return gridState.map((state) => `"${state.a || "."} ${state.b || "."}"`).join("\n");
+	const renderSlot = (slot) => (typeof slot === "string" ? slot : ".");
+	return gridState.map((state) => `"${renderSlot(state.a)} ${renderSlot(state.b)}"`).join("\n");
 }
 
 /**
@@ -125,17 +128,18 @@ const makeResizeCallback = (gridState, setGridState) => (border, amount, item) =
 					a: currentRow.a === item ? item : null,
 					b: currentRow.b === item ? item : null,
 				};
-				const fullRow = Boolean(newRow.a && newRow.b);
-				if (!fullRow && newRow.a && !row.a) {
-					return {
-						a: newRow.a,
-						b: row.b,
-					};
-				}
-				if (!fullRow && newRow.b && !row.b) {
+				const fullRow = !(isEmptySlot(newRow.a) || isEmptySlot(newRow.b));
+				console.log("new row", fullRow);
+				if (!fullRow && isEmptySlot(newRow.a) && !isEmptySlot(row.a)) {
 					return {
 						a: row.a,
 						b: newRow.b,
+					};
+				}
+				if (!fullRow && isEmptySlot(newRow.b) && !isEmptySlot(row.b)) {
+					return {
+						a: newRow.a,
+						b: row.b,
 					};
 				}
 				const newRows = [row, newRow];
