@@ -9,6 +9,7 @@ function getOverrides(obj) {
  * @param {CommonComponents.ModalProps} props
  */
 export default function Modal(props) {
+	const ModalActions = props.ModalActions || DefaultModalActions;
 	return (
 		<ReactModal
 			isOpen={props.isOpen}
@@ -40,15 +41,24 @@ export default function Modal(props) {
 			<h1 className="text-3xl">{props.title}</h1>
 			<div className="flex-1 w-full">
 				{props.children}
-				<div className="w-100">
-					<button
-						className="w-32 h-8 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
-						onClick={props.onClose}
-					>
-						{props.closeLabel || "Close"}
-					</button>
+				<div className="w-full flex justify-center">
+					<ModalActions
+						modalProps={props}
+						className="w-32 h-8 ml-2 mr-2 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
+					/>
 				</div>
 			</div>
 		</ReactModal>
 	);
 }
+
+/**
+ * @type {CommonComponents.ModalProps["ModalActions"]}
+ */
+export const DefaultModalActions = (props) => {
+	return (
+		<button className={props.className} onClick={props.modalProps.onClose}>
+			{props.modalProps.closeLabel || "Close"}
+		</button>
+	);
+};

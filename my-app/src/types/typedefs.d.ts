@@ -59,13 +59,14 @@ declare namespace ProfilePage {
 		gridStateProps: EditableGrid.GridStateProps
 	}
 
-	declare interface GridComponentsModalProps {
+	declare interface GridComponentsModalProps extends ProfilePage.ProfilePageProps {
 		openState: {isOpen: boolean, toggle: ()=> void};
 		gridComponents: EditableGrid.EditableGridProps["components"];
 		gridStateProps: EditableGrid.GridStateProps
 	}
 	declare interface GridComponentsModalCardProps {
 		item: EditableGrid.GridIdentifier;
+		previewContent: ReactNode;
 	}
 
 }
@@ -99,6 +100,7 @@ declare namespace CommonComponents {
 			overlay?: Record<string, void | string | number>,
 			content?: Record<string, void | string | number>,
 		}
+		ModalActions?: ComponentType<{modalProps: ModalProps, className: string}>
 	}
 }
 

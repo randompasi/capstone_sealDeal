@@ -1,12 +1,31 @@
+import {useCallback} from "react";
 import {useDragLayer} from "react-dnd";
-import Modal from "../../common/components/Modal";
+import Modal, {DefaultModalActions} from "../../common/components/Modal";
 import {objectKeys} from "../../common/utils";
+import {gridDefaultState, renderItemComponent} from "../../EditableGrid/editableGridUtils";
 import GridComponentsModalCard from "./GridComponentsModalCard";
 
 /**
  * @param {ProfilePage.GridComponentsModalProps} props
  */
-export default function GridComponentsModal({openState, gridComponents, gridStateProps}) {
+export default function GridComponentsModal({openState, gridComponents, gridStateProps, user}) {
+	const ModalActionsComponent = useCallback(
+		(props) => {
+			const resetGrid = () => {
+				gridStateProps.setGridState(gridDefaultState);
+				openState.toggle();
+			};
+			return (
+				<>
+					<DefaultModalActions {...props} />
+					<button className={props.className} onClick={resetGrid}>
+						Reset
+					</button>
+				</>
+			);
+		},
+		[gridStateProps.setGridState, openState.toggle]
+	);
 	const dragProps = useDragLayer((monitor) => ({
 		isDragging: monitor.isDragging(),
 	}));
@@ -25,17 +44,25 @@ export default function GridComponentsModal({openState, gridComponents, gridStat
 			isOpen={openState.isOpen}
 			contentLabel="Grid components selection"
 			onClose={openState.toggle}
+			ModalActions={ModalActionsComponent}
 			styles={{
 				overlay: hideWhenDraggingStyle,
 				content: hideWhenDraggingStyle,
 			}}
 		>
-			<ul className="grid grid-cols-4 gap-4 w-full p-8">
+			<ul className="w-full p-8">
 				{!availableComponents.length && <li>Ei jäljellä olevia widgettejä</li>}
 				{openState.isOpen &&
-					availableComponents.map((name) => (
-						<li key={name} className="h-36">
-							<GridComponentsModalCard item={name} />
+					availableComponents.map((item) => (
+						<li key={item} className="h-300 w-full">
+							<GridComponentsModalCard
+								item={item}
+								previewContent={renderItemComponent(item, {
+									components: gridComponents,
+									gridStateProps,
+									user,
+								})}
+							/>
 						</li>
 					))}
 			</ul>

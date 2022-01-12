@@ -28,7 +28,7 @@ export default function EditableGrid(props) {
 		<div className="grid gap-4 w-full seal-editable-grid" style={style}>
 			{gridItems.map((item, i) => (
 				<EditableGridItem
-					key={item?.toString() || `empty-slot-${i}`}
+					key={item.toString()}
 					index={i}
 					item={item}
 					gridProps={{...props}}
@@ -44,7 +44,7 @@ export default function EditableGrid(props) {
  * @returns {string} CSS string that can be used for value to grid-template-areas rule
  */
 function parseGridTemplateAreas(gridState) {
-	const renderSlot = (slot) => (typeof slot === "string" ? slot : ".");
+	const renderSlot = (slot) => slot.toString();
 	return gridState.map((state) => `"${renderSlot(state.a)} ${renderSlot(state.b)}"`).join("\n");
 }
 

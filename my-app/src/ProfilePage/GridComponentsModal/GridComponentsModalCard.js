@@ -12,8 +12,8 @@ export default function GridComponentsModalCard(props) {
 	});
 	return (
 		<div ref={dragRef}>
-			<div className="p-2 text-center cursor-pointer min-w-100 inline-block h-100 border-4 border-gray-700 hover:border-blue-300">
-				{props.item}
+			<div className="p-2 pointer-events-none w-full h-full cursor-pointer min-w-100 inline-block overflow-hidden border-4 border-gray-700 hover:border-blue-300">
+				{props.previewContent}
 			</div>
 		</div>
 	);

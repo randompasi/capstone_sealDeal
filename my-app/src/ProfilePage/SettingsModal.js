@@ -128,6 +128,7 @@ export default function SettingsModal({
 			></ImageSelectModal>
 
 			<GridComponentsModal
+				user={user}
 				openState={modalStates.grid}
 				gridStateProps={gridStateProps}
 				gridComponents={gridComponents}

@@ -3,7 +3,12 @@ import {useCallback, useRef, useState} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {RiDeleteBin2Line as DeleteIcon} from "react-icons/ri";
 import {AiOutlineDrag as DragIcon} from "react-icons/ai";
-import {GRID_CARD_DND_TYPE, isEmptySlot, replaceGridStateItems} from "./editableGridUtils";
+import {
+	GRID_CARD_DND_TYPE,
+	isEmptySlot,
+	renderItemComponent,
+	replaceGridStateItems,
+} from "./editableGridUtils";
 
 /**
  * @param {EditableGrid.EditableGridItemProps} props
@@ -14,7 +19,7 @@ export function EditableGridItem(props) {
 
 	/** @type {React.MutableRefObject<HTMLDivElement>} */
 	const borderRef = useRef();
-	const content = getContent(item, props.gridProps);
+	const content = emptySlot ? null : renderItemComponent(item, props.gridProps);
 	// Allow dragging some other slot on top of this one
 	const [{canDrop}, dropRef] = useDrop(() => ({
 		accept: GRID_CARD_DND_TYPE,
@@ -107,15 +112,11 @@ export function EditableGridItem(props) {
 	const draggingClassName = isResizing ? "seal-editable-grid-resize-target" : "";
 	const emptyBlockClassName = emptySlot ? "seal-editable-grid-empty" : "";
 
-	console.log(emptySlot, canDrop);
-	if (emptySlot && !canDrop) {
-		return null;
-	}
-
 	const style = {
-		gridArea: emptySlot ? `empty-slot-${props.index}` : item,
+		gridArea: item.toString(),
 		cursor: canDrop ? "pointer" : undefined,
 	};
+	const emptySlotStyle = canDrop ? {border: "2px dashed gray"} : null;
 
 	return (
 		<div
@@ -157,25 +158,16 @@ export function EditableGridItem(props) {
 						</div>
 					</div>
 				)}
-				{emptySlot && canDrop && (
-					<div className="w-full h-full bg-red-500 inline-block text-center">Empty</div>
+				{emptySlot && (
+					<div
+						className="w-full h-full inline-block text-center rounded-sm"
+						style={emptySlotStyle}
+						title="Empty slot"
+					></div>
 				)}
 			</div>
 		</div>
 	);
-}
-
-/**
- * @param {EditableGrid.GridIdentifier | EditableGrid.EmptySlot | null} item
- * @param {EditableGrid.EditableGridProps} gridProps
- */
-function getContent(item, {components, ...profilePageProps}) {
-	const Component = typeof item === "string" ? components[item] : null;
-	if (!Component) {
-		console.warn(`No component handler configured for ${item}`);
-		return null;
-	}
-	return <Component {...profilePageProps} />;
 }
 
 /**

@@ -9,7 +9,7 @@ import SettingsModal from "./SettingsModal";
 import gridComponents from "./gridComponents";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend as DnDHTML5Backend} from "react-dnd-html5-backend";
-import {useGridState} from "../EditableGrid/editableGridUtils";
+import {gridDefaultState, useGridState} from "../EditableGrid/editableGridUtils";
 
 export default function ProfilePage({controlPremiumModal, controlSettingsModal}) {
 	const authContext = useAuth();
@@ -17,12 +17,6 @@ export default function ProfilePage({controlPremiumModal, controlSettingsModal})
 
 	const [profileImage, setProfileImage] = useState(null);
 	const [backgroundImage, setBackgroundImage] = useState(null);
-
-	/** @type {EditableGrid.GridModel} */
-	const gridDefaultState = [
-		{a: "BasicInfo", b: "Achievements"},
-		{a: "EnvironmentalSavings", b: "EnvironmentalSavings"},
-	];
 
 	const gridStateProps = useGridState(gridDefaultState);
 
