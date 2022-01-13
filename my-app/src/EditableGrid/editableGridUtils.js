@@ -1,5 +1,7 @@
 import {uniqueId, uniq} from "lodash";
 import {useCallback, useState} from "react";
+import {useAsyncEffect, useResource} from "../utils/hooks";
+import * as api from "../api/api";
 
 /** @type {EditableGrid.GridModel} */
 export const gridDefaultState = [
@@ -118,4 +120,32 @@ export function renderItemComponent(item, {components, ...profilePageProps}) {
 		return null;
 	}
 	return <Component {...profilePageProps} />;
+}
+
+/**
+ * @param {null | number} gridId
+ * @param {any[]} [deps]
+ * @returns {UtilityTypes.AsyncResourceState<EditableGrid.GridStateProps>}
+ */
+export function useProfileGridResource(gridId, deps) {
+	const gridState = useGridState(gridDefaultState);
+	return useResource(async () => {
+		if (!gridId) {
+			return gridState;
+		}
+		const [grid] = await api.get("profileGrids", {id: api.matchers.eq(gridId)});
+		console.log("Loadied grid settings");
+		if (grid) {
+			gridState.setGridState(grid);
+		}
+		return gridState;
+	}, [gridId, ...(deps || [])]);
+}
+
+export function saveGridItem(gridItem) {
+	if (gridItem.id) {
+		return api.patch("profileGrids", gridItem.id, gridItem);
+	} else {
+		return api.post("profileGrids", gridItem);
+	}
 }

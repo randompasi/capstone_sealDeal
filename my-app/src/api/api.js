@@ -90,6 +90,7 @@ const userType = {
 	lastName: "",
 	city: "",
 	birthday: "",
+	profileGridId: 0,
 	// Note: avatar and background images are not included in the response
 	// by default because they are quite large. Use a separate request
 	// to fetch them as needed.

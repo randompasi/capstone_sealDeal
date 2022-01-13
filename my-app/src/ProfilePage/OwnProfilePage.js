@@ -1,5 +1,5 @@
 import {useAuth} from "../auth/authContext";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {loadImageToBase64} from "../common/utils";
 import {useAsyncEffect} from "../utils/hooks";
 import {patchUser} from "../api/api";
@@ -9,16 +9,19 @@ import SettingsModal from "./SettingsModal";
 import gridComponents from "./gridComponents";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend as DnDHTML5Backend} from "react-dnd-html5-backend";
-import {gridDefaultState, useGridState} from "../EditableGrid/editableGridUtils";
+import {
+	gridDefaultState,
+	useGridState,
+	useProfileGridResource,
+} from "../EditableGrid/editableGridUtils";
 
-export default function ProfilePage({controlPremiumModal, controlSettingsModal}) {
+export default function OwnProfilePage({controlPremiumModal, controlSettingsModal}) {
 	const authContext = useAuth();
 	const loggedInUser = authContext.user;
+	const gridResource = useProfileGridResource(loggedInUser.profileGridId);
 
 	const [profileImage, setProfileImage] = useState(null);
 	const [backgroundImage, setBackgroundImage] = useState(null);
-
-	const gridStateProps = useGridState(gridDefaultState);
 
 	//Update state changes to DB on SettingsModal call
 	useAsyncEffect(async () => {
@@ -37,9 +40,26 @@ export default function ProfilePage({controlPremiumModal, controlSettingsModal})
 		});
 	}, [backgroundImage]);
 
-	if (!loggedInUser?.id) {
+	const ignoreFirstGridState = useRef(true);
+	useAsyncEffect(async () => {
+		const value = gridResource.status === "success" ? gridResource.value : null;
+		if (!value) {
+			return;
+		}
+		if (ignoreFirstGridState.current) {
+			// Skip the first update, we get here just because the item was loaded.
+			// We only want to run updates when something changes.
+			ignoreFirstGridState.current = false;
+			return;
+		}
+
+		// await
+	}, [gridResource.status === "success" ? gridResource.value : null]);
+
+	if (!loggedInUser?.id || gridResource.status !== "success") {
 		return null; // TODO: Loading spinner / error handling
 	}
+	const gridStateProps = gridResource.value;
 
 	const user = {
 		...loggedInUser,
