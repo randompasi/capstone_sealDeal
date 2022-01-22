@@ -85,6 +85,7 @@ export function useGridState(defaultValue) {
 	const [gridStateRaw, setGridStateRaw] = useState(() => normalizeGridStateForUi(defaultValue));
 	const setGridState = useCallback(
 		(newVal) => {
+			console.log("new grid val", newVal, normalizeGridStateForUi(newVal));
 			setGridStateRaw(normalizeGridStateForUi(newVal));
 		},
 		[setGridStateRaw]
@@ -125,21 +126,30 @@ export function renderItemComponent(item, {components, ...profilePageProps}) {
 /**
  * @param {null | number} gridId
  * @param {any[]} [deps]
- * @returns {UtilityTypes.AsyncResourceState<EditableGrid.GridStateProps>}
+ * @returns {UtilityTypes.AsyncResourceState<{id: null | number, gridState: EditableGrid.GridStateProps}>}
  */
 export function useProfileGridResource(gridId, deps) {
-	const gridState = useGridState(gridDefaultState);
-	return useResource(async () => {
+	const modifiableGridState = useGridState(gridDefaultState);
+	const savedGridState = useResource(async () => {
 		if (!gridId) {
-			return gridState;
+			return null;
 		}
 		const [grid] = await api.get("profileGrids", {id: api.matchers.eq(gridId)});
-		console.log("Loadied grid settings");
-		if (grid) {
-			gridState.setGridState(grid);
-		}
-		return gridState;
+		modifiableGridState.setGridState(grid.rows);
+		return grid.id;
 	}, [gridId, ...(deps || [])]);
+
+	if (savedGridState.status !== "success") {
+		return savedGridState;
+	} else {
+		return {
+			status: "success",
+			value: {
+				id: savedGridState.value,
+				gridState: modifiableGridState,
+			},
+		};
+	}
 }
 
 export function saveGridItem(gridItem) {
