@@ -42,7 +42,7 @@ export default function ProfilePage({controlPremiumModal, controlSettingsModal})
 	};
 
 	return (
-		<div className="w-full h-screen">
+		<div>
 			<ProfilePageInfo user={user} />
 			<PremiumModal control={controlPremiumModal} />
 			<SettingsModal

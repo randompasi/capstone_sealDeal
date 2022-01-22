@@ -94,11 +94,11 @@ export default function ProfilePage({user: userBase}) {
 	return (
 		<div
 			id="page-container"
-			className="flex flex-col items-center w-full h-full"
+			className="flex flex-col items-center"
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div
-				className="w-full sm:w-10/12 xl:w-5/12 p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8"
+				className="w-full sm:w-10/12 xl:w-5/12 p-8 pt-4 mt-8 grid grid-cols-2 gap-x-8 mb-8"
 				style={{backgroundColor: "white"}}
 			>
 				<div className="col-span-2">

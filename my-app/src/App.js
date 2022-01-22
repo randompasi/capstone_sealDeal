@@ -16,9 +16,9 @@ function RequireLogin() {
 	}
 
 	return (
-		<div className="text-white h-screen w-screen">
+		<div className="text-white w-screen">
 			<Navbar setSettings={setSettings} setPremiumModal={setPremiumModal} />
-			<main className="flex-auto min-h-screen bg-cover p-0 m-0">
+			<main className="flex-auto bg-cover p-0 m-0 flex">
 				<SealdealRoutes
 					settings={settings}
 					setSettings={setSettings}

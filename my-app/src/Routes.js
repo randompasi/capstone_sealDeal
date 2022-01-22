@@ -1,14 +1,9 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import OffersView from "./OffersPage/OffersView";
 import OwnProfilePage from "./ProfilePage/OwnProfilePage";
 import ViewUserProfile from "./ProfilePage/ViewUserProfile";
 
-export default function SealdealRoutes({
-	settings,
-	setSettings,
-	showPremiumModal,
-	setPremiumModal,
-	setBackgroundImage,
-}) {
+export default function SealdealRoutes({settings, setSettings, showPremiumModal, setPremiumModal}) {
 	return (
 		<Router>
 			<Routes>
@@ -24,11 +19,11 @@ export default function SealdealRoutes({
 								showSettingsModal: settings,
 								setSettingsModal: setSettings,
 							}}
-							setBackgroundImage={setBackgroundImage}
 						/>
 					}
 				/>
 				<Route path="/user-profile/:id" element={<ViewUserProfile />} />
+				<Route path="/offers/" element={<OffersView />} />
 			</Routes>
 		</Router>
 	);
