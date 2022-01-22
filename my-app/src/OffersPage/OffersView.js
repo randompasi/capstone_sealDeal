@@ -10,6 +10,7 @@ export default function OffersView() {
 	}
 	const loggedInUser = fetchedProfile.value;
 	const parsedBgUrl = makeCssUrl(loggedInUser.backgroundBase64);
+
 	return (
 		<div
 			id="offers-page-container"
