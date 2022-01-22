@@ -6,7 +6,7 @@ import Achievement from "./Achievement";
  */
 export default function Achievements({user}) {
 	const parsedAcievements = [];
-	user.achievements.forEach((element, index) => {
+	user.achievements?.forEach((element, index) => {
 		parsedAcievements.push(<Achievement key={index} {...element} />);
 	});
 
