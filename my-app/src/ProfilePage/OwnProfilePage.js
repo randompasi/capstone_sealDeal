@@ -9,7 +9,12 @@ import SettingsModal from "./SettingsModal";
 import gridComponents from "./gridComponents";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend as DnDHTML5Backend} from "react-dnd-html5-backend";
-import {useProfileGridResource} from "../EditableGrid/editableGridUtils";
+import {
+	isEmptyRow,
+	isEmptySlot,
+	makeRowMapper,
+	useProfileGridResource,
+} from "../EditableGrid/editableGridUtils";
 
 export default function OwnProfilePage({controlPremiumModal, controlSettingsModal}) {
 	const authContext = useAuth();
@@ -54,9 +59,15 @@ export default function OwnProfilePage({controlPremiumModal, controlSettingsModa
 		// Save the user's grid to db
 		const {profileGridId} = loggedInUser;
 		console.log(loggedInUser);
+
+		// When we save the grid to DB, persist empty slots as nulls
+		const payload = value.gridState.gridState
+			.filter((_) => !isEmptyRow(_))
+			.map(makeRowMapper((_) => (isEmptySlot(_) ? null : _)));
+
 		const [savedGrid] = await upsert("profileGrids", {
 			id: profileGridId,
-			rows: value.gridState.gridState,
+			rows: payload,
 		});
 		if (!profileGridId) {
 			await patchUser(authContext, {

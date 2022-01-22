@@ -1,6 +1,6 @@
 import {uniqueId, uniq} from "lodash";
 import {useCallback, useState} from "react";
-import {useAsyncEffect, useResource} from "../utils/hooks";
+import {useResource} from "../utils/hooks";
 import * as api from "../api/api";
 
 /** @type {EditableGrid.GridModel} */
@@ -42,9 +42,17 @@ export function isEmptySlot(val) {
  * @param {EditableGrid.GridRow} row
  * @returns {boolean}
  */
-function isEmptyRow(row) {
+export function isEmptyRow(row) {
 	return isEmptySlot(row.a) && isEmptySlot(row.b);
 }
+
+/**
+ * @type {EditableGrid.MakeRowMapper}
+ */
+export const makeRowMapper = (fn) => (row) => ({
+	a: fn(row.a),
+	b: fn(row.b),
+});
 
 /**
  * @param {EditableGrid.GridIdentifier | EditableGrid.EmptySlot} val

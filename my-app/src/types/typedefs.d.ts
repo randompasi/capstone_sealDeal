@@ -149,6 +149,8 @@ declare namespace EditableGrid {
 		gridStateProps: GridStateProps;
 	}
 
+	declare type MakeRowMapper = <R>(fn: (val: EmptySlot | GridIdentifier) => R) => (row: GridRow) => {a: R, b: R};
+
 }
 
 }
