@@ -1,9 +1,8 @@
 import {findIndex, findLastIndex, times} from "lodash";
 import {useCallback} from "react";
-import {cloneDeepJson} from "../common/utils";
 import "./EditableGrid.css";
 import {EditableGridItem} from "./EditableGridItem";
-import {getAllGridItems, isEmptySlot} from "./editableGridUtils";
+import {cloneGridState, getAllGridItems, isEmptySlot} from "./editableGridUtils";
 
 /**
  * @param {EditableGrid.EditableGridProps} props
@@ -64,7 +63,7 @@ const makeResizeCallback = (gridState, setGridState) => (border, amount, item) =
 	}
 	const currentRow = gridState[currentRowIndex];
 
-	const newState = cloneDeepJson(gridState);
+	const newState = cloneGridState(gridState);
 
 	const isScalingUp = amount * (border === "top" || border === "left" ? -1 : 1) > 0;
 	const isAxisX = border === "left" || border === "right";

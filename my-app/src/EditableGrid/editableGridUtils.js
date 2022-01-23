@@ -86,6 +86,17 @@ function normalizeGridStateForUi(gridState) {
 }
 
 /**
+ * @param {EditableGrid.GridModel} gridState
+ * @returns {EditableGrid.GridModel}
+ */
+export function cloneGridState(gridState) {
+	return gridState.map((row) => ({
+		a: row.a,
+		b: row.b,
+	}));
+}
+
+/**
  * @param {EditableGrid.GridModel} defaultValue
  * @returns {EditableGrid.GridStateProps}
  */

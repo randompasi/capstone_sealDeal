@@ -74,7 +74,6 @@ export default function OwnProfilePage({controlPremiumModal, controlSettingsModa
 				profileGridId: savedGrid.id,
 			});
 		}
-		console.log("saved grid", savedGrid, loggedInUser.profileGridId);
 	}, [gridResource.status, gridResource.status === "success" ? gridResource.value : null]);
 
 	if (!loggedInUser?.id || gridResource.status !== "success") {
