@@ -130,32 +130,36 @@ export function EditableGridItem(props) {
 				{!emptySlot && (
 					<div className="w-full h-full" ref={dragPreviewRef}>
 						<div className="w-full h-full">
-							<div onMouseDown={mouseDown} ref={borderRef}>
-								<div
-									data-direction="left"
-									className="seal-editable-grid-border seal-editable-grid-border-left"
-								/>
-								<div
-									data-direction="right"
-									className="seal-editable-grid-border seal-editable-grid-border-right"
-								/>
-								<div
-									data-direction="top"
-									className="seal-editable-grid-border seal-editable-grid-border-top"
-								/>
-								<div
-									data-direction="bottom"
-									className="seal-editable-grid-border seal-editable-grid-border-bottom"
-								/>
-							</div>
-							<div className="absolute top-2 right-4 text-xl seal-editable-grid-btn">
-								<button onClick={removeItemFromGrid}>
-									<DeleteIcon />
-								</button>
-								<button ref={dragRef}>
-									<DragIcon />
-								</button>
-							</div>
+							{props.canEdit && (
+								<>
+									<div onMouseDown={mouseDown} ref={borderRef}>
+										<div
+											data-direction="left"
+											className="seal-editable-grid-border seal-editable-grid-border-left"
+										/>
+										<div
+											data-direction="right"
+											className="seal-editable-grid-border seal-editable-grid-border-right"
+										/>
+										<div
+											data-direction="top"
+											className="seal-editable-grid-border seal-editable-grid-border-top"
+										/>
+										<div
+											data-direction="bottom"
+											className="seal-editable-grid-border seal-editable-grid-border-bottom"
+										/>
+									</div>
+									<div className="absolute top-2 right-4 text-xl seal-editable-grid-btn">
+										<button onClick={removeItemFromGrid}>
+											<DeleteIcon />
+										</button>
+										<button ref={dragRef}>
+											<DragIcon />
+										</button>
+									</div>
+								</>
+							)}
 							{content}
 						</div>
 					</div>

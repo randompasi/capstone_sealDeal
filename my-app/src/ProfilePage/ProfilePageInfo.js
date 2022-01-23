@@ -4,11 +4,13 @@ import defaultBackground from "../assets/BackgroundImages/bg_default.jpg";
 import {makeCssUrl} from "../common/utils";
 import EditableGrid from "../EditableGrid/EditableGrid";
 import gridComponents from "./gridComponents";
+import {useAuth} from "../auth/authContext";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
  */
 export default function ProfilePage({user: userBase, gridStateProps}) {
+	const isOwnProfilePage = useAuth().user?.id === userBase.id;
 	const fullProfileResource = useFullUserProfile(userBase.id);
 
 	if (fullProfileResource.status !== "success") {
@@ -88,6 +90,12 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 		],
 	};
 
+	const canEditGrid = isOwnProfilePage && user.premium;
+
+	// In our own profile page there's "empty slot" rows at the top and bottom of the grid
+	// which already adds some "padding", so we'll disable extra css padding there.
+	const noPaddingClassName = isOwnProfilePage ? "pt-0 pb-0" : "";
+
 	return (
 		<div
 			id="page-container"
@@ -95,10 +103,15 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div
-				className="w-full sm-w-10/12 xl:w-8/12 p-8 pt-0 pb-0 mt-10 mb-10"
+				className={`w-full sm-w-10/12 xl:w-8/12 p-8 mt-10 mb-10 ${noPaddingClassName}`}
 				style={{backgroundColor: "white"}}
 			>
-				<EditableGrid user={user} components={gridComponents} gridStateProps={gridStateProps} />
+				<EditableGrid
+					canEdit={canEditGrid}
+					user={user}
+					components={gridComponents}
+					gridStateProps={gridStateProps}
+				/>
 			</div>
 		</div>
 	);

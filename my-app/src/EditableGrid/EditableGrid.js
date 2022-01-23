@@ -32,6 +32,7 @@ export default function EditableGrid(props) {
 					item={item}
 					gridProps={{...props}}
 					resize={resize}
+					canEdit={props.canEdit}
 				></EditableGridItem>
 			))}
 		</div>

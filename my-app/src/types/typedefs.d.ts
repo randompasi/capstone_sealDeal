@@ -136,6 +136,7 @@ declare namespace EditableGrid {
 		item: EditableGrid.GridIdentifier | EditableGrid.EmptySlot | null;
 		gridProps: EditableGridProps;
 		index: number;
+		canEdit: boolean;
 		resize: (border: GridResizeDirection, dragAmount: number, item: GridIdentifier) => any;
 	}
 
@@ -147,6 +148,7 @@ declare namespace EditableGrid {
 	}
 
 	declare interface EditableGridProps extends ProfilePage.ProfilePageProps {
+		canEdit: boolean;
 		components: Record<GridIdentifier, ComponentType<ProfilePageProps>>;
 		gridStateProps: GridStateProps;
 	}
