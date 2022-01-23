@@ -6,6 +6,7 @@ import * as api from "../api/api";
 /** @type {EditableGrid.GridModel} */
 export const gridDefaultState = [
 	{a: "BasicInfo", b: "Achievements"},
+	{a: "Reviews", b: "SellingHistory"},
 	{a: "EnvironmentalSavings", b: "EnvironmentalSavings"},
 ];
 

@@ -118,6 +118,8 @@ declare namespace EditableGrid {
 		"BasicInfo"
 		| "Achievements"
 		| "EnvironmentalSavings"
+		| "Reviews"
+		| "SellingHistory"
 
 	declare interface EmptySlot {
 		type: "empty slot";
