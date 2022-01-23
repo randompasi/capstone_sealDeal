@@ -31,3 +31,30 @@ export const loadImageToBase64 = (imageUrl) =>
  * @returns {string}
  */
 export const makeCssUrl = (url) => `url(${JSON.stringify(url)})`;
+
+/**
+ * @param {never} _impossibleValue
+ * @returns {null}
+ */
+// eslint-disable-next-line no-unused-vars
+export function impossibleCase(_impossibleValue) {
+	return null;
+}
+
+/**
+ * @type {UtilityTypes.IdentityFunction}
+ */
+export const cloneDeepJson = (value) => {
+	return JSON.parse(JSON.stringify(value));
+};
+
+/**
+ * Object.keys, but with better type definition so that enum-typed keys
+ * remain as enum types, not string[].
+ *
+ * @type {UtilityTypes.ObjectKeysFn}
+ */
+export const objectKeys = (obj) => {
+	// @ts-ignore
+	return Object.keys(obj);
+};

@@ -37,7 +37,7 @@ function Review({item}) {
  */
 export default function Reviews({user}) {
 	return (
-		<Box className="my-5" title="Reviews">
+		<Box title="Reviews">
 			<div className="flex flex-col gap-4">
 				{user.reviews.map((review) => (
 					<Review item={review} key={review.title} />

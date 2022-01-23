@@ -85,6 +85,7 @@ module.exports = {
 	devServer: {
 		open: true,
 		hot: isDevelopment,
+		port: 8000,
 		static: {
 			directory: relative("build"),
 			serveIndex: true,

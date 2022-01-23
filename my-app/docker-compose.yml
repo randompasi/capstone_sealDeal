@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   database:
+    hostname: database
     image: docker.io/postgres:13.5-alpine
     restart: always
     environment:

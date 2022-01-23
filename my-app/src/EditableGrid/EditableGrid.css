@@ -1,0 +1,68 @@
+.seal-editable-grid {
+	grid-template-columns: 1fr 1fr;
+	grid-auto-rows: minmax(50px, auto);
+}
+
+.seal-editable-grid-btn {
+	z-index: 1;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.seal-editable-grid-item:hover .seal-editable-grid-btn {
+	opacity: 1;
+}
+
+.seal-editable-grid-border {
+	--seal-editable-grid-border-weight-dynamic: 0px;
+	--seal-editable-grid-border-weight: calc(var(--seal-editable-grid-border-weight-dynamic) + 10px);
+
+	position: absolute;
+	height: 100%;
+	background-color: black;
+	z-index: 1;
+	opacity: 0;
+}
+.seal-editable-grid-border:hover {
+	opacity: 0.9;
+}
+.seal-editable-grid-border.sealdeal-editable-grid-border-active {
+	opacity: 0.9;
+	z-index: 10;
+	pointer-events: none;
+}
+.seal-editable-grid-resize-target:hover {
+	opacity: 0.5;
+	filter: grayscale(50%);
+}
+.seal-editable-grid-resize-target:hover * {
+	pointer-events: none;
+}
+
+.seal-editable-grid-border-left {
+	top: 0;
+	left: calc(0px - var(--seal-editable-grid-border-weight-dynamic));
+	cursor: w-resize;
+	width: var(--seal-editable-grid-border-weight);
+}
+.seal-editable-grid-border-right {
+	top: 0;
+	right: calc(0px - var(--seal-editable-grid-border-weight-dynamic));
+	cursor: e-resize;
+	width: var(--seal-editable-grid-border-weight);
+}
+
+.seal-editable-grid-border-top {
+	top: calc(0px - var(--seal-editable-grid-border-weight-dynamic));
+	left: 0;
+	width: 100%;
+	height: var(--seal-editable-grid-border-weight);
+	cursor: n-resize;
+}
+.seal-editable-grid-border-bottom {
+	bottom: calc(0px -  var(--seal-editable-grid-border-weight-dynamic));
+	left: 0;
+	width: 100%;
+	height: var(--seal-editable-grid-border-weight);
+	cursor: s-resize;
+}

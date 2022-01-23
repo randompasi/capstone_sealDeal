@@ -12,7 +12,7 @@ export default function BasicInfo({user}) {
 	const userC = authContext.user;
 
 	return (
-		<Box className="my-5" title="">
+		<Box title="">
 			<div className="grid grid-cols-5 w-full">
 				<div>
 					<Avatar url={user.avatarUrl} />

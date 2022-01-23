@@ -1,18 +1,12 @@
 import Modal from "react-modal"; //https://www.npmjs.com/package/react-modal
 
-export default function ImageSelectModal({
-	showModal,
-	setModal,
-	setImage,
-	imageSources,
-	headerText,
-}) {
+export default function ImageSelectModal({openState, setImage, imageSources, headerText}) {
 	const images = imageSources;
 
 	return (
 		<Modal
 			id="avatar-modal"
-			isOpen={showModal}
+			isOpen={openState.isOpen}
 			contentLabel="Settings Modal"
 			ariaHideApp={false}
 			style={{
@@ -37,7 +31,7 @@ export default function ImageSelectModal({
 							key={index}
 							className="h-36"
 							onClick={() => {
-								setModal(false);
+								openState.toggle();
 								setImage(src);
 							}}
 						>
@@ -57,7 +51,7 @@ export default function ImageSelectModal({
 				<button
 					className="w-32 h-8 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
 					onClick={() => {
-						setModal(false);
+						openState.toggle();
 					}}
 				>
 					Cancel

@@ -47,29 +47,48 @@ export const remove = (entity, id) =>
 	request({url: entity, params: {id: matchers.eq(id)}, method: "DELETE", headers: baseHeaders});
 
 /**
- * @param {string} url
+ * @param {string} entity
  * @param {any} payload
  * @returns {Promise<any[]>}
  */
-export const post = (url, payload) =>
-	fetch(getApiUrl(url), {
+export const post = (entity, payload) =>
+	request({
+		url: entity,
+		params: null,
 		method: "POST",
 		headers: baseHeaders,
 		body: JSON.stringify(payload),
-	}).then(parseResp);
+	});
 
 /**
  * @param {string} entity
  * @param {number} id
- * @param {any} patch
+ * @param {any} payload
  * @returns {Promise<any>}
  */
-export const patch = (entity, id, patch) =>
-	fetch(getApiUrl(`${entity}?id=eq.${id}`), {
+export const patch = (entity, id, payload) =>
+	request({
+		url: entity,
+		params: {id: matchers.eq(id)},
 		method: "PATCH",
 		headers: baseHeaders,
-		body: JSON.stringify(patch),
-	}).then(parseResp);
+		body: JSON.stringify(payload),
+	});
+
+/**
+ * Saves changes to an item based on its id,
+ * or creates a new item if the payload has no id.
+ *
+ * @param {string} entity
+ * @param {any} payload
+ */
+export const upsert = (entity, {id, ...payload}) => {
+	if (id) {
+		return patch(entity, id, payload);
+	} else {
+		return post(entity, payload);
+	}
+};
 
 /**
  * @param {any} authContext
@@ -90,6 +109,7 @@ const userType = {
 	lastName: "",
 	city: "",
 	birthday: "",
+	profileGridId: 0,
 	// Note: avatar and background images are not included in the response
 	// by default because they are quite large. Use a separate request
 	// to fetch them as needed.
