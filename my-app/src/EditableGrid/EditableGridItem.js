@@ -113,15 +113,9 @@ export function EditableGridItem(props) {
 	const draggingClassName = isResizing ? "seal-editable-grid-resize-target" : "";
 	const emptyBlockClassName = emptySlot ? "seal-editable-grid-empty" : "";
 
-	// We add one empty row to the top and one to the bottom so that the whole
-	// grid can be made taller by dragging items tehre. However, we can show those
-	// much smaller if we are not currently dragging.
-	const isRowMockedForEmptySlots =
-		props.index === 0 || props.index >= props.gridProps.gridStateProps.gridState.length;
 	const style = {
 		gridArea: item.toString(),
 		cursor: canDrop ? "pointer" : undefined,
-		minHeight: !isRowMockedForEmptySlots || canDrop ? "100px" : undefined,
 	};
 
 	const emptySlotStyle = canDrop ? {border: "2px dashed gray"} : null;

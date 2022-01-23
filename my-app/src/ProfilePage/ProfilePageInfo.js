@@ -91,26 +91,14 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 	return (
 		<div
 			id="page-container"
-			className="flex flex-col items-center w-full h-full"
+			className="flex flex-col items-center"
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
-			<div className="w-full p-8" style={{backgroundColor: "white"}}>
+			<div
+				className="w-full sm-w-10/12 xl:w-8/12 p-8 pt-0 pb-0 mt-10 mb-10"
+				style={{backgroundColor: "white"}}
+			>
 				<EditableGrid user={user} components={gridComponents} gridStateProps={gridStateProps} />
-				{/* <div className="col-span-2">
-					<BasicInfo user={user} />
-				</div>
-
-				<div className="col-span-2">
-					<Achievements user={user} />
-				</div>
-
-				<Reviews user={user} />
-
-				<SellingHistory />
-
-				<div className="col-span-2">
-					<EnvironmentalSavings user={user} />
-				</div> */}
 			</div>
 		</div>
 	);
