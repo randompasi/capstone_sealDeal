@@ -36,7 +36,7 @@ export default function OffersView() {
 			>
 				<div className="flex flex-col">
 					<p className="text-xl mt-4 mb-2">Create new offer:</p>
-                    <p> - - Insert cool interface here - - </p>
+					<p> - - Insert cool interface here - - </p>
 				</div>
 				<p className="text-xl mt-4 mb-2">Sent offers:</p>
 				<div className="flex flex-col bg-gray-700 p-4 rounded">

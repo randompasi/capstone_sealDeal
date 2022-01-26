@@ -8,7 +8,8 @@ export default function OffersView({offer}) {
 	return (
 		<div
 			className={
-				"flex flex-row justify-between pl-2 pr-2 rounded mt-1 mb-1 " + statusToGradientMap[offer.status]
+				"flex flex-row justify-between pl-2 pr-2 rounded mt-1 mb-1 " +
+				statusToGradientMap[offer.status]
 			}
 		>
 			<div className="flex flex-row w-2/4">
