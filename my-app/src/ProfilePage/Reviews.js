@@ -55,13 +55,15 @@ function Review({item, onReviewGiven}) {
 		if (ratingFromHover && onReviewGiven) {
 			onReviewGiven(ratingFromHover);
 		}
+		setRatingFromHover(null);
 	};
 
 	return (
 		<div
 			className="flex flex-col gap-1"
 			onMouseOut={canEdit ? mouseOut : undefined}
-			onClick={canEdit ? onClick : undefined}
+			// pointerUp works with finger dragging better than onClick
+			onPointerUp={canEdit ? onClick : undefined}
 		>
 			<div className="text-sm font-semibold">{item.title}</div>
 			<div className="flex flex-nowrap w-full gap-2">{stars}</div>
