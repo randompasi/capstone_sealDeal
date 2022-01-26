@@ -69,6 +69,13 @@ function Review({item, onReviewGiven}) {
 	);
 }
 
+const calculateAverageRatings = (reviews) => {
+	return mapValues(
+		groupBy(reviews, (_) => _.category),
+		(_) => meanBy(_, (_) => _.averageRating)
+	);
+};
+
 /**
  * @param {ProfilePage.ProfilePageProps} props
  */
@@ -83,26 +90,30 @@ export default function Reviews({user}) {
 	const loggedInUser = useAuth().user;
 
 	const addReview = (newReview) => {
-		setAddedReviews([...addedReviews, newReview]);
+		setAddedReviews([
+			...addedReviews,
+			{category: newReview.category, averageRating: newReview.rating},
+		]);
 		post("reviews", {
 			...newReview,
 			toUserId: user.id,
 			fromUserId: loggedInUser.id,
 		});
 	};
+
+	// Combined previously fetched averages and the averages of newly added items
 	const allRatings = (reviewsResource.status === "success" ? reviewsResource.value : []).concat(
-		addedReviews.map((_) => ({category: _.category, averageRating: _.rating}))
+		Object.entries(calculateAverageRatings(addedReviews)).map(([category, averageRating]) => ({
+			category,
+			averageRating,
+		}))
 	);
 
-	const grouped = mapValues(
-		groupBy(allRatings, (_) => _.category),
-		(_) => meanBy(_, (_) => _.averageRating)
-	);
 	const ratings = {
 		"Item condition": 3,
 		Delivery: 3,
 		Friendliness: 3,
-		...grouped,
+		...calculateAverageRatings(allRatings),
 	};
 	const canGiveReview = !!loggedInUser && loggedInUser.id !== user.id;
 
