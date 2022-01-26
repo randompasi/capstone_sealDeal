@@ -16,10 +16,5 @@ html, body , #root {
 	background-color: white;
 	margin:0px;
 	height:100%;
-
-	--sd-color-pink: #FE9996;
 }
 
-.sd-text-color-pink {
-	color: var(--sd-color-pink);
-}
