@@ -15,7 +15,6 @@ declare namespace ProfilePage {
 		city: string
 		avatarUrl: string
 		achievements: AcievementProp[]
-		reviews: Review[]
 		followers: FollowerInfo[]
 		premium: boolean
 	}

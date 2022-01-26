@@ -58,3 +58,11 @@ export const objectKeys = (obj) => {
 	// @ts-ignore
 	return Object.keys(obj);
 };
+
+/**
+ * @param {(string | undefined | null | false)[]} classNames
+ * @returns {string}
+ */
+export function combineClassnames(...classNames) {
+	return classNames.filter((_) => typeof _ === "string" && !!_).join(" ");
+}

@@ -83,11 +83,6 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 				iconType: "trophy",
 			},
 		],
-		reviews: [
-			{title: "Item condition", rating: 4},
-			{title: "Delivery", rating: 3},
-			{title: "Friendliness", rating: 5},
-		],
 	};
 
 	const canEditGrid = isOwnProfilePage && user.premium;

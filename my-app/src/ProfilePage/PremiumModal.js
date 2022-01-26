@@ -28,7 +28,7 @@ export default function PremiumModal({control}) {
 							<span className="mb-3 mt-3">Help us save the environment and stay connected!</span>
 							<span className="mb-3 mt-3">...and keep the Seals happy!</span>
 						</div>
-						<div className="w-2/4 h-3/4 ml-2 flex bg-red-200 rounded rounded-2xl justify-center mt-8">
+						<div className="w-2/4 h-3/4 ml-2 flex bg-red-200 rounded justify-center mt-8">
 							<IconContext.Provider value={{color: "red", size: "230px"}}>
 								<CgHeart className="bg"></CgHeart>
 							</IconContext.Provider>
