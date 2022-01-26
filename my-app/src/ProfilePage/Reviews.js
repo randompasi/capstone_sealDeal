@@ -1,31 +1,59 @@
 import Box from "../Box";
-import {times} from "../common/utils";
-import starSrc from "../assets/star.png";
+import {combineClassnames, times} from "../common/utils";
 import "./Reviews.css";
+import {useResource} from "../utils/hooks";
+import {get, matchers, post} from "../api/api";
+import {TiStarFullOutline as FullStarIcon, TiStarHalfOutline as HalfStarIcon} from "react-icons/ti";
+import {useCallback, useState} from "react";
+import {useAuth} from "../auth/authContext";
+import {groupBy, mapValues, meanBy} from "lodash";
 
 /**
- * @param {{item: ProfilePage.Review}} props
+ * @param {{item: ProfilePage.Review, onReviewGiven?: (rating: number) => any}} props
  */
-function Review({item}) {
-	const ratingIndex = item.rating - 1;
-	const stars = times(5, (i) => (
-		<div
-			className="flex-auto"
-			style={{
-				/* Can't get the arbitrary width values working in tailwind syntax :( */
-				maxWidth: "50px",
-			}}
-			key={i}
-		>
-			<img
-				src={starSrc}
-				alt="Star"
-				className={ratingIndex < i ? "opacity-0" : "reviews-star-colorize"}
-			/>
-		</div>
-	));
+function Review({item, onReviewGiven}) {
+	const [ratingFromHover, setRatingFromHover] = useState(null);
+	const starRating = ratingFromHover || item.rating;
+	const starIconsCount = Math.ceil(starRating);
+	const canEdit = !!onReviewGiven;
+	const isHoveringSomeStar = !!ratingFromHover;
+
+	const stars = times(5, (i) => {
+		const value = i + 1;
+		const isHalfStar = value > starRating && starIconsCount - starRating > 0.5;
+		const isOver = value > starIconsCount;
+		const StarIcon = isHalfStar ? HalfStarIcon : FullStarIcon;
+		const extraStarClassName = isOver && (isHoveringSomeStar ? "opacity-10" : "opacity-0");
+
+		const onHover = useCallback(() => setRatingFromHover(value), [value, setRatingFromHover]);
+
+		return (
+			<div style={{marginLeft: -10}} onMouseOver={canEdit ? onHover : undefined} key={i}>
+				<i
+					style={{
+						transition: `opacity ${value * 50}ms`,
+					}}
+					className={combineClassnames(extraStarClassName, canEdit && "cursor-pointer")}
+				>
+					<StarIcon fontSize={70} className="sd-text-color-pink" />
+				</i>
+			</div>
+		);
+	});
+
+	const mouseOut = useCallback(() => setRatingFromHover(null), [setRatingFromHover]);
+	const onClick = () => {
+		if (ratingFromHover && onReviewGiven) {
+			onReviewGiven(ratingFromHover);
+		}
+	};
+
 	return (
-		<div className="flex flex-col gap-1">
+		<div
+			className="flex flex-col gap-1"
+			onMouseOut={canEdit ? mouseOut : undefined}
+			onClick={canEdit ? onClick : undefined}
+		>
 			<div className="text-sm font-semibold">{item.title}</div>
 			<div className="flex flex-nowrap w-full gap-2">{stars}</div>
 		</div>
@@ -36,11 +64,50 @@ function Review({item}) {
  * @param {ProfilePage.ProfilePageProps} props
  */
 export default function Reviews({user}) {
+	const reviewsResource = useResource(async () => {
+		const averages = await get("averageRatings", {
+			userId: matchers.eq(user.id),
+		});
+		return averages;
+	});
+	const [addedReviews, setAddedReviews] = useState([]);
+	const loggedInUser = useAuth().user;
+
+	const addReview = (newReview) => {
+		setAddedReviews([...addedReviews, newReview]);
+		post("reviews", {
+			...newReview,
+			toUserId: user.id,
+			fromUserId: loggedInUser.id,
+		});
+	};
+	const allRatings = (reviewsResource.status === "success" ? reviewsResource.value : []).concat(
+		addedReviews.map((_) => ({category: _.category, averageRating: _.rating}))
+	);
+
+	const grouped = mapValues(
+		groupBy(allRatings, (_) => _.category),
+		(_) => meanBy(_, (_) => _.averageRating)
+	);
+	const ratings = {
+		"Item condition": 1,
+		Delivery: 1,
+		Friendliness: 1,
+		...grouped,
+	};
+	const canGiveReview = !!loggedInUser && loggedInUser.id !== user.id;
+
 	return (
 		<Box title="Reviews">
 			<div className="flex flex-col gap-4">
-				{user.reviews.map((review) => (
-					<Review item={review} key={review.title} />
+				{Object.entries(ratings).map(([title, rating]) => (
+					<Review
+						item={{title, rating}}
+						key={title}
+						onReviewGiven={
+							canGiveReview ? (rating) => addReview({rating, category: title}) : undefined
+						}
+					/>
 				))}
 			</div>
 		</Box>
