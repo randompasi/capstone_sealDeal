@@ -99,9 +99,9 @@ export default function Reviews({user}) {
 		(_) => meanBy(_, (_) => _.averageRating)
 	);
 	const ratings = {
-		"Item condition": 1,
-		Delivery: 1,
-		Friendliness: 1,
+		"Item condition": 3,
+		Delivery: 3,
+		Friendliness: 3,
 		...grouped,
 	};
 	const canGiveReview = !!loggedInUser && loggedInUser.id !== user.id;
