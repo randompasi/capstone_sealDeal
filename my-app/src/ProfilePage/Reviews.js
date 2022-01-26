@@ -8,6 +8,14 @@ import {useCallback, useState} from "react";
 import {useAuth} from "../auth/authContext";
 import {groupBy, mapValues, meanBy} from "lodash";
 
+const starColors = {
+	5: "#FE9996", // red
+	4: "#96fea4", // green
+	3: "#96cffe", // blue
+	2: "#feeb96", // yellow
+	1: "#c5c5c5", // gray
+};
+
 /**
  * @param {{item: ProfilePage.Review, onReviewGiven?: (rating: number) => any}} props
  */
@@ -31,11 +39,12 @@ function Review({item, onReviewGiven}) {
 			<div style={{marginLeft: -10}} onMouseOver={canEdit ? onHover : undefined} key={i}>
 				<i
 					style={{
+						color: starColors[value],
 						transition: `opacity ${value * 50}ms`,
 					}}
 					className={combineClassnames(extraStarClassName, canEdit && "cursor-pointer")}
 				>
-					<StarIcon fontSize={70} className="sd-text-color-pink" />
+					<StarIcon fontSize={70} />
 				</i>
 			</div>
 		);
@@ -90,9 +99,9 @@ export default function Reviews({user}) {
 		(_) => meanBy(_, (_) => _.averageRating)
 	);
 	const ratings = {
-		"Item condition": 1,
-		Delivery: 1,
-		Friendliness: 1,
+		"Item condition": 3,
+		Delivery: 3,
+		Friendliness: 3,
 		...grouped,
 	};
 	const canGiveReview = !!loggedInUser && loggedInUser.id !== user.id;
