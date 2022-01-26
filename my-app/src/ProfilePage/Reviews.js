@@ -4,7 +4,7 @@ import "./Reviews.css";
 import {useResource} from "../utils/hooks";
 import {get, matchers, post} from "../api/api";
 import {TiStarFullOutline as FullStarIcon, TiStarHalfOutline as HalfStarIcon} from "react-icons/ti";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useAuth} from "../auth/authContext";
 import {groupBy, mapValues, meanBy} from "lodash";
 
@@ -21,6 +21,20 @@ const starColors = {
  */
 function Review({item, onReviewGiven}) {
 	const [ratingFromHover, setRatingFromHover] = useState(null);
+
+	// This flag is active for a second after the user has given a new review.
+	const [justGaveReview, setJustGaveReview] = useState(false);
+	useEffect(() => {
+		if (justGaveReview) {
+			const token = setTimeout(() => {
+				setJustGaveReview(false);
+			}, 1000);
+			return () => {
+				clearTimeout(token);
+			};
+		}
+	}, [justGaveReview]);
+
 	const starRating = ratingFromHover || item.rating;
 	const starIconsCount = Math.ceil(starRating);
 	const canEdit = !!onReviewGiven;
@@ -34,13 +48,16 @@ function Review({item, onReviewGiven}) {
 		const extraStarClassName = isOver && (isHoveringSomeStar ? "opacity-10" : "opacity-0");
 
 		const onHover = useCallback(() => setRatingFromHover(value), [value, setRatingFromHover]);
+		const color = starColors[value];
 
 		return (
 			<div style={{marginLeft: -10}} onMouseOver={canEdit ? onHover : undefined} key={i}>
 				<i
 					style={{
-						color: starColors[value],
-						transition: `opacity ${value * 50}ms`,
+						color,
+						// Little glow effect when saving new reviews
+						filter: justGaveReview ? `drop-shadow(0 0 5px ${color})` : undefined,
+						transition: `all ${value * 50}ms`,
 					}}
 					className={combineClassnames(extraStarClassName, canEdit && "cursor-pointer")}
 				>
@@ -56,6 +73,7 @@ function Review({item, onReviewGiven}) {
 			onReviewGiven(ratingFromHover);
 		}
 		setRatingFromHover(null);
+		setJustGaveReview(true);
 	};
 
 	return (
