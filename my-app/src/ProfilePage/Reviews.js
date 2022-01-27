@@ -4,7 +4,7 @@ import "./Reviews.css";
 import {useResource} from "../utils/hooks";
 import {get, matchers, post} from "../api/api";
 import {TiStarFullOutline as FullStarIcon, TiStarHalfOutline as HalfStarIcon} from "react-icons/ti";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useAuth} from "../auth/authContext";
 import {groupBy, mapValues, meanBy} from "lodash";
 
@@ -21,6 +21,20 @@ const starColors = {
  */
 function Review({item, onReviewGiven}) {
 	const [ratingFromHover, setRatingFromHover] = useState(null);
+
+	// This flag is active for a second after the user has given a new review.
+	const [justGaveReview, setJustGaveReview] = useState(false);
+	useEffect(() => {
+		if (justGaveReview) {
+			const token = setTimeout(() => {
+				setJustGaveReview(false);
+			}, 1000);
+			return () => {
+				clearTimeout(token);
+			};
+		}
+	}, [justGaveReview]);
+
 	const starRating = ratingFromHover || item.rating;
 	const starIconsCount = Math.ceil(starRating);
 	const canEdit = !!onReviewGiven;
@@ -34,13 +48,16 @@ function Review({item, onReviewGiven}) {
 		const extraStarClassName = isOver && (isHoveringSomeStar ? "opacity-10" : "opacity-0");
 
 		const onHover = useCallback(() => setRatingFromHover(value), [value, setRatingFromHover]);
+		const color = starColors[value];
 
 		return (
 			<div style={{marginLeft: -10}} onMouseOver={canEdit ? onHover : undefined} key={i}>
 				<i
 					style={{
-						color: starColors[value],
-						transition: `opacity ${value * 50}ms`,
+						color,
+						// Little glow effect when saving new reviews
+						filter: justGaveReview ? `drop-shadow(0 0 5px ${color})` : undefined,
+						transition: `all ${value * 50}ms`,
 					}}
 					className={combineClassnames(extraStarClassName, canEdit && "cursor-pointer")}
 				>
@@ -55,19 +72,29 @@ function Review({item, onReviewGiven}) {
 		if (ratingFromHover && onReviewGiven) {
 			onReviewGiven(ratingFromHover);
 		}
+		setRatingFromHover(null);
+		setJustGaveReview(true);
 	};
 
 	return (
 		<div
 			className="flex flex-col gap-1"
 			onMouseOut={canEdit ? mouseOut : undefined}
-			onClick={canEdit ? onClick : undefined}
+			// pointerUp works with finger dragging better than onClick
+			onPointerUp={canEdit ? onClick : undefined}
 		>
 			<div className="text-sm font-semibold">{item.title}</div>
 			<div className="flex flex-nowrap w-full gap-2">{stars}</div>
 		</div>
 	);
 }
+
+const calculateAverageRatings = (reviews) => {
+	return mapValues(
+		groupBy(reviews, (_) => _.category),
+		(_) => meanBy(_, (_) => _.averageRating)
+	);
+};
 
 /**
  * @param {ProfilePage.ProfilePageProps} props
@@ -83,26 +110,30 @@ export default function Reviews({user}) {
 	const loggedInUser = useAuth().user;
 
 	const addReview = (newReview) => {
-		setAddedReviews([...addedReviews, newReview]);
+		setAddedReviews([
+			...addedReviews,
+			{category: newReview.category, averageRating: newReview.rating},
+		]);
 		post("reviews", {
 			...newReview,
 			toUserId: user.id,
 			fromUserId: loggedInUser.id,
 		});
 	};
+
+	// Combined previously fetched averages and the averages of newly added items
 	const allRatings = (reviewsResource.status === "success" ? reviewsResource.value : []).concat(
-		addedReviews.map((_) => ({category: _.category, averageRating: _.rating}))
+		Object.entries(calculateAverageRatings(addedReviews)).map(([category, averageRating]) => ({
+			category,
+			averageRating,
+		}))
 	);
 
-	const grouped = mapValues(
-		groupBy(allRatings, (_) => _.category),
-		(_) => meanBy(_, (_) => _.averageRating)
-	);
 	const ratings = {
 		"Item condition": 3,
 		Delivery: 3,
 		Friendliness: 3,
-		...grouped,
+		...calculateAverageRatings(allRatings),
 	};
 	const canGiveReview = !!loggedInUser && loggedInUser.id !== user.id;
 
