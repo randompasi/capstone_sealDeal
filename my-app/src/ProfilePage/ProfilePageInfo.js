@@ -94,11 +94,11 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 	return (
 		<div
 			id="page-container"
-			className="flex flex-col items-center"
+			className="flex flex-col items-center h-full"
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div
-				className={`w-full sm-w-10/12 xl:w-8/12 p-8 mt-10 mb-10 ${noPaddingClassName}`}
+				className={`w-full sm-w-10/12 xl:w-8/12 p-8 mt-10 ${noPaddingClassName}`}
 				style={{backgroundColor: "white"}}
 			>
 				<EditableGrid
