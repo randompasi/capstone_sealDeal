@@ -40,8 +40,6 @@ export default function EditableGrid(props) {
 		gridTemplateRows: !dragState.isDragging ? parseGridRowsStyle(gridState) : undefined,
 	};
 
-	console.log("Grid template: \n" + style.gridTemplateAreas);
-
 	return (
 		<div className="w-full seal-editable-grid" style={style}>
 			{gridItems.map((item, i) => (

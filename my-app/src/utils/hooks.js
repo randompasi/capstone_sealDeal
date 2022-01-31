@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 /**
  * @param {string} initialValue
@@ -18,13 +18,20 @@ export function useInput(initialValue) {
 }
 
 /**
+ * @param {boolean} val
+ */
+function toggleBoolean(val) {
+	return !val;
+}
+
+/**
  * @param {boolean} [initialValue] Default: false
  */
 export function useToggle(initialValue) {
 	const [isOpen, setValue] = useState(Boolean(initialValue));
-	const toggle = () => {
-		setValue(!isOpen);
-	};
+	const toggle = useCallback(() => {
+		setValue(toggleBoolean);
+	}, []);
 	return {isOpen, toggle};
 }
 

@@ -1,29 +1,42 @@
-import Modal from "react-modal"; //https://www.npmjs.com/package/react-modal
+import Modal from "../common/components/Modal";
+import {useDropzone} from "react-dropzone";
+import {useCallback} from "react";
+import {MdAddPhotoAlternate as AddPhotoIcon} from "react-icons/md";
+import {combineClassnames} from "../common/utils";
 
 export default function ImageSelectModal({openState, setImage, imageSources, headerText}) {
 	const images = imageSources;
+	const onDrop = useCallback(
+		(/** @type{File[]} */ acceptedFiles) => {
+			if (!acceptedFiles.length) {
+				return;
+			}
+			const reader = new FileReader();
+			reader.onabort = () => console.log("file reading was aborted");
+			reader.onerror = (err) => console.error("file reading has failed", err);
+			reader.onload = () => {
+				openState.toggle();
+				setImage(reader.result);
+			};
+			reader.readAsDataURL(acceptedFiles[0]);
+		},
+		[setImage, openState.toggle]
+	);
+	const {getRootProps, getInputProps} = useDropzone({onDrop});
+	const imageSizeStyle = {
+		height: 125,
+		width: 200,
+	};
+	const imageClassName = "w-100 h-100 border-4 border-gray-700 hover:border-blue-300";
 
 	return (
 		<Modal
-			id="avatar-modal"
+			title={headerText}
+			closeLabel="Cancel"
+			onClose={openState.toggle}
 			isOpen={openState.isOpen}
 			contentLabel="Settings Modal"
-			ariaHideApp={false}
-			style={{
-				overlay: {display: "flex", justifyContent: "center", zIndex: 50},
-				content: {
-					flex: "1",
-					maxWidth: "970px",
-					position: "relative",
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "center",
-					alignItems: "center",
-					height: "95%",
-				},
-			}}
 		>
-			<h1 className="text-3xl">{headerText}</h1>
 			<div className="flex-1 w-full">
 				<div className="grid grid-cols-4 gap-4 w-full p-8">
 					{images.map((src, index) => (
@@ -35,27 +48,20 @@ export default function ImageSelectModal({openState, setImage, imageSources, hea
 								setImage(src);
 							}}
 						>
-							<img
-								className="w-100 h-100 border-4 border-gray-700 hover:border-blue-300"
-								style={{
-									height: 125,
-									width: 200,
-								}}
-								src={src}
-							/>
+							<img style={imageSizeStyle} className={imageClassName} src={src} />
 						</div>
 					))}
+					<div className="h-36 cursor-pointer" title="Add new image">
+						<div
+							{...getRootProps()}
+							style={imageSizeStyle}
+							className={combineClassnames(imageClassName, `flex justify-center items-center`)}
+						>
+							<input {...getInputProps()} />
+							<AddPhotoIcon className="flex-1 text-5xl" />
+						</div>
+					</div>
 				</div>
-			</div>
-			<div className="w-100">
-				<button
-					className="w-32 h-8 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
-					onClick={() => {
-						openState.toggle();
-					}}
-				>
-					Cancel
-				</button>
 			</div>
 		</Modal>
 	);

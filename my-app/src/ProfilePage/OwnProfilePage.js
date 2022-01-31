@@ -58,7 +58,6 @@ export default function OwnProfilePage({controlPremiumModal, controlSettingsModa
 
 		// Save the user's grid to db
 		const {profileGridId} = loggedInUser;
-		console.log(loggedInUser);
 
 		// When we save the grid to DB, persist empty slots as nulls
 		const payload = value.gridState.gridState
