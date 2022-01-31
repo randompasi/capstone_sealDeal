@@ -25,7 +25,7 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 	//Dumb fix for handling none local profile viewing
 	const isPremium = userBase.premium ?? fullProfile.premium;
 	let parsedAvatarUrl;
-	let parsedBgUrl;
+	let bgUrl;
 	if (!isPremium) {
 		//Simple API that generates Avatars based on names, https://eu.ui-avatars.com/
 		//Only requesting with innitials to be extra safe with privacy :P
@@ -36,14 +36,13 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 			fullProfile.lastName.charAt(0);
 
 		//Force none reactive default bg for none premium users
-		parsedBgUrl = makeCssUrl(defaultBackground);
+		bgUrl = defaultBackground;
 	} else {
 		parsedAvatarUrl = userBase.avatarBase64 ?? fullProfile.avatarBase64 ?? defaultAvatarImage;
 
-		parsedBgUrl = makeCssUrl(
-			userBase.backgroundBase64 ?? fullProfile.backgroundBase64 ?? defaultBackground
-		);
+		bgUrl = userBase.backgroundBase64 ?? fullProfile.backgroundBase64 ?? defaultBackground;
 	}
+	const parsedBgUrl = makeCssUrl(bgUrl);
 
 	/** @type {ProfilePage.UserInfo} */
 	const user = {
@@ -87,29 +86,33 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 
 	const canEditGrid = isOwnProfilePage && user.premium;
 
-	// In our own profile page there's "empty slot" rows at the top and bottom of the grid
-	// which already adds some "padding", so we'll disable extra css padding there.
-	const noPaddingClassName = isOwnProfilePage ? "pt-0 pb-0" : "";
-	const wrapperClassName = `w-full sm-w-10/12 xl:w-8/12 p-4 sm:p-8 mt-10 ${noPaddingClassName}`;
+	const wrapperClassName = `w-full sm-w-10/12 xl:w-8/12`;
 
 	return (
-		<div
-			id="page-container"
-			className="h-full"
-			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
-		>
+		<div id="page-container" className="h-full min-h-screen pt-10">
+			<div
+				className="flex flex-col h-screen w-screen fixed top-0 left-0 z-0 pointer-events-none"
+				style={{
+					backgroundImage: parsedBgUrl,
+					backgroundSize: "cover",
+					backgroundPosition: "center",
+				}}
+			></div>
 			<div className="relative w-full m-auto flex flex-col items-center">
-				<div className={wrapperClassName + ` absolute h-full w-full top-0 overflow-hidden`}>
+				<div
+					className={wrapperClassName + ` absolute h-full w-full top-0`}
+					style={{clip: "rect(0, auto, auto, 0)"}}
+				>
 					<img
-						src={userBase.backgroundBase64 ?? fullProfile.backgroundBase64 ?? defaultBackground}
-						className="w-screen h-screen absolute top-0 left-0 object-cover object-center"
+						src={bgUrl}
+						className="w-screen h-screen fixed top-0 left-0 object-cover object-center"
 						style={{
 							opacity: 0.9,
-							filter: "brightness(1.5) blur(3px)",
+							filter: "brightness(1.5) blur(4px)",
 						}}
 					/>
 				</div>
-				<div className={wrapperClassName + ` relative`}>
+				<div className={wrapperClassName + ` p-2 sm:p-8 pt-0 pb-0`}>
 					<div>
 						<EditableGrid
 							canEdit={canEditGrid}

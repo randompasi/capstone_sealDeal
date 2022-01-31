@@ -58,7 +58,6 @@ export default function OwnProfilePage({controlPremiumModal, controlSettingsModa
 
 		// Save the user's grid to db
 		const {profileGridId} = loggedInUser;
-		console.log(loggedInUser);
 
 		// When we save the grid to DB, persist empty slots as nulls
 		const payload = value.gridState.gridState
@@ -88,7 +87,7 @@ export default function OwnProfilePage({controlPremiumModal, controlSettingsModa
 	};
 
 	return (
-		<div className="w-full h-screen">
+		<div className="w-full">
 			<DndProvider backend={DnDHTML5Backend}>
 				<ProfilePageInfo user={user} gridStateProps={gridStateProps} />
 				<PremiumModal control={controlPremiumModal} />

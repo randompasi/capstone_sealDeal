@@ -4,14 +4,18 @@ import {CgLogOut} from "react-icons/cg"; //react-icons.github.io/react-icons
 import {IoSettingsOutline} from "react-icons/io5";
 import logoImage from "./assets/logo.png";
 import Search from "./Search/Search";
+import {useLocation} from "react-router-dom";
 
 export default function Navbar({setSettings, setPremiumModal}) {
 	const {user, signout} = useAuth();
+	const location = useLocation();
 	if (!user) {
 		return null;
 	}
+	const isOwnProfilePage = location.pathname === "/";
+
 	return (
-		<header>
+		<header className="z-10 relative">
 			<Box className="pt-2 pb-2" title="">
 				<div className="flex items-center justify-between flex-wrap text-xl">
 					<div
@@ -26,23 +30,27 @@ export default function Navbar({setSettings, setPremiumModal}) {
 						<Search />
 					</div>
 					<div className="flex flex-row items-center">
-						<p
-							onClick={() => {
-								setPremiumModal(true);
-							}}
-							className="mr-4 cursor-pointer hover:underline hover:underline-offset-4"
-						>
-							<b>Premium</b>
-						</p>
-						<button
-							style={{borderColor: "white"}}
-							className="flex items-center border-r-2 border-solid"
-							onClick={() => {
-								setSettings(true);
-							}}
-						>
-							<IoSettingsOutline className="mr-4 ml-4 text-3xl"></IoSettingsOutline>
-						</button>
+						{isOwnProfilePage && (
+							<>
+								<p
+									onClick={() => {
+										setPremiumModal(true);
+									}}
+									className="mr-4 cursor-pointer hover:underline hover:underline-offset-4"
+								>
+									<b>Premium</b>
+								</p>
+								<button
+									style={{borderColor: "white"}}
+									className="flex items-center border-r-2 border-solid"
+									onClick={() => {
+										setSettings(true);
+									}}
+								>
+									<IoSettingsOutline className="mr-4 ml-4 text-3xl"></IoSettingsOutline>
+								</button>
+							</>
+						)}
 						<NavItem
 							className="m-4 flex justify-self-end"
 							link="/"
