@@ -1,6 +1,29 @@
 .seal-editable-grid {
+	display: grid;
+	gap: 1rem;
 	grid-template-columns: 1fr 1fr;
 	grid-auto-rows: minmax(50px, auto);
+}
+
+@media (max-width: 790px) {
+	.seal-editable-grid {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		padding-top: 1rem;
+		gap: 0;
+		grid-template-columns: none;
+		grid-auto-rows: none;
+	}
+	.seal-editable-grid-item {
+		margin: 0;
+		margin-bottom: 1rem;
+		height: auto;
+		max-height: none;
+	}
+	.seal-editable-grid-empty, .seal-editable-grid-btn, .seal-editable-grid-border {
+		display: none;
+	}
 }
 
 .seal-editable-grid-btn {

@@ -2,7 +2,6 @@
  * @param {ProfilePage.AvatarProps} props
  */
 export default function Avatar({url}) {
-	const size = 100;
 	const makeCssUrl = (url) => `url('${url}')`;
 
 	return (
@@ -12,10 +11,10 @@ export default function Avatar({url}) {
 				className="mr-3"
 				style={{
 					overflow: "hidden",
-					height: size,
-					width: size,
-					borderRadius: 50,
+					width: "100%",
+					borderRadius: "50%",
 					border: "2px solid #ccc",
+					aspectRatio: "1 / 1",
 					backgroundImage: makeCssUrl(url),
 					backgroundRepeat: "no-repeat",
 					backgroundSize: "cover",

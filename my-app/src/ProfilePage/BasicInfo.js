@@ -13,27 +13,27 @@ export default function BasicInfo({user}) {
 
 	return (
 		<Box title="">
-			<div className="grid grid-cols-5 w-full">
-				<div>
+			<div className="grid grid-cols-3 md:grid-cols-5 w-full flex-wrap">
+				<div className="m-2 md:m-0">
 					<Avatar url={user.avatarUrl} />
 				</div>
-				<div className="col-span-2 h-2/3 mt-2 w-full">
+				<div className="col-span-2 mt-2 w-full text-center">
 					<SectionTitle>{user.name + ", " + user.city}</SectionTitle>
 
-					<div className="flex flex-row w-1/4 ">
-						<div className="flex flex-col m-4 ml-3 justify-center items-center">
+					<div className="grid grid-cols-2 mt-2 text-center">
+						<div className="flex flex-col justify-center items-center">
 							<strong>10</strong>
 							<span className="text-sm">Mutuals</span>
 						</div>
-						<div className="flex flex-col m-4 justify-center items-center">
+						<div className="flex flex-col justify-center items-center">
 							<strong>24</strong>
 							<span className="text-sm">Sales</span>
 						</div>
 					</div>
 				</div>
-				<div className="col-span-2">
-					<div className="h-1 flex flex-col items-end">
-						<div className="flex flex-col items-center">
+				<div className="col-span-3 mt-8 md:mt-2 md:col-span-2">
+					<div className="flex flex-col items-center">
+						<div className="flex flex-col items-center text-center">
 							{getSellerStatus(userC.premium)}
 							<FollowerList user={user} />
 						</div>
