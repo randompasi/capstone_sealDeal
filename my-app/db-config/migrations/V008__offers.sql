@@ -7,7 +7,7 @@ create table api.offers (
   "toUserId" int not null references api.users (id),
   "fromUserId" int not null references api.users (id),
 	"productName" text not null,
-	"productPrice" NUMERIC(5,2) not null,
+	"productPrice" integer not null,
   "status" offer_status not null default 'pending',
 	"createdAt" timestamptz not null default now()
 );

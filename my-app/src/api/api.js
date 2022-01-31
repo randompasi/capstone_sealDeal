@@ -101,6 +101,33 @@ export async function patchUser(authContext, userPatch) {
 	authContext.setCachedUser({...user, ...userPatch});
 }
 
+export function createOffer(offerPayload) {
+	post("offers", offerPayload);
+}
+
+export async function fetchSentOffers(userId) {
+	const offers = await get("offers", {
+		fromUserId: "eq." + userId,
+		order: "status.asc,createdAt.desc",
+	});
+	return offers;
+}
+
+export async function fetchReceivedOffers(userId) {
+	const offers = await get("offers", {
+		toUserId: "eq." + userId,
+		order: "status.asc,createdAt.desc",
+	});
+	return offers;
+}
+
+export async function updateOfferStatus(userId, statusText) {
+	if (!["pending", "accepted", "rejected"].includes(statusText)) {
+		throw new Error(`Offer status: Gave invalid status code - ${statusText}`);
+	}
+	return patch("offers", userId, {status: statusText});
+}
+
 // eslint-disable-next-line no-unused-vars
 const userType = {
 	id: 0,

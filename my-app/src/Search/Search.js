@@ -24,7 +24,7 @@ function DebouncedInput({onChange, forwardedRef}) {
 	);
 }
 
-export default function Search() {
+export default function Search({onClick}) {
 	const usersResource = useResource(async () => {
 		const usersMap = await api.fetchAllUsers();
 		return Array.from(usersMap.values(), (user) => {
@@ -41,6 +41,15 @@ export default function Search() {
 		usersResource.status === "success" && isOpen
 			? usersResource.value.filter((user) => user.searchTerm.includes(searchValue.toLowerCase()))
 			: [];
+
+	//Quick fix to reuse the component by overriding search links if an onClick function is given
+	//The search passes the selected user as a default param for the onClick function
+	let overrideLink = false;
+	if (typeof onClick !== "undefined" && onClick !== null) {
+		overrideLink = true;
+	}
+	console.log(overrideLink);
+	console.log(searchRef.current);
 
 	return (
 		<div>
@@ -69,7 +78,18 @@ export default function Search() {
 						<ul className="divide-y-2 divide-gray-100">
 							{filteredUsers.map(({user}) => (
 								<li key={user.id} className="p-3">
-									<a href={`/user-profile/${user.id}`}>
+									<a
+										href={overrideLink ? "#" : `/user-profile/${user.id}`}
+										onClick={
+											overrideLink
+												? () => {
+														onClick(user);
+														setSearch(0);
+														searchRef.current.value = "";
+												  }
+												: null
+										}
+									>
 										{user.firstName} {user.lastName}
 									</a>
 								</li>
