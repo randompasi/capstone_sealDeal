@@ -15,7 +15,7 @@ export default function Navbar({setSettings, setPremiumModal}) {
 	const isOwnProfilePage = location.pathname === "/";
 
 	return (
-		<header>
+		<header className="z-10 relative">
 			<Box className="pt-2 pb-2" title="">
 				<div className="flex items-center justify-between flex-wrap text-xl">
 					<div
