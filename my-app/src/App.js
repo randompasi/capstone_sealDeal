@@ -4,6 +4,7 @@ import {ProvideAuth, useAuth} from "./auth/authContext";
 import LoginPage from "./LoginPage/LoginPage";
 import Navbar from "./Navbar";
 import {useState} from "react";
+import {BrowserRouter as Router} from "react-router-dom";
 
 function RequireLogin() {
 	const authContext = useAuth();
@@ -16,18 +17,20 @@ function RequireLogin() {
 	}
 
 	return (
-		<div className="text-white w-full">
-			<Navbar setSettings={setSettings} setPremiumModal={setPremiumModal} />
-			<main className="flex-auto bg-cover p-0 m-0 flex">
-				<SealdealRoutes
-					settings={settings}
-					setSettings={setSettings}
-					showPremiumModal={showPremiumModal}
-					setPremiumModal={setPremiumModal}
-				/>
-			</main>
-			<footer className="w-full h-24 bg-gray-700"></footer>
-		</div>
+		<Router>
+			<div className="text-white w-full">
+				<Navbar setSettings={setSettings} setPremiumModal={setPremiumModal} />
+				<main className="flex-auto bg-cover p-0 m-0 flex">
+					<SealdealRoutes
+						settings={settings}
+						setSettings={setSettings}
+						showPremiumModal={showPremiumModal}
+						setPremiumModal={setPremiumModal}
+					/>
+				</main>
+				<footer className="w-full h-24 bg-gray-700"></footer>
+			</div>
+		</Router>
 	);
 }
 
