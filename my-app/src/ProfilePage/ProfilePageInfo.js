@@ -98,8 +98,8 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div
-				className={`w-full sm-w-10/12 xl:w-8/12 p-8 mt-10 ${noPaddingClassName}`}
-				style={{backgroundColor: "white"}}
+				className={`w-full sm-w-10/12 xl:w-8/12 p-4 sm:p-8 mt-10 ${noPaddingClassName}`}
+				style={{backgroundColor: "white", maxWidth: 1000}}
 			>
 				<EditableGrid
 					canEdit={canEditGrid}

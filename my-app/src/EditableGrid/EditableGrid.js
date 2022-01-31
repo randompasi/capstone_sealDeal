@@ -24,7 +24,7 @@ export default function EditableGrid(props) {
 	console.log("Grid template: \n" + style.gridTemplateAreas);
 
 	return (
-		<div className="grid gap-4 w-full seal-editable-grid" style={style}>
+		<div className="w-full seal-editable-grid" style={style}>
 			{gridItems.map((item, i) => (
 				<EditableGridItem
 					key={item.toString()}
