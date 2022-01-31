@@ -1,8 +1,21 @@
 import {findIndex, findLastIndex, times} from "lodash";
 import {useCallback} from "react";
+import {useDrop} from "react-dnd";
 import "./EditableGrid.css";
 import {EditableGridItem} from "./EditableGridItem";
-import {cloneGridState, getAllGridItems, isEmptySlot} from "./editableGridUtils";
+import {
+	cloneGridState,
+	getAllGridItems,
+	GRID_CARD_DND_TYPE,
+	isEmptyRow,
+	isEmptySlot,
+} from "./editableGridUtils";
+
+function collectDropState(monitor) {
+	return {
+		isDragging: monitor.canDrop(),
+	};
+}
 
 /**
  * @param {EditableGrid.EditableGridProps} props
@@ -16,9 +29,15 @@ export default function EditableGrid(props) {
 		setGridState,
 	]);
 
+	const [dragState] = useDrop(() => ({
+		accept: GRID_CARD_DND_TYPE,
+		collect: collectDropState,
+	}));
+
 	/** @type {Record<string, string>} */
 	const style = {
 		gridTemplateAreas: parseGridTemplateAreas(gridState),
+		gridTemplateRows: !dragState.isDragging ? parseGridRowsStyle(gridState) : undefined,
 	};
 
 	console.log("Grid template: \n" + style.gridTemplateAreas);
@@ -46,6 +65,14 @@ export default function EditableGrid(props) {
 function parseGridTemplateAreas(gridState) {
 	const renderSlot = (slot) => slot.toString();
 	return gridState.map((state) => `"${renderSlot(state.a)} ${renderSlot(state.b)}"`).join("\n");
+}
+
+/**
+ * @param {EditableGrid.GridModel} gridState
+ * @returns {string} CSS string that can be used for value to grid-rows rule
+ */
+function parseGridRowsStyle(gridState) {
+	return gridState.map((row) => (isEmptyRow(row) ? "0px" : "minmax(100px, auto)")).join(" ");
 }
 
 /**

@@ -34,7 +34,10 @@ export function EditableGridItem(props) {
 				newState = replaceGridStateItems(newState, newItem, null);
 			}
 			newState = replaceGridStateItems(newState, currentItem, newItem);
-			props.gridProps.gridStateProps.setGridState(newState);
+			const wasDroppedSomewhere = newState.some((_) => _.a === newItem || _.b === newItem);
+			if (wasDroppedSomewhere) {
+				props.gridProps.gridStateProps.setGridState(newState);
+			}
 		},
 		canDrop() {
 			return true;

@@ -31,7 +31,7 @@ export default function ViewUserProfile() {
 
 	return (
 		<DndProvider backend={DnDHTML5Backend}>
-			<div className="h-screen w-full">
+			<div className="w-full">
 				<ProfilePage user={{id: userId}} gridStateProps={gridStateProps} />
 			</div>
 		</DndProvider>

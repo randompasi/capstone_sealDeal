@@ -87,15 +87,12 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 
 	const canEditGrid = isOwnProfilePage && user.premium;
 
-	// In our own profile page there's "empty slot" rows at the top and bottom of the grid
-	// which already adds some "padding", so we'll disable extra css padding there.
-	const noPaddingClassName = isOwnProfilePage ? "pt-0 pb-0" : "";
-	const wrapperClassName = `w-full sm-w-10/12 xl:w-8/12 p-4 sm:p-8 mt-10 ${noPaddingClassName}`;
+	const wrapperClassName = `w-full sm-w-10/12 xl:w-8/12`;
 
 	return (
 		<div
 			id="page-container"
-			className="h-full"
+			className="h-full min-h-screen pt-10"
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div className="relative w-full m-auto flex flex-col items-center">
@@ -109,7 +106,7 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 						}}
 					/>
 				</div>
-				<div className={wrapperClassName + ` relative`}>
+				<div className={wrapperClassName + ` p-2 sm:p-8 pt-0 pb-0`}>
 					<div>
 						<EditableGrid
 							canEdit={canEditGrid}
