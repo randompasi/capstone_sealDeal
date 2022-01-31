@@ -90,23 +90,35 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 	// In our own profile page there's "empty slot" rows at the top and bottom of the grid
 	// which already adds some "padding", so we'll disable extra css padding there.
 	const noPaddingClassName = isOwnProfilePage ? "pt-0 pb-0" : "";
+	const wrapperClassName = `w-full sm-w-10/12 xl:w-8/12 p-4 sm:p-8 mt-10 ${noPaddingClassName}`;
 
 	return (
 		<div
 			id="page-container"
-			className="flex flex-col items-center h-full"
+			className="h-full"
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
-			<div
-				className={`w-full sm-w-10/12 xl:w-8/12 p-4 sm:p-8 mt-10 ${noPaddingClassName}`}
-				style={{backgroundColor: "white", maxWidth: 1000}}
-			>
-				<EditableGrid
-					canEdit={canEditGrid}
-					user={user}
-					components={gridComponents}
-					gridStateProps={gridStateProps}
-				/>
+			<div className="relative w-full m-auto flex flex-col items-center">
+				<div className={wrapperClassName + ` absolute h-full w-full top-0 overflow-hidden`}>
+					<img
+						src={userBase.backgroundBase64 ?? fullProfile.backgroundBase64 ?? defaultBackground}
+						className="w-screen h-screen absolute top-0 left-0 object-cover object-center"
+						style={{
+							opacity: 0.9,
+							filter: "brightness(1.5) blur(3px)",
+						}}
+					/>
+				</div>
+				<div className={wrapperClassName + ` relative`}>
+					<div>
+						<EditableGrid
+							canEdit={canEditGrid}
+							user={user}
+							components={gridComponents}
+							gridStateProps={gridStateProps}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

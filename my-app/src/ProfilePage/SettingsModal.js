@@ -63,7 +63,7 @@ export default function SettingsModal({
 				contentLabel="Example Modal"
 				ariaHideApp={false}
 				style={{
-					overlay: {display: "flex", justifyContent: "center", zIndex: 20},
+					overlay: {display: "flex", justifyContent: "center", zIndex: 50},
 					content: {
 						flex: "1",
 						position: "relative",

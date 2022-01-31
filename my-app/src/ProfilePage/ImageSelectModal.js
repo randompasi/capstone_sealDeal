@@ -10,7 +10,7 @@ export default function ImageSelectModal({openState, setImage, imageSources, hea
 			contentLabel="Settings Modal"
 			ariaHideApp={false}
 			style={{
-				overlay: {display: "flex", justifyContent: "center"},
+				overlay: {display: "flex", justifyContent: "center", zIndex: 50},
 				content: {
 					flex: "1",
 					maxWidth: "970px",
