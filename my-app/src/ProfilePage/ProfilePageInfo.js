@@ -5,6 +5,7 @@ import {makeCssUrl} from "../common/utils";
 import EditableGrid from "../EditableGrid/EditableGrid";
 import gridComponents from "./gridComponents";
 import {useAuth} from "../auth/authContext";
+import SealMascot from "./SealMascot/SealMascot";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
@@ -114,6 +115,9 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 				</div>
 				<div className={wrapperClassName + ` p-2 sm:p-8 pt-0 pb-0 z-10`}>
 					<div>
+						<div>
+							<SealMascot />
+						</div>
 						<EditableGrid
 							canEdit={canEditGrid}
 							user={user}
