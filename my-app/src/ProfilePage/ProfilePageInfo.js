@@ -105,14 +105,14 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 				>
 					<img
 						src={bgUrl}
-						className="w-screen h-screen fixed top-0 left-0 object-cover object-center"
+						className="w-screen h-screen fixed top-0 left-0 object-cover object-center z-0 pointer-events-none"
 						style={{
 							opacity: 0.9,
 							filter: "brightness(1.5) blur(4px)",
 						}}
 					/>
 				</div>
-				<div className={wrapperClassName + ` p-2 sm:p-8 pt-0 pb-0`}>
+				<div className={wrapperClassName + ` p-2 sm:p-8 pt-0 pb-0 z-10`}>
 					<div>
 						<EditableGrid
 							canEdit={canEditGrid}
