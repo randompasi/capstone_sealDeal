@@ -5,6 +5,7 @@ import {makeCssUrl} from "../common/utils";
 import EditableGrid from "../EditableGrid/EditableGrid";
 import gridComponents from "./gridComponents";
 import {useAuth} from "../auth/authContext";
+import FeedbackDialog from "../FeedbackDialog/FeedbackDialog";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
@@ -90,6 +91,7 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 
 	return (
 		<div id="page-container" className="h-full min-h-screen pt-10">
+			<FeedbackDialog />
 			<div
 				className="flex flex-col h-screen w-screen fixed top-0 left-0 z-0 pointer-events-none"
 				style={{
