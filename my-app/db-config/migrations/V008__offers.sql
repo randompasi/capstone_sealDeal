@@ -1,5 +1,3 @@
-drop table if exists api.offers;
-
 create type offer_status as enum ('accepted', 'pending', 'rejected');
 
 create table api.offers (
