@@ -1,6 +1,7 @@
 import Box from "../Box";
 
-function History() {
+function History(props) {
+	console.log(props);
 	const historyLists = [
 		{
 			id: 0,

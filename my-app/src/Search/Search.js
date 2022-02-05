@@ -24,7 +24,7 @@ function DebouncedInput({onChange, forwardedRef}) {
 	);
 }
 
-export default function Search({onClick}) {
+export default function Search({onClick, position}) {
 	const usersResource = useResource(async () => {
 		const usersMap = await api.fetchAllUsers();
 		return Array.from(usersMap.values(), (user) => {
@@ -48,8 +48,13 @@ export default function Search({onClick}) {
 	if (typeof onClick !== "undefined" && onClick !== null) {
 		overrideLink = true;
 	}
-	console.log(overrideLink);
-	console.log(searchRef.current);
+
+	let overrideX,
+		overrideY = null;
+	if (position) {
+		overrideX = position.x;
+		overrideY = position.y;
+	}
 
 	return (
 		<div>
@@ -61,8 +66,8 @@ export default function Search({onClick}) {
 					style={{
 						overlay: {
 							position: "absolute",
-							top: searchRef.current.offsetTop + searchRef.current.offsetHeight,
-							left: searchRef.current.offsetLeft,
+							top: overrideY ?? searchRef.current.offsetTop + searchRef.current.offsetHeight,
+							left: overrideX ?? searchRef.current.offsetLeft,
 							maxWidth: 400,
 							height: 300,
 							backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -84,8 +89,6 @@ export default function Search({onClick}) {
 											overrideLink
 												? () => {
 														onClick(user);
-														setSearch(0);
-														searchRef.current.value = "";
 												  }
 												: null
 										}
