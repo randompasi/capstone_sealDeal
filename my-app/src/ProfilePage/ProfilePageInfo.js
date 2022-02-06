@@ -101,7 +101,7 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 			<div className="relative w-full m-auto flex flex-col items-center">
 				<div
 					className={wrapperClassName + ` absolute h-full w-full top-0`}
-					style={{clip: "rect(0, auto, auto, 0)"}}
+					style={{clip: "rect(0, auto, auto, 0)", maxWidth: "980px"}}
 				>
 					<img
 						src={bgUrl}
@@ -112,7 +112,10 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 						}}
 					/>
 				</div>
-				<div className={wrapperClassName + ` p-2 sm:p-8 pt-0 pb-0 z-10`}>
+				<div
+					className={wrapperClassName + ` p-2 sm:p-8 pt-0 pb-0 z-10`}
+					style={{maxWidth: "980px"}}
+				>
 					<div>
 						<EditableGrid
 							canEdit={canEditGrid}

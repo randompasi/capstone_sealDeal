@@ -87,7 +87,7 @@ export default function OwnProfilePage({controlPremiumModal, controlSettingsModa
 	};
 
 	return (
-		<div className="w-full">
+		<div className="w-full min-h-screen">
 			<DndProvider backend={DnDHTML5Backend}>
 				<ProfilePageInfo user={user} gridStateProps={gridStateProps} />
 				<PremiumModal control={controlPremiumModal} />

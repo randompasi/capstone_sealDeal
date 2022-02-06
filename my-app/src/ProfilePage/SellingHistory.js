@@ -1,42 +1,53 @@
 import Box from "../Box";
+import Offer from "../OffersPage/Offer";
 
 function History() {
 	const historyLists = [
 		{
 			id: 0,
-			content: "Bicycle",
-			date: "22.11.2021",
-			button: "User Review",
+			productName: "Bicycle",
+			productPrice: 70,
+			status: "accepted",
 		},
 		{
 			id: 1,
-			content: "Car Tires",
-			date: "12.11.2021",
-			button: "User Review",
+			productName: "Car Tires",
+			productPrice: 150,
+			status: "accepted",
 		},
 		{
 			id: 2,
-			content: "Skates",
-			date: "09.10.2021",
-			button: "User Review",
+			productName: "Skates",
+			productPrice: 60,
+			status: "accepted",
 		},
 		{
 			id: 3,
-			content: "Helmet",
-			date: "08.10.2021",
-			button: "User Review",
+			productName: "Helmet",
+			productPrice: 55,
+			status: "accepted",
+		},
+		{
+			id: 4,
+			productName: "Snowboard",
+			productPrice: 200,
+			status: "accepted",
+		},
+		{
+			id: 5,
+			productName: "Used Laptop",
+			productPrice: 80,
+			status: "accepted",
 		},
 	];
 
-	const listAll = historyLists.map((historyList, index) => (
-		<ul key={index}>
-			<li key={historyList.id} className="flex flex-col justify-between mb-2">
-				<h1>{historyList.content + " - " + historyList.date}</h1>
-				<a className="underline underline-offset-1" href={""}>
-					{historyList.button}
-				</a>
-			</li>
-		</ul>
+	const listAll = historyLists.map((item) => (
+		<Offer
+			className="mt-4"
+			key={item.id}
+			offer={item}
+			click={() => (window.location.href = "/offers/")}
+		></Offer>
 	));
 
 	return <div className="w-full">{listAll}</div>;
@@ -45,7 +56,7 @@ function History() {
 export default function SellingHistory() {
 	return (
 		<Box title="Selling history">
-			<div className="w-full">
+			<div className="w-full pt-1">
 				<History />
 			</div>
 		</Box>

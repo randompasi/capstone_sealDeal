@@ -74,7 +74,7 @@ export default function PremiumModal({control}) {
 						flexDirection: "column",
 						justifyContent: "center",
 						alignItems: "center",
-						height: "40%",
+						maxHeight: "500px",
 					},
 				}}
 			>

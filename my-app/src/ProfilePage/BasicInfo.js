@@ -10,7 +10,6 @@ import {useAuth} from "../auth/authContext";
 export default function BasicInfo({user}) {
 	const authContext = useAuth();
 	const userC = authContext.user;
-
 	return (
 		<Box title="">
 			<div className="grid grid-cols-3 md:grid-cols-5 w-full flex-wrap">

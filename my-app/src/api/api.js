@@ -101,6 +101,33 @@ export async function patchUser(authContext, userPatch) {
 	authContext.setCachedUser({...user, ...userPatch});
 }
 
+export function createOffer(offerPayload) {
+	post("offers", offerPayload);
+}
+
+export async function fetchSentOffers(userId) {
+	const offers = await get("offers", {
+		fromUserId: "eq." + userId,
+		order: "status.asc,createdAt.desc",
+	});
+	return offers;
+}
+
+export async function fetchReceivedOffers(userId) {
+	const offers = await get("offers", {
+		toUserId: "eq." + userId,
+		order: "status.asc,createdAt.desc",
+	});
+	return offers;
+}
+
+export async function updateOfferStatus(id, statusText) {
+	if (!["pending", "accepted", "rejected"].includes(statusText)) {
+		throw new Error(`Offer status: Gave invalid status code - ${statusText}`);
+	}
+	return patch("offers", id, {status: statusText});
+}
+
 // eslint-disable-next-line no-unused-vars
 const userType = {
 	id: 0,
@@ -141,6 +168,22 @@ export async function fetchAllUsers() {
 	}
 	return usersMap;
 }
+
+export async function getFullProfileById(id) {
+	const user = await get("users", {
+		id: "eq." + id,
+	});
+	return user[0];
+}
+
+export const getUserById = (id) => {
+	let found = null;
+	Array.from(usersMap.values()).some(function (user) {
+		found = user;
+		return user.id == id; //Break on found
+	});
+	return found;
+};
 
 export const getUserByName = (usersMap, firstName, lastName) =>
 	usersMap.get(usersMapKey(firstName, lastName));
