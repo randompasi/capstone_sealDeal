@@ -90,6 +90,7 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 
 	return (
 		<div id="page-container" className="h-full min-h-screen pt-10">
+			<Feedback />
 			<div
 				className="flex flex-col h-screen w-screen fixed top-0 left-0 z-0 pointer-events-none"
 				style={{
