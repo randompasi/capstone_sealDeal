@@ -7,7 +7,7 @@ export default function SealdealRoutes({settings, setSettings, showPremiumModal,
 	return (
 		<Routes>
 			<Route
-				path="/"
+				path="/dashboard/"
 				element={
 					<OwnProfilePage
 						controlPremiumModal={{
@@ -22,7 +22,7 @@ export default function SealdealRoutes({settings, setSettings, showPremiumModal,
 				}
 			/>
 			<Route path="/user-profile/:id" element={<ViewUserProfile />} />
-			<Route path="/offers/" element={<OffersView />} />
+			<Route path="/" element={<OffersView />} />
 		</Routes>
 	);
 }

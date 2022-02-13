@@ -22,3 +22,15 @@ html, body , #root {
     z-index: 1000;
 }
 
+.react-tabs__tab.react-tabs__tab--selected {
+	background-color: rgba(55, 65, 81);
+	font-weight: 600;
+	color: white;
+}
+
+.react-tabs__tab {
+	background-color: rgba(55, 65, 81);
+	color: white;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
