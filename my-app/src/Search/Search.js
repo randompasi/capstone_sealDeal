@@ -4,7 +4,7 @@ import * as api from "../api/api";
 import Modal from "react-modal";
 import debounce from "lodash/debounce";
 
-function DebouncedInput({onChange, forwardedRef}) {
+function DebouncedInput({onChange, forwardedRef, bgColor}) {
 	const inputState = useInput("");
 	const changeCallback = useCallback(
 		debounce((...args) => onChange(...args), 300),
@@ -15,7 +15,7 @@ function DebouncedInput({onChange, forwardedRef}) {
 	}, [inputState, changeCallback]);
 	return (
 		<input
-			className="rounded border-gray-300 border bg-transparent p-2"
+			className={"rounded border-gray-300 border p-2 " + "bg-" + bgColor}
 			type="search"
 			placeholder="Search user"
 			{...inputState}
@@ -24,7 +24,7 @@ function DebouncedInput({onChange, forwardedRef}) {
 	);
 }
 
-export default function Search({onClick, position}) {
+export default function Search({onClick, position, inputColor}) {
 	const usersResource = useResource(async () => {
 		const usersMap = await api.fetchAllUsers();
 		return Array.from(usersMap.values(), (user) => {
@@ -56,9 +56,14 @@ export default function Search({onClick, position}) {
 		overrideY = position.y;
 	}
 
+	let overrideInputColor = "transparent";
+	if(inputColor) {
+		overrideInputColor = inputColor;
+	}
+
 	return (
 		<div>
-			<DebouncedInput forwardedRef={searchRef} onChange={setSearch} />
+			<DebouncedInput forwardedRef={searchRef} onChange={setSearch} bgColor={overrideInputColor}/>
 			{searchRef.current && (
 				<Modal
 					isOpen={isOpen}

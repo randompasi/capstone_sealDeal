@@ -12,7 +12,8 @@ export default function Navbar({setSettings, setPremiumModal}) {
 	if (!user) {
 		return null;
 	}
-	const isOwnProfilePage = location.pathname === "/";
+	const isOwnProfilePage = location.pathname === "/dashboard/";
+	const isPublicProfile = location.pathname === "/";
 
 	return (
 		<header className="z-10 relative">
@@ -49,6 +50,18 @@ export default function Navbar({setSettings, setPremiumModal}) {
 								>
 									<IoSettingsOutline className="mr-4 ml-4 text-3xl"></IoSettingsOutline>
 								</button>
+							</>
+						)}
+						{isPublicProfile && (
+							<>
+								<p
+									onClick={() => {
+										window.open("/dashboard/", "_blank");
+									}}
+									className="mr-4 cursor-pointer hover:underline hover:underline-offset-4"
+								>
+									<b>Dashboard</b>
+								</p>
 							</>
 						)}
 						<NavItem

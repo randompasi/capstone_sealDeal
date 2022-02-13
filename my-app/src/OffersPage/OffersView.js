@@ -5,8 +5,10 @@ import defaultBackground from "../assets/BackgroundImages/bg_default.jpg";
 import Offer from "./Offer";
 import OfferModal from "./OfferModal";
 import Search from "../Search/Search";
-import Modal from "react-modal";
 import {useState} from "react";
+import BasicInfo from "../ProfilePage/BasicInfo";
+import {Tab, Tabs, TabList, TabPanel} from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 import {
 	createOffer,
 	fetchSentOffers,
@@ -21,7 +23,6 @@ export default function OffersView() {
 	const [userId, setUserId] = useState();
 	const [itemName, setItemName] = useState();
 	const [itemPrice, setItemPrice] = useState();
-	const [showOfferCreationModal, setShowOfferCreationModal] = useState(false);
 	const [showOfferModal, setShowOfferModal] = useState(false);
 	const [offerToShow, setOfferToShow] = useState(false);
 	const [userToShow, setUserToShow] = useState();
@@ -81,6 +82,55 @@ export default function OffersView() {
 		sentOffers.splice(index, 0, parsedOffer);
 
 		return true;
+	}
+
+	function parseProfileUser() {
+		let avatar = loggedInUser.avatarBase64;
+		if (!loggedInUser.premium || !avatar) {
+			avatar =
+				"https://eu.ui-avatars.com/api/?name=" +
+				loggedInUser.firstName.charAt(0) +
+				"+" +
+				loggedInUser.lastName.charAt(0);
+		}
+		return {
+			id: loggedInUser.id,
+			avatarUrl: avatar,
+			name: `${loggedInUser.firstName} ${loggedInUser.lastName}`,
+			bday: "22.10.1987",
+			city: "Turku",
+			followers: loggedInUser.followers,
+			premium: loggedInUser.premium,
+			achievements: [
+				//Note: The description could eventually be hardcoded to the icon type
+				//Doesn't make sense currently since we only have two icons
+				{
+					text: "Seller No. 1",
+					description: "This trophy was awarded to the number 1 seller of the month!",
+					iconType: "trophy",
+				},
+				{
+					text: "Top 100",
+					description: "This trophy was awarded to the top 100 sellers this month!",
+					iconType: "trophy",
+				},
+				{
+					text: "Seal Approved",
+					description: "This seller is recognized as trustworthy by the Seal Team!",
+					iconType: "trophy",
+				},
+				{
+					text: "Trusted",
+					description: "This seller has made +20 completed sales!",
+					iconType: "trophy",
+				},
+				{
+					text: "Ecological",
+					description: "This seller has saved +20 products from the trashcan!",
+					iconType: "trophy",
+				},
+			],
+		};
 	}
 
 	async function inspectOffer(offer) {
@@ -154,163 +204,135 @@ export default function OffersView() {
 	return (
 		<div
 			id="offers-page-container"
-			className="flex flex-col items-center h-screen w-screen"
+			className="flex flex-col items-center min-h-screen w-screen"
 			style={{backgroundImage: parsedBgUrl, backgroundSize: "cover"}}
 		>
 			<div
-				className="w-full flex flex-col sm:w-10/12 p-8 pt-4 mt-8 gap-x-8 mb-8 h-full text-black display justify-end"
-				style={{backgroundColor: "white", maxWidth: "970px"}}
+				className="w-full flex flex-col sm:w-10/12 p-8 pt-4 mt-8 gap-x-8 mb-8 h-full display justify-end"
+				style={{opacity: 0.9, backdropFilter: "brightness(1.5) blur(4px)", maxWidth: "970px"}}
 			>
 				<div className="w-full flex flex-col justify-self-end  pt-2">
-					<div className="flex flex-row h-full justify-between align-center w-full">
-						<h1 className="text-4xl">Offers</h1>
-						<button
-							className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold rounded justify-self-end"
-							style={{width: "130px", height: "35px"}}
-							onClick={() => setShowOfferCreationModal(true)}
-						>
-							New +
-						</button>
-					</div>
-					<div className="flex flex-row h-full justify-start align-center w-1/2 pr-5 mt-4">
-						<p className="text-lg mr-2">New Offers: 2</p>
-						<p className="text-lg ml-2">
-							Active Offers: {sentOffers.length + receivedOffers.length}
-						</p>
+					<div className="flex flex-row h-full justify-start align-center w-full pr-5 mt-4">
+						<BasicInfo className="text-white" user={parseProfileUser()} />
 					</div>
 					<div className="w-1/2 flex flex-row h-full justify-end align-center">
 						<div className="flex flex-row w-2/3 justify-center"></div>
 					</div>
 				</div>
-				<div className="w-full flex flex-row justify-self-end flex-1 mt-4">
-					<div className="w-1/2 flex flex-col h-full mr-2">
-						<p className="text-xl mt-4 mb-2">Sent offers:</p>
-						<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
-							{sentOffers.map((offer) => (
-								<Offer key={offer.id} offer={offer} click={inspectOffer} />
-							))}
-							<h3 className={"text-white " + noOffersSent}>No offers sent yet!</h3>
-						</div>
-					</div>
-					<div className="w-1/2 flex flex-col h-2 ml-2 h-full">
-						<p className="text-xl mt-4 mb-2">Received offers:</p>
-						<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
-							{receivedOffers.map((offer) => (
-								<Offer key={offer.id} offer={offer} click={inspectOffer} />
-							))}
-							<h3 className={"text-white " + noOffersReceived}>No offers received yet!</h3>
-						</div>
-					</div>
-				</div>
-				<Modal
-					id="offer-modal"
-					isOpen={showOfferCreationModal}
-					contentLabel="offer-modal"
-					ariaHideApp={false}
-					style={{
-						overlay: {display: "flex", justifyContent: "center"},
-						content: {
-							flex: "1",
-							maxWidth: "600px",
-							height: "470px",
-							position: "relative",
-							display: "flex",
-							flexDirection: "column",
-							justifyContent: "center",
-							alignItems: "center",
-						},
-					}}
-				>
-					<h1 className="text-3xl">Create a new offer:</h1>
-					<div className="flex-1 w-full">
-						<div className="flex flex-col w-full mt-10 p-4">
-							<div className="flex flex-row justify-center">
-								<div className="flex flex-col w-2/4 pl-2">
-									<label>Search:</label>
-									<Search
-										onClick={updateSelectedUser}
-										position={{x: window.innerWidth / 2 - 240, y: 220}}
-									/>
-								</div>
-								<div className="flex flex-col w-2/4 self-end pl-4">
-									<label>User seleceted:</label>
-									<input
-										id="selected-user"
-										className="rounded border-gray-300 border bg-transparent p-2"
-										type="text"
-										value={userName}
-										placeholder="-"
-										disabled
-										style={{maxWidth: "228px"}}
-									/>
-								</div>
-							</div>
-							<div className="flex flex-row mt-6 justify-center">
-								<div className="flex flex-col w-2/4 pl-2">
-									<label htmlFor="selected-user">Item name:</label>
-									<input
-										id="selected-user"
-										className="rounded border-gray-300 border bg-transparent p-2"
-										type="text"
-										value={itemName}
-										style={{maxWidth: "228px"}}
-										onChange={(event) => setItemName(event.target.value)}
-									/>
-								</div>
-								<div className="w-2/4 flex flex-col self-end align-items-end pl-4">
-									<label className="self-start">Item price:</label>
-									<input
-										id="price-input"
-										className="rounded border-gray-300 border bg-transparent p-2 "
-										type="text"
-										value={itemPrice}
-										style={{maxWidth: "228px"}}
-										onChange={(event) => setItemPrice(event.target.value)}
-									/>
-								</div>
+				<Tabs className="w-full flex flex-col justify-self-end flex-1 mt-4 text-black ">
+					<TabList style={{marginBottom: "0px"}}>
+						<Tab>Sent offers</Tab>
+						<Tab>Received offers</Tab>
+						<Tab>New Offer</Tab>
+					</TabList>
+					<TabPanel className="w-full">
+						<div className="flex flex-col h-full mr-2">
+							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
+								{sentOffers.map((offer) => (
+									<Offer key={offer.id} offer={offer} click={inspectOffer} />
+								))}
+								<h3 className={"text-white " + noOffersSent}>No offers sent yet!</h3>
 							</div>
 						</div>
-					</div>
-					<div className="w-full flex justify-center">
-						<div className="flex flex-col w-1/2 pr-8">
-							<button
-								className="w-32 h-8 rounded min-h-40 text-white bg-green-500 hover:bg-green-600 font-bold self-end"
-								type="submit"
-								onClick={() => {
-									const result = sendOffer();
-									if (result) {
-										alert("Offer sent successfully!");
-										setUserName("");
-										setUserId(null);
-										setItemName("");
-										setItemPrice("");
-									} else {
-										alert("Failure, invalid or missing values! :(");
-									}
-								}}
-							>
-								Submit
-							</button>
+					</TabPanel>
+					<TabPanel className="w-full">
+						<div className="flex flex-col h-2 h-full">
+							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
+								{receivedOffers.map((offer) => (
+									<Offer key={offer.id} offer={offer} click={inspectOffer} />
+								))}
+								<h3 className={"text-white " + noOffersReceived}>No offers received yet!</h3>
+							</div>
 						</div>
-						<div className="flex flex-col w-1/2 pl-4">
-							<button
-								className="w-32 h-8 rounded min-h-40 text-white bg-gray-700 hover:bg-gray-600 font-bold"
-								onClick={() => setShowOfferCreationModal(false)}
+					</TabPanel>
+					<TabPanel>
+						<div className="bg-gray-700  rounded flex-1">
+							<div
+								className="flex flex-col w-full align-center justify-center"
+								style={{minHeight: "350px"}}
 							>
-								Cancel
-							</button>
+								<h1c className="text-4xl text-white ml-4">Create: </h1c>
+								<div className="flex flex-col w-full p-4">
+									<div className="flex flex-row justify-center">
+										<div className="flex flex-col w-2/4 pl-2">
+											<label className="text-white">Search:</label>
+											<Search
+												style={{backgroundColor: "white"}}
+												onClick={updateSelectedUser}
+												inputColor="white"
+											/>
+										</div>
+										<div className="flex flex-col w-2/4 self-end pl-4">
+											<label className="text-white">User seleceted:</label>
+											<input
+												id="selected-user"
+												className="rounded border-gray-300 border bg-white p-2"
+												type="text"
+												value={userName}
+												placeholder="-"
+												disabled
+												style={{maxWidth: "228px"}}
+											/>
+										</div>
+									</div>
+									<div className="flex flex-row mt-6 justify-center">
+										<div className="flex flex-col w-2/4 pl-2">
+											<label htmlFor="selected-user" className="text-white">
+												Item name:
+											</label>
+											<input
+												id="selected-user"
+												className="rounded border-gray-300 border bg-white p-2"
+												type="text"
+												value={itemName}
+												style={{maxWidth: "228px"}}
+												onChange={(event) => setItemName(event.target.value)}
+											/>
+										</div>
+										<div className="w-2/4 flex flex-col self-end align-items-end pl-4">
+											<label className="self-start text-white">Item price:</label>
+											<input
+												id="price-input"
+												className="rounded border-gray-300 border bg-white p-2 "
+												type="text"
+												value={itemPrice}
+												style={{maxWidth: "228px"}}
+												onChange={(event) => setItemPrice(event.target.value)}
+											/>
+										</div>
+									</div>
+								</div>
+								<button
+									className="w-32 h-8 rounded min-h-40 text-white bg-green-500 hover:bg-green-600 font-bold ml-6 mt-4"
+									type="submit"
+									onClick={() => {
+										const result = sendOffer();
+										if (result) {
+											alert("Offer sent successfully!");
+											setUserName("");
+											setUserId(null);
+											setItemName("");
+											setItemPrice("");
+										} else {
+											alert("Failure, invalid or missing values! :(");
+										}
+									}}
+								>
+									Submit
+								</button>
+							</div>
 						</div>
-					</div>
-				</Modal>
-				<OfferModal
-					control={{showOfferModal: showOfferModal, setShowOfferModal: setShowOfferModal}}
-					offer={offerToShow}
-					user={loggedInUser}
-					externalUser={userToShow}
-					reject={rejectOffer}
-					accept={acceptOffer}
-				/>
+					</TabPanel>
+				</Tabs>
 			</div>
+			<OfferModal
+				control={{showOfferModal: showOfferModal, setShowOfferModal: setShowOfferModal}}
+				offer={offerToShow}
+				user={loggedInUser}
+				externalUser={userToShow}
+				reject={rejectOffer}
+				accept={acceptOffer}
+			/>
 		</div>
 	);
 }
