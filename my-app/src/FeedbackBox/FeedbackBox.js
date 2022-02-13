@@ -3,27 +3,28 @@ import {useState} from "react";
 import {usePopper} from 'react-popper'
 import Modal from "../common/components/Modal";
 import {noop} from "lodash";
-import {useToggle} from "../utils/hooks";
-import {Button} from "style-components";
+import {useInput, useToggle} from "../utils/hooks";
 import styled from "styled-components";
+import Contact from "./contact";
 
-export default function Feedback() {
+export default function FeedbackBox() {
 
-	const Button = styled.button`
-  	background-color: #3a4150;
-  	color: white;
-  	font-size: 16px;
-  	padding: 5px 25px;
-  	border-radius: 5px;
-  	margin: 10px 0px;
-  	cursor: pointer;
-		text-align: center;
-		font-weight: bold;
-`;
+	const sendEmail = () => {
+		sendEmail({
+			example_user: "hongdu@utu.fi",
+			example_data: new Date().toISOString(),
+		});
+	};
+
+	const msgSend = () => {
+		console.log();
+		alert(`Send successful!`)
+	}
+
 
 	const modalStyles = {
 		overlay: {
-			top: '90%',
+			top: '80%',
 			left: '90%',
 			right: 'auto',
 			bottom: 'auto',
@@ -43,8 +44,11 @@ export default function Feedback() {
 					Send Feedback
 				</h1>
 				<p>Your feedback is helping us to do better!</p>
-				<input/>
-				<Button>Submit</Button>
+
+				<div>
+					<Contact />
+				</div>
+
 			</Modal>
 		</div>
 	);

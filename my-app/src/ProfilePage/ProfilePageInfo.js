@@ -5,6 +5,8 @@ import {makeCssUrl} from "../common/utils";
 import EditableGrid from "../EditableGrid/EditableGrid";
 import gridComponents from "./gridComponents";
 import {useAuth} from "../auth/authContext";
+import Feedback from "../FeedbackBox/Feedback";
+import FeedbackBox from "../FeedbackBox/FeedbackBox";
 
 /**
  * @param {ProfilePage.UserProfileInfoProps} props
@@ -89,7 +91,9 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 	const wrapperClassName = `w-full sm-w-10/12 xl:w-8/12`;
 
 	return (
+
 		<div id="page-container" className="h-full min-h-screen pt-10">
+			<FeedbackBox />
 			<div
 				className="flex flex-col h-screen w-screen fixed top-0 left-0 z-0 pointer-events-none"
 				style={{
@@ -98,6 +102,7 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 					backgroundPosition: "center",
 				}}
 			></div>
+
 			<div className="relative w-full m-auto flex flex-col items-center">
 				<div
 					className={wrapperClassName + ` absolute h-full w-full top-0`}
