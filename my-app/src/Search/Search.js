@@ -57,13 +57,13 @@ export default function Search({onClick, position, inputColor}) {
 	}
 
 	let overrideInputColor = "transparent";
-	if(inputColor) {
+	if (inputColor) {
 		overrideInputColor = inputColor;
 	}
 
 	return (
 		<div>
-			<DebouncedInput forwardedRef={searchRef} onChange={setSearch} bgColor={overrideInputColor}/>
+			<DebouncedInput forwardedRef={searchRef} onChange={setSearch} bgColor={overrideInputColor} />
 			{searchRef.current && (
 				<Modal
 					isOpen={isOpen}
