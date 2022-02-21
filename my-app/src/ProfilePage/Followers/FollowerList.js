@@ -90,7 +90,6 @@ function FollowButton({user, onFollow, onUnfollow}) {
 					followedUserId: user.id,
 				})
 				.then(head);
-			console.log(newFollowing);
 			setFollowingState(newFollowing);
 			onFollow();
 		};

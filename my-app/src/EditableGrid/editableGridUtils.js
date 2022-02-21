@@ -105,7 +105,6 @@ export function useGridState(defaultValue) {
 	const [gridStateRaw, setGridStateRaw] = useState(() => normalizeGridStateForUi(defaultValue));
 	const setGridState = useCallback(
 		(newVal) => {
-			console.log("new grid val", newVal, normalizeGridStateForUi(newVal));
 			setGridStateRaw(normalizeGridStateForUi(newVal));
 		},
 		[setGridStateRaw]

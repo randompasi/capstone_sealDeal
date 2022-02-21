@@ -55,9 +55,8 @@ export default function OffersView() {
 		setUserId(user.id);
 	}
 
-	console.log(params);
 	const urlId = Number(params.id ?? -1);
-	console.log(urlId);
+
 	if (urlId >= 0 && userToOffer != urlId) {
 		const urlUser = getUserById(urlId);
 		setUserToOffer(urlId);
@@ -159,7 +158,6 @@ export default function OffersView() {
 
 		const userToShow = await getFullProfileById(idToFetch);
 
-		console.log(userToShow);
 		if (!userToShow) {
 			console.log("Not found");
 			return;

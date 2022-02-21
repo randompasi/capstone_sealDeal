@@ -69,7 +69,6 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		return <FaRegHandshake></FaRegHandshake>;
 	}
 
-	console.log(window);
 
 	return (
 		<div>
