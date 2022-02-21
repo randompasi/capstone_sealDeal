@@ -36,6 +36,7 @@ export default function BasicInfo({user}) {
 						<div className="flex flex-col items-center text-center">
 							{getSellerStatus(userC.premium)}
 							<FollowerList user={user} />
+							{linkToOfferCreation(user.offerUrl ?? null)}
 						</div>
 					</div>
 				</div>
@@ -58,4 +59,16 @@ function getSellerStatus(isPremium) {
 			<SectionTitle>Sealdeal Free User</SectionTitle>
 		</div>
 	);
+}
+
+function linkToOfferCreation(url) {
+	if (url) {
+		return (
+			<div className="flex flex-col justify-center items-center">
+				<a className="text-md mt-4 underline underline-offset-2 font-bold" href={url}>
+					Make me an offer!
+				</a>
+			</div>
+		);
+	}
 }

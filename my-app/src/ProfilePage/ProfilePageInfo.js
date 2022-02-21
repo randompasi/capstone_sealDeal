@@ -54,6 +54,7 @@ export default function ProfilePage({user: userBase, gridStateProps}) {
 		city: "Turku",
 		followers: fullProfile.followers,
 		premium: isPremium,
+		offerUrl: !isOwnProfilePage ? "/offer-to/" + fullProfile.id : null,
 		achievements: [
 			//Note: The description could eventually be hardcoded to the icon type
 			//Doesn't make sense currently since we only have two icons
