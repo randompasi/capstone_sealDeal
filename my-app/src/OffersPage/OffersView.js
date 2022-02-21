@@ -15,8 +15,10 @@ import {
 	fetchReceivedOffers,
 	getFullProfileById,
 	updateOfferStatus,
+	getUserById,
 } from "../api/api";
 import {useResource} from "../utils/hooks";
+import {useParams} from "react-router-dom";
 
 export default function OffersView() {
 	const [userName, setUserName] = useState();
@@ -26,6 +28,9 @@ export default function OffersView() {
 	const [showOfferModal, setShowOfferModal] = useState(false);
 	const [offerToShow, setOfferToShow] = useState(false);
 	const [userToShow, setUserToShow] = useState();
+	const [userToOffer, setUserToOffer] = useState();
+	const [tabIndex, setTabIndex] = useState(0);
+	const params = useParams();
 
 	const authContext = useAuth();
 	const sentOfferFetch = useResource(async () => fetchSentOffers(authContext.user.id));
@@ -48,6 +53,16 @@ export default function OffersView() {
 	function updateSelectedUser(user) {
 		setUserName(user.firstName + " " + user.lastName);
 		setUserId(user.id);
+	}
+
+	console.log(params);
+	const urlId = Number(params.id ?? -1);
+	console.log(urlId);
+	if (urlId >= 0 && userToOffer != urlId) {
+		const urlUser = getUserById(urlId);
+		setUserToOffer(urlId);
+		setTabIndex(2);
+		updateSelectedUser(urlUser);
 	}
 
 	const noOffersReceived = receivedOffers.length ? "hidden" : "";
@@ -80,6 +95,8 @@ export default function OffersView() {
 			}
 		});
 		sentOffers.splice(index, 0, parsedOffer);
+
+		setTabIndex(0);
 
 		return true;
 	}
@@ -219,7 +236,11 @@ export default function OffersView() {
 						<div className="flex flex-row w-2/3 justify-center"></div>
 					</div>
 				</div>
-				<Tabs className="w-full flex flex-col justify-self-end flex-1 mt-4 text-black ">
+				<Tabs
+					className="w-full flex flex-col justify-self-end flex-1 mt-4 text-black "
+					selectedIndex={tabIndex}
+					onSelect={(index) => setTabIndex(index)}
+				>
 					<TabList style={{marginBottom: "0px"}}>
 						<Tab>Sent offers</Tab>
 						<Tab>Received offers</Tab>

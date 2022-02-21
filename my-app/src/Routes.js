@@ -23,6 +23,7 @@ export default function SealdealRoutes({settings, setSettings, showPremiumModal,
 			/>
 			<Route path="/user-profile/:id" element={<ViewUserProfile />} />
 			<Route path="/" element={<OffersView />} />
+			<Route path="/offer-to/:id" element={<OffersView />} />
 		</Routes>
 	);
 }

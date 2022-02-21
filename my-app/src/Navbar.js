@@ -12,7 +12,8 @@ export default function Navbar({setSettings, setPremiumModal}) {
 	if (!user) {
 		return null;
 	}
-	const isOwnProfilePage = location.pathname === "/dashboard/";
+	const isOwnProfilePage =
+		location.pathname === "/dashboard/" || location.pathname.startsWith("/offer-to/");
 	const isPublicProfile = location.pathname === "/";
 
 	return (

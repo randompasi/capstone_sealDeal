@@ -2,7 +2,7 @@ import {useParams} from "react-router-dom";
 import {useResource} from "../utils/hooks";
 import ProfilePage from "./ProfilePageInfo";
 import * as api from "../api/api";
-import {gridDefaultState} from "../EditableGrid/editableGridUtils";
+//import {gridDefaultState} from "../EditableGrid/editableGridUtils";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend as DnDHTML5Backend} from "react-dnd-html5-backend";
 
@@ -21,11 +21,18 @@ export default function ViewUserProfile() {
 		return null;
 	}
 
-	const gridRows = gridResource.value?.rows || [];
+	//Hardcode the grid state to info + achievements + reviews to act as a quick mini profile
+
+	//const gridRows = gridResource.value?.rows || [];
 
 	/** @type {EditableGrid.GridStateProps} */
 	const gridStateProps = {
-		gridState: gridRows.length > 0 ? gridRows : gridDefaultState,
+		//gridState: gridRows.length > 0 ? gridRows : gridDefaultState,
+		gridState: [
+			{a: "BasicInfo", b: "BasicInfo"},
+			{a: "Achievements", b: "Achievements"},
+			{a: "Reviews", b: "Reviews"},
+		],
 		setGridState: () => {},
 	};
 
