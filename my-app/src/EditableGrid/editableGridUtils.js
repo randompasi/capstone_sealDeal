@@ -7,6 +7,7 @@ import * as api from "../api/api";
 export const gridDefaultState = [
 	{a: "BasicInfo", b: "Achievements"},
 	{a: "Reviews", b: "SellingHistory"},
+	{a: "SellingStats", b: "SellingStats"},
 	{a: "EnvironmentalSavings", b: "EnvironmentalSavings"},
 ];
 

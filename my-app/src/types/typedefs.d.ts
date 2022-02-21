@@ -17,6 +17,7 @@ declare namespace ProfilePage {
 		achievements: AcievementProp[]
 		followers: FollowerInfo[]
 		premium: boolean
+		offerUrl?: string
 	}
 
 	declare interface Review {
@@ -66,6 +67,12 @@ declare namespace ProfilePage {
 	declare interface GridComponentsModalCardProps {
 		item: EditableGrid.GridIdentifier;
 		previewContent: ReactNode;
+	}
+
+	declare interface SearchComponentProps {
+		onClick?: (user: UserInfo) => any;
+		position?: {x: number, y: number};
+		inputColor?: string;
 	}
 
 }
@@ -119,6 +126,7 @@ declare namespace EditableGrid {
 		| "EnvironmentalSavings"
 		| "Reviews"
 		| "SellingHistory"
+		| "SellingStats"
 
 	declare interface EmptySlot {
 		type: "empty slot";

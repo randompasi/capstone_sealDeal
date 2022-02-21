@@ -19,16 +19,19 @@ import {
 } from "../api/api";
 import {useResource} from "../utils/hooks";
 import {useParams} from "react-router-dom";
+import {noop} from "lodash";
 
 export default function OffersView() {
-	const [userName, setUserName] = useState();
-	const [userId, setUserId] = useState();
-	const [itemName, setItemName] = useState();
-	const [itemPrice, setItemPrice] = useState();
+	/** @type {string | undefined | null} */
+	const defaultValue = undefined;
+	const [userName, setUserName] = useState(defaultValue);
+	const [userId, setUserId] = useState(defaultValue);
+	const [itemName, setItemName] = useState(defaultValue);
+	const [itemPrice, setItemPrice] = useState(defaultValue);
 	const [showOfferModal, setShowOfferModal] = useState(false);
 	const [offerToShow, setOfferToShow] = useState(false);
 	const [userToShow, setUserToShow] = useState();
-	const [userToOffer, setUserToOffer] = useState();
+	const [userToOffer, setUserToOffer] = useState(/** @type {number | undefined} */ undefined);
 	const [tabIndex, setTabIndex] = useState(0);
 	const params = useParams();
 
@@ -228,7 +231,7 @@ export default function OffersView() {
 			>
 				<div className="w-full flex flex-col justify-self-end  pt-2">
 					<div className="flex flex-row h-full justify-start align-center w-full pr-5 mt-4">
-						<BasicInfo className="text-white" user={parseProfileUser()} />
+						<BasicInfo user={parseProfileUser()} />
 					</div>
 					<div className="w-1/2 flex flex-row h-full justify-end align-center">
 						<div className="flex flex-row w-2/3 justify-center"></div>
@@ -247,15 +250,15 @@ export default function OffersView() {
 					<TabPanel className="w-full">
 						<div className="flex flex-col h-full mr-2">
 							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
-								{sentOffers.map((offer) => (
-									<Offer key={offer.id} offer={offer} click={inspectOffer} />
+								{sentOffers.map((offer, index) => (
+									<Offer key={offer.id || "index-" + index} offer={offer} click={inspectOffer} />
 								))}
 								<h3 className={"text-white " + noOffersSent}>No offers sent yet!</h3>
 							</div>
 						</div>
 					</TabPanel>
 					<TabPanel className="w-full">
-						<div className="flex flex-col h-2 h-full">
+						<div className="flex flex-col min-h-4">
 							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
 								{receivedOffers.map((offer) => (
 									<Offer key={offer.id} offer={offer} click={inspectOffer} />
@@ -283,7 +286,8 @@ export default function OffersView() {
 												id="selected-user"
 												className="rounded border-gray-300 border bg-white p-2"
 												type="text"
-												value={userName}
+												value={userName || ""}
+												onClick={noop}
 												placeholder="-"
 												disabled
 												style={{maxWidth: "228px"}}
@@ -292,14 +296,14 @@ export default function OffersView() {
 									</div>
 									<div className="flex flex-row mt-6 justify-center">
 										<div className="flex flex-col w-2/4 pl-2">
-											<label htmlFor="selected-user" className="text-white">
+											<label htmlFor="item-name" className="text-white">
 												Item name:
 											</label>
 											<input
-												id="selected-user"
+												id="item-name"
 												className="rounded border-gray-300 border bg-white p-2"
 												type="text"
-												value={itemName}
+												value={itemName || ""}
 												style={{maxWidth: "228px"}}
 												onChange={(event) => setItemName(event.target.value)}
 											/>
@@ -310,7 +314,7 @@ export default function OffersView() {
 												id="price-input"
 												className="rounded border-gray-300 border bg-white p-2 "
 												type="text"
-												value={itemPrice}
+												value={itemPrice || ""}
 												style={{maxWidth: "228px"}}
 												onChange={(event) => setItemPrice(event.target.value)}
 											/>
