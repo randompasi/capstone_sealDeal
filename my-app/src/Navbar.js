@@ -12,7 +12,7 @@ export default function Navbar({setSettings, setPremiumModal}) {
 	if (!user) {
 		return null;
 	}
-	const isOwnProfilePage = location.pathname === "/dashboard/"; //Only show controls in Dashboard view
+	const isOwnProfilePage = location.pathname.includes("/dashboard"); //Only show controls in Dashboard view
 	const isPublicProfile = location.pathname === "/";
 
 	return (
