@@ -19,6 +19,7 @@ import {
 } from "../api/api";
 import {useResource} from "../utils/hooks";
 import {useParams} from "react-router-dom";
+import {noop} from "lodash";
 
 export default function OffersView() {
 	/** @type {string | undefined | null} */
@@ -285,7 +286,8 @@ export default function OffersView() {
 												id="selected-user"
 												className="rounded border-gray-300 border bg-white p-2"
 												type="text"
-												value={userName}
+												value={userName || ""}
+												onClick={noop}
 												placeholder="-"
 												disabled
 												style={{maxWidth: "228px"}}
@@ -294,11 +296,11 @@ export default function OffersView() {
 									</div>
 									<div className="flex flex-row mt-6 justify-center">
 										<div className="flex flex-col w-2/4 pl-2">
-											<label htmlFor="selected-user" className="text-white">
+											<label htmlFor="item-name" className="text-white">
 												Item name:
 											</label>
 											<input
-												id="selected-user"
+												id="item-name"
 												className="rounded border-gray-300 border bg-white p-2"
 												type="text"
 												value={itemName}

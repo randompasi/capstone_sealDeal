@@ -36,6 +36,8 @@ export default function Search({onClick, position, inputColor}) {
 		});
 	});
 	const [searchValue, setSearch] = useState("");
+	// Bit of a hack to force DebouncedInput to re-mount on click
+	const [resetCounter, setResetCounter] = useState(0);
 	/** @type{React.MutableRefObject<HTMLInputElement>} */
 	const searchRef = useRef();
 	const isOpen = searchValue.length > 0;
@@ -47,10 +49,7 @@ export default function Search({onClick, position, inputColor}) {
 
 	//Quick fix to reuse the component by overriding search links if an onClick function is given
 	//The search passes the selected user as a default param for the onClick function
-	let overrideLink = false;
-	if (typeof onClick !== "undefined" && onClick !== null) {
-		overrideLink = true;
-	}
+	const overrideLink = typeof onClick === "function";
 
 	let overrideX,
 		overrideY = null;
@@ -64,9 +63,19 @@ export default function Search({onClick, position, inputColor}) {
 		overrideInputColor = inputColor;
 	}
 
+	const reset = () => {
+		setSearch("");
+		setResetCounter((_) => _ + 1);
+	};
+
 	return (
 		<div>
-			<DebouncedInput forwardedRef={searchRef} onChange={setSearch} bgColor={overrideInputColor} />
+			<DebouncedInput
+				key={resetCounter}
+				forwardedRef={searchRef}
+				onChange={setSearch}
+				bgColor={overrideInputColor}
+			/>
 			{searchRef.current && (
 				<Modal
 					isOpen={isOpen}
@@ -96,6 +105,7 @@ export default function Search({onClick, position, inputColor}) {
 										onClick={
 											overrideLink
 												? () => {
+														reset();
 														onClick(user);
 												  }
 												: null
