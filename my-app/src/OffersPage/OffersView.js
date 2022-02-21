@@ -270,16 +270,12 @@ export default function OffersView() {
 								className="flex flex-col w-full align-center justify-center"
 								style={{minHeight: "350px"}}
 							>
-								<h1c className="text-4xl text-white ml-4">Create: </h1c>
+								<h1 className="text-4xl text-white ml-4">Create: </h1>
 								<div className="flex flex-col w-full p-4">
 									<div className="flex flex-row justify-center">
 										<div className="flex flex-col w-2/4 pl-2">
 											<label className="text-white">Search:</label>
-											<Search
-												style={{backgroundColor: "white"}}
-												onClick={updateSelectedUser}
-												inputColor="white"
-											/>
+											<Search onClick={updateSelectedUser} inputColor="white" />
 										</div>
 										<div className="flex flex-col w-2/4 self-end pl-4">
 											<label className="text-white">User seleceted:</label>
