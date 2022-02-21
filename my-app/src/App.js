@@ -5,6 +5,7 @@ import LoginPage from "./LoginPage/LoginPage";
 import Navbar from "./Navbar";
 import {useState} from "react";
 import {BrowserRouter as Router} from "react-router-dom";
+import Notifications from "./Notifications/Notifications";
 
 function RequireLogin() {
 	const authContext = useAuth();
@@ -29,6 +30,7 @@ function RequireLogin() {
 					/>
 				</main>
 				<footer className="w-full h-24 bg-gray-700"></footer>
+				<Notifications key={user.id} user={user} />
 			</div>
 		</Router>
 	);

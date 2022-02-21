@@ -217,7 +217,10 @@ export async function signin(firstName, lastName) {
  */
 export const matchers = {
 	eq(value) {
-		return `eq.${value}`;
+		return value === null ? `is.${value}` : `eq.${value}`;
+	},
+	gt(value) {
+		return `gt.${value}`;
 	},
 	in(options) {
 		return `in.${options.join(",")}`;
