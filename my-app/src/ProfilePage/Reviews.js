@@ -37,6 +37,7 @@ function Review({item, onReviewGiven}) {
 
 	const starRating = ratingFromHover || item.rating;
 	const starIconsCount = Math.ceil(starRating);
+	const color = starColors[starIconsCount];
 	const canEdit = !!onReviewGiven;
 	const isHoveringSomeStar = !!ratingFromHover;
 
@@ -48,7 +49,6 @@ function Review({item, onReviewGiven}) {
 		const extraStarClassName = isOver && (isHoveringSomeStar ? "opacity-10" : "opacity-0");
 
 		const onHover = useCallback(() => setRatingFromHover(value), [value, setRatingFromHover]);
-		const color = starColors[value];
 
 		return (
 			<div style={{marginLeft: -10}} onMouseOver={canEdit ? onHover : undefined} key={i}>
