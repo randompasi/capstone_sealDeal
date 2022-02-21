@@ -250,15 +250,15 @@ export default function OffersView() {
 					<TabPanel className="w-full">
 						<div className="flex flex-col h-full mr-2">
 							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
-								{sentOffers.map((offer) => (
-									<Offer key={offer.id} offer={offer} click={inspectOffer} />
+								{sentOffers.map((offer, index) => (
+									<Offer key={offer.id || "index-" + index} offer={offer} click={inspectOffer} />
 								))}
 								<h3 className={"text-white " + noOffersSent}>No offers sent yet!</h3>
 							</div>
 						</div>
 					</TabPanel>
 					<TabPanel className="w-full">
-						<div className="flex flex-col h-2">
+						<div className="flex flex-col min-h-4">
 							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
 								{receivedOffers.map((offer) => (
 									<Offer key={offer.id} offer={offer} click={inspectOffer} />
@@ -303,7 +303,7 @@ export default function OffersView() {
 												id="item-name"
 												className="rounded border-gray-300 border bg-white p-2"
 												type="text"
-												value={itemName}
+												value={itemName || ""}
 												style={{maxWidth: "228px"}}
 												onChange={(event) => setItemName(event.target.value)}
 											/>
@@ -314,7 +314,7 @@ export default function OffersView() {
 												id="price-input"
 												className="rounded border-gray-300 border bg-white p-2 "
 												type="text"
-												value={itemPrice}
+												value={itemPrice || ""}
 												style={{maxWidth: "228px"}}
 												onChange={(event) => setItemPrice(event.target.value)}
 											/>

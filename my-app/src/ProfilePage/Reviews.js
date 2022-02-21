@@ -7,13 +7,14 @@ import {TiStarFullOutline as FullStarIcon, TiStarHalfOutline as HalfStarIcon} fr
 import {useCallback, useEffect, useState} from "react";
 import {useAuth} from "../auth/authContext";
 import {groupBy, mapValues, meanBy} from "lodash";
+import * as colors from "../common/colors";
 
 const starColors = {
-	5: "#FE9996", // red
-	4: "#96fea4", // green
-	3: "#96cffe", // blue
-	2: "#feeb96", // yellow
-	1: "#c5c5c5", // gray
+	5: colors.RED,
+	4: colors.GREEN,
+	3: colors.BLUE,
+	2: colors.YELLOW,
+	1: colors.GRAY,
 };
 
 /**

@@ -5,10 +5,12 @@ import "./EditableGrid.css";
 import {EditableGridItem} from "./EditableGridItem";
 import {
 	cloneGridState,
+	EmptySlot,
 	getAllGridItems,
 	GRID_CARD_DND_TYPE,
 	isEmptyRow,
 	isEmptySlot,
+	replaceGridStateItems,
 } from "./editableGridUtils";
 
 function collectDropState(monitor) {
@@ -21,8 +23,16 @@ function collectDropState(monitor) {
  * @param {EditableGrid.EditableGridProps} props
  */
 export default function EditableGrid(props) {
-	const {gridState, setGridState} = props.gridStateProps;
+	// eslint-disable-next-line prefer-const
+	let {gridState, setGridState} = props.gridStateProps;
 	const gridItems = getAllGridItems(gridState);
+
+	if (!props.user.premium) {
+		// Remove Stats component from non-premium users, it's a premium feature
+		gridState = replaceGridStateItems(gridState, "SellingStats", new EmptySlot()).filter(
+			(_) => !isEmptyRow(_)
+		);
+	}
 
 	const resize = useCallback(makeResizeCallback(gridState, setGridState), [
 		gridState,
