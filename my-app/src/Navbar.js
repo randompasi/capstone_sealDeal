@@ -54,14 +54,12 @@ export default function Navbar({setSettings, setPremiumModal}) {
 						)}
 						{isPublicProfile && (
 							<>
-								<p
-									onClick={() => {
-										window.open("/dashboard/", "_blank");
-									}}
+								<a
+									href="/dashboard"
 									className="mr-4 cursor-pointer hover:underline hover:underline-offset-4"
 								>
 									<b>Dashboard</b>
-								</p>
+								</a>
 							</>
 						)}
 						<NavItem
