@@ -24,6 +24,9 @@ function DebouncedInput({onChange, forwardedRef, bgColor}) {
 	);
 }
 
+/**
+ * @param {ProfilePage.SearchComponentProps} props
+ */
 export default function Search({onClick, position, inputColor}) {
 	const usersResource = useResource(async () => {
 		const usersMap = await api.fetchAllUsers();
