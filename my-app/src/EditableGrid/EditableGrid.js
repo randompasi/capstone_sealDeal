@@ -154,7 +154,6 @@ const makeResizeCallback = (gridState, setGridState) => (border, amount, item) =
 					b: currentRow.b === item ? item : null,
 				};
 				const fullRow = !(isEmptySlot(newRow.a) || isEmptySlot(newRow.b));
-				console.log("new row", fullRow);
 				if (!fullRow && isEmptySlot(newRow.a) && !isEmptySlot(row.a)) {
 					return {
 						a: row.a,
