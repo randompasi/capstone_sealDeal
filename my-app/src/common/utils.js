@@ -66,3 +66,11 @@ export const objectKeys = (obj) => {
 export function combineClassnames(...classNames) {
 	return classNames.filter((_) => typeof _ === "string" && !!_).join(" ");
 }
+
+/**
+ * @param {{firstName: string, lastName: string}} user
+ * @returns {string}
+ */
+export function fullName(user) {
+	return `${user.firstName} ${user.lastName}`;
+}

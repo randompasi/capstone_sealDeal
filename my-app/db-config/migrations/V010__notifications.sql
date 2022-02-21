@@ -60,9 +60,9 @@ begin
 		insert into api."notifications" ("userId", "title", "type", "data")
 		values (
 			new."toUserId",
-			'Congratulations!',
+			new."text",
 			'congrats',
-			jsonb_build_object('congratulationsId', new.id)
+			jsonb_build_object('congratulationsId', new.id, 'reaction', new."reaction")
 		);
 		return null;
 end;
