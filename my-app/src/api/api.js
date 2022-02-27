@@ -105,6 +105,20 @@ export function createOffer(offerPayload) {
 	post("offers", offerPayload);
 }
 
+export function createReview(offerPayload) {
+	post("reviews", offerPayload);
+}
+
+export function sendReview(from, to, score, type) {
+	const payload = {
+		fromUserId: from,
+		toUserId: to,
+		category: type,
+		rating: score,
+	};
+	createReview(payload);
+}
+
 export async function fetchSentOffers(userId) {
 	const offers = await get("offers", {
 		fromUserId: "eq." + userId,
@@ -126,6 +140,13 @@ export async function updateOfferStatus(id, statusText) {
 		throw new Error(`Offer status: Gave invalid status code - ${statusText}`);
 	}
 	return patch("offers", id, {status: statusText});
+}
+
+export async function finishOfferReview(id, isSender) {
+	if (isSender) {
+		return patch("offers", id, {fromReview: true});
+	}
+	return patch("offers", id, {toReview: true});
 }
 
 // eslint-disable-next-line no-unused-vars

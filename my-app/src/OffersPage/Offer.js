@@ -1,4 +1,4 @@
-export default function OffersView({offer, click}) {
+export default function OffersView({offer, click, reviewed}) {
 	const statusToGradientMap = {
 		accepted:
 			"bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600",
@@ -23,7 +23,13 @@ export default function OffersView({offer, click}) {
 				</div>
 			</div>
 			<div className="flex flex-row p-2 justify-self-end">
-				<p>{offer.status}</p>
+				<p>
+					{!reviewed
+						? "waiting review"
+						: offer.status == "accepted"
+						? "Deal Sealed!"
+						: offer.status}
+				</p>
 			</div>
 		</div>
 	);
