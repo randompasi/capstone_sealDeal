@@ -94,7 +94,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 			}
 		} else if (!offer.fromReview && isSeller) {
 			showReview = true;
-			if (reviewState == 0) {
+			if (reviewState == null) {
 				setReviewState(ReviewStates.seller);
 			}
 		} else if (reviewState == null) {
@@ -110,7 +110,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		} else if (offer.status == "accepted") {
 			return "You Sealed the Deal on '" + offer.productName + "' for " + offer.productPrice + "€ !";
 		} else {
-			return "This deal was rejected by the opposite party :(";
+			return "This deal was rejected by the receiver :(";
 		}
 	}
 
@@ -152,9 +152,22 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 			} else {
 				offer.toReview = true;
 			}
-			sendReview(fromId, toId, collectedReviews.friendliness, "friendliness");
-			sendReview(fromId, toId, collectedReviews.delivery, "delivery");
-			sendReview(fromId, toId, collectedReviews.condition, "condition");
+
+			if (reviewState != ReviewStates.seller) {
+				sendReview(fromId, toId, collectedReviews.friendliness, "friendliness");
+				sendReview(fromId, toId, collectedReviews.delivery, "delivery");
+				sendReview(fromId, toId, collectedReviews.condition, "condition");
+			} else {
+				sendReview(fromId, toId, collectedReviews.condition, "friendliness");
+			}
+		}
+	}
+
+	function getReviewParital() {
+		if (showReview && reviewState != ReviewStates.done) {
+			return <CircleReview click={handleReviewClick} />;
+		} else if (reviewState == ReviewStates.done) {
+			return <p className="mt-4">Review done, Thank you for the Feedback!</p>;
 		}
 	}
 
@@ -227,11 +240,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 								? getReviewStatusText()
 								: getStatusText()}
 						</p>
-						{showReview && reviewState != ReviewStates.done ? (
-							<CircleReview click={handleReviewClick} />
-						) : (
-							<p className="mt-4">Review done, Thank you for the Feedback!</p>
-						)}
+						{getReviewParital()}
 					</div>
 					<div className="flex-1 pt-6 flex justify-around items-center">
 						<button
