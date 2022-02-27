@@ -16,8 +16,6 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		condition: 4,
 	};
 
-	console.log(offer);
-
 	const defaultReviews = {
 		friendliness: -1,
 		delivery: -1,
@@ -32,9 +30,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		setLastReview(offer.id);
 		setReviewState(null);
 		setCollectedReviews(defaultReviews);
-		console.log("RESET");
 	}
-	console.log(collectedReviews);
 
 	const statusToSettingsMap = {
 		accepted: "green",
@@ -92,25 +88,19 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 	let showReview = false;
 	if (offer.status == "accepted") {
 		if (!offer.toReview && !isSeller) {
-			console.log("t1");
 			showReview = true;
 			if (reviewState == null) {
 				setReviewState(ReviewStates.friendliness);
 			}
 		} else if (!offer.fromReview && isSeller) {
-			console.log("t2");
-
 			showReview = true;
 			if (reviewState == 0) {
 				setReviewState(ReviewStates.seller);
 			}
 		} else if (reviewState == null) {
-			console.log("t3");
 			setReviewState(ReviewStates.done);
 		}
 	}
-
-	console.log("State: " + reviewState);
 
 	function getStatusText() {
 		if (offer.status == "pending" && showButtons) {
@@ -147,7 +137,6 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 	}
 
 	async function handleReviewClick(review) {
-		console.log("REVIEW CLICK");
 		if (reviewState == ReviewStates.friendliness) {
 			collectedReviews.friendliness = review;
 			setReviewState(ReviewStates.delivery);
@@ -157,9 +146,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		} else if (reviewState == ReviewStates.condition || reviewState == ReviewStates.seller) {
 			setReviewState(ReviewStates.done);
 			collectedReviews.condition = review;
-			console.log("REVIEWING:");
-			console.log(collectedReviews);
-			const res = await finishOfferReview(offer.id, isSeller);
+			await finishOfferReview(offer.id, isSeller);
 			if (isSeller) {
 				offer.fromReview = true;
 			} else {
@@ -168,8 +155,6 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 			sendReview(fromId, toId, collectedReviews.friendliness, "friendliness");
 			sendReview(fromId, toId, collectedReviews.delivery, "delivery");
 			sendReview(fromId, toId, collectedReviews.condition, "condition");
-
-			console.log(res);
 		}
 	}
 

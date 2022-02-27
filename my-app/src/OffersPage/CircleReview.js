@@ -11,7 +11,6 @@ export default function CircleReview({click}) {
 }
 
 function Circle({number, click}) {
-	console.log(number);
 	return (
 		<div
 			onClick={() => click(number)}
