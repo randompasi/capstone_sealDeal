@@ -6,6 +6,13 @@ export default function OffersView({offer, click, reviewed}) {
 			"bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600",
 		rejected: "bg-gradient-to-r from-red-400 to-red-500 hover:from-red-500 hover:to-red-600",
 	};
+
+	function getStatusText() {
+		if (offer.status == "accepted" && typeof reviewed == "boolean") {
+			return !reviewed ? "waiting review" : "sealed";
+		}
+		return offer.status;
+	}
 	return (
 		<div
 			className={
@@ -23,13 +30,7 @@ export default function OffersView({offer, click, reviewed}) {
 				</div>
 			</div>
 			<div className="flex flex-row p-2 justify-self-end">
-				<p>
-					{!reviewed
-						? "waiting review"
-						: offer.status == "accepted"
-						? "Deal Sealed!"
-						: offer.status}
-				</p>
+				<p>{getStatusText()}</p>
 			</div>
 		</div>
 	);

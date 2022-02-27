@@ -225,9 +225,9 @@ export default function OffersView() {
 
 	function getOffer(offer, index, received) {
 		let reviewed = false;
-		if (received && offer.toReview) {
+		if (received && offer.toReview && offer.status == "accepted") {
 			reviewed = true;
-		} else if (!received && offer.fromReview) {
+		} else if (!received && offer.fromReview && offer.status == "accepted") {
 			reviewed = true;
 		}
 
@@ -269,7 +269,7 @@ export default function OffersView() {
 					<TabPanel className="w-full">
 						<div className="flex flex-col h-full mr-2">
 							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
-								{sentOffers.map((offer, index) => getOffer(offer, index, true))}
+								{sentOffers.map((offer, index) => getOffer(offer, index, false))}
 								<h3 className={"text-white " + noOffersSent}>No offers sent yet!</h3>
 							</div>
 						</div>
