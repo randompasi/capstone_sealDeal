@@ -3,8 +3,39 @@ import Avatar from "../ProfilePage/Avatar";
 import {FaRegHandshake, FaHandshakeSlash} from "react-icons/fa"; //react-icons.github.io/react-icons
 import {ImCross} from "react-icons/im";
 import {IconContext} from "react-icons/lib";
+import CircleReview from "./CircleReview";
+import {useState} from "react";
+import {finishOfferReview, sendReview} from "../api/api";
 
 export default function OfferModal({control, offer, user, externalUser, reject, accept}) {
+	const ReviewStates = {
+		done: -1,
+		seller: 1,
+		friendliness: 2,
+		delivery: 3,
+		condition: 4,
+	};
+
+	console.log(offer);
+
+	const defaultReviews = {
+		friendliness: -1,
+		delivery: -1,
+		condition: -1,
+	};
+
+	const [reviewState, setReviewState] = useState(null);
+	const [lastReview, setLastReview] = useState(null);
+	const [collectedReviews, setCollectedReviews] = useState(null);
+
+	if (lastReview !== offer.id) {
+		setLastReview(offer.id);
+		setReviewState(null);
+		setCollectedReviews(defaultReviews);
+		console.log("RESET");
+	}
+	console.log(collectedReviews);
+
 	const statusToSettingsMap = {
 		accepted: "green",
 		pending: "#fbbf24",
@@ -42,6 +73,14 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		}
 	}
 
+	let isSeller = false;
+	const fromId = user.id;
+	let toId = offer.fromUserId;
+	if (user.id == offer.fromUserId) {
+		isSeller = true;
+		toId = offer.toUserId;
+	}
+
 	let showButtons = true;
 	if (
 		offer.status != "pending" ||
@@ -49,6 +88,29 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 	) {
 		showButtons = false;
 	}
+
+	let showReview = false;
+	if (offer.status == "accepted") {
+		if (!offer.toReview && !isSeller) {
+			console.log("t1");
+			showReview = true;
+			if (reviewState == null) {
+				setReviewState(ReviewStates.friendliness);
+			}
+		} else if (!offer.fromReview && isSeller) {
+			console.log("t2");
+
+			showReview = true;
+			if (reviewState == 0) {
+				setReviewState(ReviewStates.seller);
+			}
+		} else if (reviewState == null) {
+			console.log("t3");
+			setReviewState(ReviewStates.done);
+		}
+	}
+
+	console.log("State: " + reviewState);
 
 	function getStatusText() {
 		if (offer.status == "pending" && showButtons) {
@@ -62,11 +124,53 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		}
 	}
 
+	function getReviewStatusText() {
+		const base = "Review the Deal: ";
+		if (reviewState == ReviewStates.done) {
+			return "Review done, Thank you for the feedback!";
+		} else if (reviewState == ReviewStates.seller) {
+			return base + "Customer friendliness";
+		} else if (reviewState == ReviewStates.friendliness) {
+			return base + "Friendliness";
+		} else if (reviewState == ReviewStates.delivery) {
+			return base + "Delivery";
+		} else if (reviewState == ReviewStates.condition) {
+			return base + "Condition";
+		}
+	}
+
 	function getHandshakeIcon() {
 		if (offer.status == "rejected") {
 			return <FaHandshakeSlash></FaHandshakeSlash>;
 		}
 		return <FaRegHandshake></FaRegHandshake>;
+	}
+
+	async function handleReviewClick(review) {
+		console.log("REVIEW CLICK");
+		if (reviewState == ReviewStates.friendliness) {
+			collectedReviews.friendliness = review;
+			setReviewState(ReviewStates.delivery);
+		} else if (reviewState == ReviewStates.delivery) {
+			collectedReviews.delivery = review;
+			setReviewState(ReviewStates.condition);
+		} else if (reviewState == ReviewStates.condition || reviewState == ReviewStates.seller) {
+			setReviewState(ReviewStates.done);
+			collectedReviews.condition = review;
+			console.log("REVIEWING:");
+			console.log(collectedReviews);
+			const res = await finishOfferReview(offer.id, isSeller);
+			if (isSeller) {
+				offer.fromReview = true;
+			} else {
+				offer.toReview = true;
+			}
+			sendReview(fromId, toId, collectedReviews.friendliness, "friendliness");
+			sendReview(fromId, toId, collectedReviews.delivery, "delivery");
+			sendReview(fromId, toId, collectedReviews.condition, "condition");
+
+			console.log(res);
+		}
 	}
 
 	return (
@@ -80,13 +184,13 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 					overlay: {display: "flex", justifyContent: "center"},
 					content: {
 						flex: "1",
-						maxWidth: "600px",
+						maxWidth: "650px",
 						position: "relative",
 						display: "flex",
 						flexDirection: "column",
 						justifyContent: "center",
 						alignItems: "center",
-						height: "550px",
+						height: "600px",
 					},
 				}}
 			>
@@ -132,8 +236,17 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 							<p className="mt-2 text-lg">{exParsedName}</p>
 						</div>
 					</div>
-					<div className={!showButtons ? "mt-8" : ""}>
-						<p className="text-2xl">{getStatusText()}</p>
+					<div className={!showButtons ? (showReview ? "mt-4" : "mt-8") : ""}>
+						<p className="text-2xl">
+							{showReview && reviewState != ReviewStates.done
+								? getReviewStatusText()
+								: getStatusText()}
+						</p>
+						{showReview && reviewState != ReviewStates.done ? (
+							<CircleReview click={handleReviewClick} />
+						) : (
+							<p className="mt-4">Review done, Thank you for the Feedback!</p>
+						)}
 					</div>
 					<div className="flex-1 pt-6 flex justify-around items-center">
 						<button

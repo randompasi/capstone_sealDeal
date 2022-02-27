@@ -45,6 +45,10 @@ export default function OffersView() {
 	}
 	const loggedInUser = fetchedProfile.value;
 
+	if (!loggedInUser) {
+		return null;
+	}
+
 	let parsedBgUrl = makeCssUrl(defaultBackground);
 	if (loggedInUser.premium) {
 		parsedBgUrl = makeCssUrl(loggedInUser.backgroundBase64 ?? defaultBackground);
@@ -219,6 +223,21 @@ export default function OffersView() {
 	receivedOffers.sort(compare);
 	sentOffers.sort(compare);
 
+	function getOffer(offer, index, received) {
+		let reviewed = false;
+		if (received && offer.toReview) {
+			reviewed = true;
+		} else if (!received && offer.fromReview) {
+			reviewed = true;
+		}
+
+		let key = offer.id;
+		if (!received) {
+			key = offer.id || "index-" + index;
+		}
+		return <Offer key={key} offer={offer} click={inspectOffer} reviewed={reviewed} />;
+	}
+
 	return (
 		<div
 			id="offers-page-container"
@@ -250,9 +269,7 @@ export default function OffersView() {
 					<TabPanel className="w-full">
 						<div className="flex flex-col h-full mr-2">
 							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
-								{sentOffers.map((offer, index) => (
-									<Offer key={offer.id || "index-" + index} offer={offer} click={inspectOffer} />
-								))}
+								{sentOffers.map((offer, index) => getOffer(offer, index, true))}
 								<h3 className={"text-white " + noOffersSent}>No offers sent yet!</h3>
 							</div>
 						</div>
@@ -260,9 +277,7 @@ export default function OffersView() {
 					<TabPanel className="w-full">
 						<div className="flex flex-col min-h-4">
 							<div className="flex flex-col bg-gray-700 p-4 rounded overflow-auto h-full">
-								{receivedOffers.map((offer) => (
-									<Offer key={offer.id} offer={offer} click={inspectOffer} />
-								))}
+								{receivedOffers.map((offer, index) => getOffer(offer, index, true))}
 								<h3 className={"text-white " + noOffersReceived}>No offers received yet!</h3>
 							</div>
 						</div>
