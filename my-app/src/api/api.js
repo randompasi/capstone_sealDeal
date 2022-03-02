@@ -102,11 +102,11 @@ export async function patchUser(authContext, userPatch) {
 }
 
 export function createOffer(offerPayload) {
-	post("offers", offerPayload);
+	return post("offers", offerPayload);
 }
 
 export function createReview(offerPayload) {
-	post("reviews", offerPayload);
+	return post("reviews", offerPayload);
 }
 
 export function sendReview(from, to, score, type) {

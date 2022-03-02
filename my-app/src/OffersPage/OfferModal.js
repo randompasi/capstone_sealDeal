@@ -7,7 +7,7 @@ import CircleReview from "./CircleReview";
 import {useState} from "react";
 import {finishOfferReview, sendReview} from "../api/api";
 
-export default function OfferModal({control, offer, user, externalUser, reject, accept}) {
+export default function OfferModal({onClose, offer, user, externalUser, reject, accept}) {
 	const ReviewStates = {
 		done: -1,
 		seller: 1,
@@ -175,7 +175,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 		<div>
 			<Modal
 				id="show-offer-modal"
-				isOpen={control.showOfferModal}
+				isOpen={true}
 				contentLabel="show-offer-modal"
 				ariaHideApp={false}
 				style={{
@@ -196,7 +196,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 					<ImCross
 						className="self-end"
 						onClick={() => {
-							control.setShowOfferModal(false);
+							onClose();
 						}}
 					></ImCross>
 					<h1 className="text-3xl">
@@ -250,7 +250,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 							}
 							onClick={() => {
 								accept(offer.id);
-								control.setShowOfferModal(false);
+								onClose();
 							}}
 						>
 							Accept
@@ -262,7 +262,7 @@ export default function OfferModal({control, offer, user, externalUser, reject, 
 							}
 							onClick={() => {
 								reject(offer.id);
-								control.setShowOfferModal(false);
+								onClose();
 							}}
 						>
 							Decline

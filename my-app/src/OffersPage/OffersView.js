@@ -29,8 +29,7 @@ export default function OffersView() {
 	const [userId, setUserId] = useState(defaultValue);
 	const [itemName, setItemName] = useState(defaultValue);
 	const [itemPrice, setItemPrice] = useState(defaultValue);
-	const [showOfferModal, setShowOfferModal] = useState(false);
-	const [offerToShow, setOfferToShow] = useState(false);
+	const [offerIdToShow, setOfferIdToShow] = useState(/** @type {number | undefined} */ null);
 	const [userToShow, setUserToShow] = useState();
 	const [userToOffer, setUserToOffer] = useState(/** @type {number | undefined} */ undefined);
 	const [tabIndex, setTabIndex] = useState(0);
@@ -71,6 +70,10 @@ export default function OffersView() {
 	const sentOffers = sentOfferFetch.status === "success" ? sentOfferFetch.value : [];
 	const receivedOffers = receivedOfferFetch.status === "success" ? receivedOfferFetch.value : [];
 
+	const offerToShow = offerIdToShow
+		? receivedOffers.concat(sentOffers).find((offer) => offer.id === offerIdToShow)
+		: undefined;
+
 	function updateSelectedUser(user) {
 		setUserName(user.firstName + " " + user.lastName);
 		setUserId(user.id);
@@ -88,7 +91,7 @@ export default function OffersView() {
 	const noOffersReceived = receivedOffers.length ? "hidden" : "";
 	const noOffersSent = sentOffers.length ? "hidden" : "";
 
-	function sendOffer() {
+	async function sendOffer() {
 		if (
 			!itemName ||
 			!itemPrice ||
@@ -106,7 +109,7 @@ export default function OffersView() {
 			status: "pending",
 		};
 
-		createOffer(parsedOffer);
+		await createOffer(parsedOffer);
 
 		let index = -1;
 		sentOffers.forEach(function (value, i) {
@@ -184,9 +187,8 @@ export default function OffersView() {
 			return;
 		}
 
-		setOfferToShow(offer);
+		setOfferIdToShow(offer.id);
 		setUserToShow(userToShow);
-		setShowOfferModal(true);
 	}
 
 	function rejectOffer(id) {
@@ -353,14 +355,15 @@ export default function OffersView() {
 								<button
 									className="w-32 h-8 rounded min-h-40 text-white bg-green-500 hover:bg-green-600 font-bold ml-6 mt-4"
 									type="submit"
-									onClick={() => {
-										const result = sendOffer();
+									onClick={async () => {
+										const result = await sendOffer();
 										if (result) {
 											alert("Offer sent successfully!");
 											setUserName("");
 											setUserId(null);
 											setItemName("");
 											setItemPrice("");
+											setRefreshSentOffersCounter(increment);
 										} else {
 											alert("Failure, invalid or missing values! :(");
 										}
@@ -373,14 +376,17 @@ export default function OffersView() {
 					</TabPanel>
 				</Tabs>
 			</div>
-			<OfferModal
-				control={{showOfferModal: showOfferModal, setShowOfferModal: setShowOfferModal}}
-				offer={offerToShow}
-				user={loggedInUser}
-				externalUser={userToShow}
-				reject={rejectOffer}
-				accept={acceptOffer}
-			/>
+			{offerToShow && (
+				<OfferModal
+					key={offerToShow.id}
+					onClose={() => setOfferIdToShow(null)}
+					offer={offerToShow}
+					user={loggedInUser}
+					externalUser={userToShow}
+					reject={rejectOffer}
+					accept={acceptOffer}
+				/>
+			)}
 		</div>
 	);
 }

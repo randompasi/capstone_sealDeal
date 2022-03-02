@@ -54,3 +54,7 @@ export const useAsyncEffect = (fn, deps) =>
 	useEffect(() => {
 		fn();
 	}, deps);
+
+export function setStateProperty(setState, property, value) {
+	setState((state) => ({...state, [property]: value}));
+}
