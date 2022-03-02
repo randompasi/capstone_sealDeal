@@ -6,6 +6,7 @@ import Navbar from "./Navbar";
 import {useState} from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import Notifications from "./Notifications/Notifications";
+import {ProvideNotifications} from "./Notifications/notificationsProvider";
 
 function RequireLogin() {
 	const authContext = useAuth();
@@ -21,16 +22,18 @@ function RequireLogin() {
 		<Router>
 			<div className="text-white w-full">
 				<Navbar setSettings={setSettings} setPremiumModal={setPremiumModal} />
-				<main className="flex-auto bg-cover p-0 m-0 flex">
-					<SealdealRoutes
-						settings={settings}
-						setSettings={setSettings}
-						showPremiumModal={showPremiumModal}
-						setPremiumModal={setPremiumModal}
-					/>
-				</main>
-				<footer className="w-full h-24 bg-gray-700"></footer>
-				<Notifications key={user.id} user={user} />
+				<ProvideNotifications>
+					<main className="flex-auto bg-cover p-0 m-0 flex">
+						<SealdealRoutes
+							settings={settings}
+							setSettings={setSettings}
+							showPremiumModal={showPremiumModal}
+							setPremiumModal={setPremiumModal}
+						/>
+					</main>
+					<footer className="w-full h-24 bg-gray-700"></footer>
+					<Notifications key={user.id} />
+				</ProvideNotifications>
 			</div>
 		</Router>
 	);
