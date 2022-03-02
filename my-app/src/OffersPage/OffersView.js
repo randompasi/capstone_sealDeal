@@ -5,7 +5,7 @@ import defaultBackground from "../assets/BackgroundImages/bg_default.jpg";
 import Offer from "./Offer";
 import OfferModal from "./OfferModal";
 import Search from "../Search/Search";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import BasicInfo from "../ProfilePage/BasicInfo";
 import {Tab, Tabs, TabList, TabPanel} from "react-tabs";
 import "react-tabs/style/react-tabs.css";
@@ -20,6 +20,7 @@ import {
 import {useResource} from "../utils/hooks";
 import {useParams} from "react-router-dom";
 import {noop} from "lodash";
+import {useNotifications} from "../Notifications/notificationsProvider";
 
 export default function OffersView() {
 	/** @type {string | undefined | null} */
@@ -33,11 +34,24 @@ export default function OffersView() {
 	const [userToShow, setUserToShow] = useState();
 	const [userToOffer, setUserToOffer] = useState(/** @type {number | undefined} */ undefined);
 	const [tabIndex, setTabIndex] = useState(0);
+	const [refreshSentOffersCounter, setRefreshSentOffersCounter] = useState(0);
 	const params = useParams();
 
 	const authContext = useAuth();
-	const sentOfferFetch = useResource(async () => fetchSentOffers(authContext.user.id));
+	const sentOfferFetch = useResource(
+		async () => fetchSentOffers(authContext.user.id),
+		[refreshSentOffersCounter]
+	);
 	const receivedOfferFetch = useResource(async () => fetchReceivedOffers(authContext.user.id));
+
+	// Subscribe to "offer_accepted" notification and update sent offers
+	const {newestNotification} = useNotifications();
+	useEffect(() => {
+		if (newestNotification?.type === "offer_accepted") {
+			// Force re-fetch offers, since the offer status might have changed
+			setRefreshSentOffersCounter(increment);
+		}
+	}, [newestNotification]);
 
 	const fetchedProfile = useFullUserProfile(authContext.user.id);
 	if (fetchedProfile.status !== "success") {
@@ -370,3 +384,5 @@ export default function OffersView() {
 		</div>
 	);
 }
+
+const increment = (counter) => counter + 1;
