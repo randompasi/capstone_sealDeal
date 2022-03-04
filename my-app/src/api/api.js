@@ -119,6 +119,10 @@ export function sendReview(from, to, score, type) {
 	createReview(payload);
 }
 
+export function rewardPoints(userId, amount, base) {
+	patch("users", userId, {points: amount + base});
+}
+
 export async function fetchSentOffers(userId) {
 	const offers = await get("offers", {
 		fromUserId: "eq." + userId,
@@ -158,6 +162,7 @@ const userType = {
 	city: "",
 	birthday: "",
 	profileGridId: 0,
+	points: 0,
 	// Note: avatar and background images are not included in the response
 	// by default because they are quite large. Use a separate request
 	// to fetch them as needed.

@@ -5,7 +5,8 @@ import {ImCross} from "react-icons/im";
 import {IconContext} from "react-icons/lib";
 import CircleReview from "./CircleReview";
 import {useState} from "react";
-import {finishOfferReview, sendReview} from "../api/api";
+import {finishOfferReview, sendReview, patchUser} from "../api/api";
+import {useAuth} from "../auth/authContext";
 
 export default function OfferModal({onClose, offer, user, externalUser, reject, accept}) {
 	const ReviewStates = {
@@ -14,6 +15,7 @@ export default function OfferModal({onClose, offer, user, externalUser, reject, 
 		friendliness: 2,
 		delivery: 3,
 		condition: 4,
+		old: 5,
 	};
 
 	const defaultReviews = {
@@ -22,13 +24,17 @@ export default function OfferModal({onClose, offer, user, externalUser, reject, 
 		condition: -1,
 	};
 
+	const authContext = useAuth();
+
 	const [reviewState, setReviewState] = useState(null);
 	const [lastReview, setLastReview] = useState(null);
 	const [collectedReviews, setCollectedReviews] = useState(null);
+	const [reward, setReward] = useState(null);
 
 	if (lastReview !== offer.id) {
 		setLastReview(offer.id);
 		setReviewState(null);
+		setReward(null);
 		setCollectedReviews(defaultReviews);
 	}
 
@@ -98,7 +104,7 @@ export default function OfferModal({onClose, offer, user, externalUser, reject, 
 				setReviewState(ReviewStates.seller);
 			}
 		} else if (reviewState == null) {
-			setReviewState(ReviewStates.done);
+			setReviewState(ReviewStates.old);
 		}
 	}
 
@@ -116,7 +122,7 @@ export default function OfferModal({onClose, offer, user, externalUser, reject, 
 
 	function getReviewStatusText() {
 		const base = "Review the Deal: ";
-		if (reviewState == ReviewStates.done) {
+		if (reviewState == ReviewStates.old || reviewState == ReviewStates.done) {
 			return "Review done, Thank you for the feedback!";
 		} else if (reviewState == ReviewStates.seller) {
 			return base + "Customer friendliness";
@@ -146,7 +152,14 @@ export default function OfferModal({onClose, offer, user, externalUser, reject, 
 		} else if (reviewState == ReviewStates.condition || reviewState == ReviewStates.seller) {
 			setReviewState(ReviewStates.done);
 			collectedReviews.condition = review;
+			const pointsToReward = Math.floor(Math.random() * (250 - 50 + 1) + 50);
+			setReward(pointsToReward);
 			await finishOfferReview(offer.id, isSeller);
+			await patchUser(authContext, {
+				points: user.points + pointsToReward,
+			});
+			user.points = user.points + pointsToReward;
+
 			if (isSeller) {
 				offer.fromReview = true;
 			} else {
@@ -166,11 +179,16 @@ export default function OfferModal({onClose, offer, user, externalUser, reject, 
 	function getReviewParital() {
 		if (showReview && reviewState != ReviewStates.done) {
 			return <CircleReview click={handleReviewClick} />;
-		} else if (reviewState == ReviewStates.done) {
+		} else if (reviewState == ReviewStates.old) {
 			return <p className="mt-4">Review done, Thank you for the Feedback!</p>;
+		} else if (reviewState == ReviewStates.done) {
+			return (
+				<p className="mt-4">
+					You were rewarded <span className="underline">{reward} Seal-points</span> for this deal!
+				</p>
+			);
 		}
 	}
-
 	return (
 		<div>
 			<Modal
@@ -236,7 +254,7 @@ export default function OfferModal({onClose, offer, user, externalUser, reject, 
 					</div>
 					<div className={!showButtons ? (showReview ? "mt-4" : "mt-8") : ""}>
 						<p className="text-2xl">
-							{showReview && reviewState != ReviewStates.done
+							{showReview && reviewState != ReviewStates.old
 								? getReviewStatusText()
 								: getStatusText()}
 						</p>

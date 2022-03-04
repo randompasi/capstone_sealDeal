@@ -309,7 +309,11 @@ export default function OffersView() {
 									<div className="flex flex-row justify-center">
 										<div className="flex flex-col w-2/4 pl-2">
 											<label className="text-white">Search:</label>
-											<Search onClick={updateSelectedUser} inputColor="white" />
+											<Search
+												position={{x: window.innerWidth / 2 - 437, y: 602}}
+												onClick={updateSelectedUser}
+												inputColor="white"
+											/>
 										</div>
 										<div className="flex flex-col w-2/4 self-end pl-4">
 											<label className="text-white">User seleceted:</label>

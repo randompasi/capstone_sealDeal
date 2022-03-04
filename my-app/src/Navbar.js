@@ -2,9 +2,11 @@ import {useAuth} from "./auth/authContext";
 import Box from "./Box";
 import {CgLogOut} from "react-icons/cg"; //react-icons.github.io/react-icons
 import {IoSettingsOutline} from "react-icons/io5";
+import {FaCoins} from "react-icons/fa";
 import logoImage from "./assets/logo.png";
 import Search from "./Search/Search";
 import {useLocation} from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 
 export default function Navbar({setSettings, setPremiumModal}) {
 	const {user, signout} = useAuth();
@@ -14,7 +16,8 @@ export default function Navbar({setSettings, setPremiumModal}) {
 	}
 	const isOwnProfilePage = location.pathname.includes("/dashboard"); //Only show controls in Dashboard view
 	const isPublicProfile = location.pathname === "/";
-
+	const pointsDesc =
+		"SealPoints: An experimental virtual currency for all your customization needs!";
 	return (
 		<header className="z-10 relative">
 			<Box className="pt-2 pb-2" title="">
@@ -33,6 +36,13 @@ export default function Navbar({setSettings, setPremiumModal}) {
 					<div className="flex flex-row items-center">
 						{isOwnProfilePage && (
 							<>
+								<div className="mr-4 flex flex-row">
+									<p className="mr-2">
+										<b data-tip={pointsDesc}>Seal-points: {user.points}</b>
+									</p>
+									<FaCoins data-tip={pointsDesc} className="mt-1 mr-5" />
+									<ReactTooltip place="right" type="dark" effect="float" multiline={true} />
+								</div>
 								<p
 									onClick={() => {
 										setPremiumModal(true);

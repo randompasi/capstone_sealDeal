@@ -46,7 +46,7 @@ function History() {
 			className="mt-4"
 			key={item.id}
 			offer={item}
-			click={() => (window.location.href = "/offers/")}
+			click={() => (window.location.href = "/")}
 		></Offer>
 	));
 
