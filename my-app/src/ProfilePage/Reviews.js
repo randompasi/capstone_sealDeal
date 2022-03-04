@@ -42,6 +42,12 @@ function Review({item, onReviewGiven}) {
 	const canEdit = !!onReviewGiven;
 	const isHoveringSomeStar = !!ratingFromHover;
 
+	const categoryNameMap = {
+		condition: "Item Condition",
+		friendliness: "Friendliness",
+		delivery: "Delivery",
+	};
+
 	const stars = times(5, (i) => {
 		const value = i + 1;
 		const isHalfStar = value > starRating && starIconsCount - starRating > 0.5;
@@ -84,7 +90,7 @@ function Review({item, onReviewGiven}) {
 			// pointerUp works with finger dragging better than onClick
 			onPointerUp={canEdit ? onClick : undefined}
 		>
-			<div className="text-sm font-semibold">{item.title}</div>
+			<div className="text-sm font-semibold">{categoryNameMap[item.title] ?? item.title}</div>
 			<div className="flex flex-nowrap w-full gap-2">{stars}</div>
 		</div>
 	);
@@ -131,9 +137,9 @@ export default function Reviews({user}) {
 	);
 
 	const ratings = {
-		"Item condition": 3,
-		Delivery: 3,
-		Friendliness: 3,
+		condition: 3,
+		delivery: 3,
+		friendliness: 3,
 		...calculateAverageRatings(allRatings),
 	};
 	const canGiveReview = !!loggedInUser && loggedInUser.id !== user.id;
